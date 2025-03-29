@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Presentation/Presentation.csproj",
+      "projectUniqueName": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Presentation.csproj",
       "projectName": "Presentation",
-      "projectPath": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Presentation/Presentation.csproj",
+      "projectPath": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Presentation.csproj",
       "packagesPath": "/home/fup/.nuget/packages/",
-      "outputPath": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Presentation/obj/",
+      "outputPath": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/fup/.nuget/NuGet/NuGet.Config"

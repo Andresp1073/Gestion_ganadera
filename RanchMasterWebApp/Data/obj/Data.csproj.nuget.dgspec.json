@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Data/Data.csproj": {}
+    "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Data/Data.csproj": {}
   },
   "projects": {
-    "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Data/Data.csproj": {
+    "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Data/Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Data/Data.csproj",
+        "projectUniqueName": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Data/Data.csproj",
         "projectName": "Data",
-        "projectPath": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Data/Data.csproj",
+        "projectPath": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Data/Data.csproj",
         "packagesPath": "/home/fup/.nuget/packages/",
-        "outputPath": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Data/obj/",
+        "outputPath": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Data/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fup/.nuget/NuGet/NuGet.Config"

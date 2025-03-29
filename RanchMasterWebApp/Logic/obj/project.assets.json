@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Logic/Logic.csproj",
+      "projectUniqueName": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Logic/Logic.csproj",
       "projectName": "Logic",
-      "projectPath": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Logic/Logic.csproj",
+      "projectPath": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Logic/Logic.csproj",
       "packagesPath": "/home/fup/.nuget/packages/",
-      "outputPath": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Logic/obj/",
+      "outputPath": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Logic/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/fup/.nuget/NuGet/NuGet.Config"
