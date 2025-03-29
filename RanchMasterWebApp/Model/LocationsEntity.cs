@@ -8,7 +8,7 @@ public class LocationsEntity
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id_locations")]
-    public int IdLocations { get; set; }
+    public int IdLocation { get; set; }
     
     [Required]
     [StringLength(45)]
