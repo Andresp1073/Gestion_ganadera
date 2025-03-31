@@ -16,4 +16,6 @@ public class LocationsEntity
     [Required]
     public int Capacity { get; set; }
     
+    public ICollection<AnimalsEntity> Animals { get; set; }
+    
 }
