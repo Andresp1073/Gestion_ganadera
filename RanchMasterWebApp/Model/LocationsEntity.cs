@@ -14,11 +14,13 @@ public class LocationsEntity
     public string Name { get; set; }
     
     [Required]
-    public int Capacity { get; set; }
-    
-    [Required]
     [StringLength(45)]
     public string Type { get; set; }
+    
+    [Required]
+    public int Capacity { get; set; }
+    
+    
     
     public ICollection<AnimalsEntity> Animals { get; set; }
     
