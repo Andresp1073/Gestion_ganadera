@@ -16,6 +16,10 @@ public class LocationsEntity
     [Required]
     public int Capacity { get; set; }
     
+    [Required]
+    [StringLength(45)]
+    public string Type { get; set; }
+    
     public ICollection<AnimalsEntity> Animals { get; set; }
     
 }
