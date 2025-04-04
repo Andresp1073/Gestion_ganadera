@@ -21,6 +21,6 @@ public class VeterinariansEntity
     [StringLength(45)]
     public string Email { get; set; }
     
-    public ICollection<HealtsRecordsEntity> HealtsRecords { get; set; }
+    public ICollection<HealthsRecordsEntity> HealthsRecords { get; set; }
     
 }
