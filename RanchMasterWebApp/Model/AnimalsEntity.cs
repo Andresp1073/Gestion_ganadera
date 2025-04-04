@@ -26,7 +26,7 @@ public class AnimalsEntity
 
     
     public string IdSchedule { get; set; }
-    public ScheduleEntity Schedule { get; set; }
+    public SchedulesEntity Schedule { get; set; }
 
 
     
@@ -35,7 +35,7 @@ public class AnimalsEntity
 
     
     public string IdRace  { get; set; }
-    public RaceEntity Race { get; set; }
+    public RacesEntity Race { get; set; }
     
     //Lista
     
