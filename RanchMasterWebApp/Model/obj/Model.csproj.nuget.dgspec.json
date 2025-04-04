@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Model/Model.csproj": {}
+    "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Model/Model.csproj": {}
   },
   "projects": {
-    "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Model/Model.csproj": {
+    "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Model/Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Model/Model.csproj",
+        "projectUniqueName": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Model/Model.csproj",
         "projectName": "Model",
-        "projectPath": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Model/Model.csproj",
+        "projectPath": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Model/Model.csproj",
         "packagesPath": "/home/fup/.nuget/packages/",
-        "outputPath": "/home/fup/Documentos/Gestion Ganadera/gestion-ganadera-app/RanchMasterWebApp/Model/obj/",
+        "outputPath": "/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Model/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fup/.nuget/NuGet/NuGet.Config"
@@ -60,7 +60,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.104/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
