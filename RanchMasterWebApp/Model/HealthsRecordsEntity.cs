@@ -21,7 +21,7 @@ public class HealthsRecordsEntity
     public int IdVeterinarian { get; set; }
     
     [ForeignKey("IdVeterinarian")]
-    public VeterinarianEntity Veterinarian { get; set; }
+    public VeterinariansEntity Veterinarians { get; set; }
     
     [Required]
     [StringLength(45)]
@@ -31,5 +31,5 @@ public class HealthsRecordsEntity
     public int IdAnimal { get; set; }
     
     [ForeignKey("IdAnimal")]
-    public AnimalEntity Animal { get; set; }
+    public AnimalsEntity Animals { get; set; }
 }
