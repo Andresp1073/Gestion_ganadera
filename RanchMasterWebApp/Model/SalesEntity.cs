@@ -10,16 +10,17 @@ public class SalesEntity
     public int IdSale { get; set; }
    
     [Required]
-    [DataType(DataType.Date)]
+    [DataType(DataType.DateTime)]
     public DateTime SaleDateTime { get; set; }
-   
-    //llave foranea
-    public string IdBuyer { get; set; }
+    
+    
+    //llave foraneas
+    public int IdBuyer { get; set; } 
+    [ForeignKey("IdBuyer")]
     public BuyersEntity Buyer { get; set; }
    
-   
-   
-    public string IdAnimal { get; set; }
-    public AnimalsEntity Animals { get; set; }
-
+    
+    public int IdAnimal { get; set; }
+    [ForeignKey("IdAnimal")]
+    public AnimalsEntity Animal { get; set; }
 }
