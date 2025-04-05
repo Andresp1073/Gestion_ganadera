@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Model;
 
 public class AnimalsEntity
@@ -15,30 +16,30 @@ public class AnimalsEntity
     [Required]
     public int Age { get; set; }
     
-    
     [Required]
     [StringLength(8)]
     public string Status { get; set; }
     
-    // Claves foráneas
-    public string IdLocation { get; set; }
+    //llave foranea
+    
+    [ForeignKey("IdSchedule")]
+    public FeedingSchedulesEntity Schedule { get; set; }
+
+    // Relación con LocationsEntity
+    public int IdLocation { get; set; }
+    [ForeignKey("IdLocation")]
     public LocationsEntity Location { get; set; }
 
-    
-    public string IdSchedule { get; set; }
-    public SchedulesEntity Schedule { get; set; }
+    // Relación con ReproductionsEntity
+    [ForeignKey("IdReproduction")]
+    public ReproductionsEntity Reproduction { get; set; }
 
-
-    
-    public string IdReproduction { get; set; }
-    public ReproductionsEntity  Reproduction { get; set; }
-
-    
-    public string IdRace  { get; set; }
+    // Relación con RacesEntity
+    public int IdRace { get; set; }
+    [ForeignKey("IdRace")]
     public RacesEntity Race { get; set; }
-    
-    //Lista
-    
-    public ICollection<SalesEntity> Sales { get; set; }
 
+    // Relación con SalesEntity (uno a muchos)
+    public ICollection<SalesEntity> Sales { get; set; }
 }
+
