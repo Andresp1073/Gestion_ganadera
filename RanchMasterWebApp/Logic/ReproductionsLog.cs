@@ -13,20 +13,20 @@ public class ReproductionsLog
         }
     }
 
-    public void UpdateReproductions(ReproductionsEntity objreproductions)
+    public void UpdateReproductions(ReproductionsEntity objReproduction)
     {
         using (var db = new RanchMasterContext())
         {
-            db.Reproductions.Update(objreproductions);
+            db.Reproductions.Update(objReproduction);
             db.SaveChanges();
         }
     }
 
-    public void CreateReproductions(ReproductionsEntity objreproductions)
+    public void CreateReproductions(ReproductionsEntity objReproduction)
     {
         using (var db = new RanchMasterContext())
         {
-            db.Reproductions.Add(objreproductions);
+            db.Reproductions.Add(objReproduction);
             db.SaveChanges();
         }
     }
