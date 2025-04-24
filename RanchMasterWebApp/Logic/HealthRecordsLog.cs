@@ -3,7 +3,7 @@ using Model;
 
 namespace Logic;
 
-public class HealthsRecordsLog
+public class HealthRecordsLog
 {
     
     public void CreateHealthRecords(HealthsRecordsEntity objHealthsRecords)

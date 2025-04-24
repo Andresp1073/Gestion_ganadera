@@ -22,11 +22,11 @@ public class BuyersLog
         }
     }
 
-    public void CreateBuyers(SalesEntity objbuyers)
+    public void CreateBuyers(BuyersEntity objbuyers)
     {
         using (var db = new RanchMasterContext())
         {
-            db.Sales.Add(objbuyers);
+            db.Buyers.Add(objbuyers);
             db.SaveChanges();
         }
     }

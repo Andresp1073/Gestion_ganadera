@@ -3,7 +3,7 @@ using Model;
 
 namespace Logic;
 
-public class VeterinarianLog
+public class VeterinariansLog
 {
     public List<VeterinariansEntity> VeterinarianList()
     {
@@ -13,7 +13,7 @@ public class VeterinarianLog
         }
     }
 
-    public void UpdateVeterians(VeterinariansEntity objveterinarian)
+    public void UpdateVeterinarians(VeterinariansEntity objveterinarian)
     {
         using (var db = new RanchMasterContext())
         {

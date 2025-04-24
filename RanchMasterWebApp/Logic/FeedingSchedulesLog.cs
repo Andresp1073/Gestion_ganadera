@@ -3,7 +3,7 @@ using Model;
 
 namespace Logic;
 
-public class FeedingShedulesLog
+public class FeedingSchedulesLog
 {
     public void CreateFeedingSheduleLog(FeedingSchedulesEntity objFeedingSheduleLog)
     {

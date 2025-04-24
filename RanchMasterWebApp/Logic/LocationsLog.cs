@@ -13,7 +13,7 @@ public class LocationsLog
         }
     }
 
-    public void Update(LocationsEntity objlocations)
+    public void UpdateLocation(LocationsEntity objlocations)
     {
         using (var db = new  RanchMasterContext())
         {
