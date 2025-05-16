@@ -1,0 +1,53 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+<h3>Registrar Veterinario</h3>
+
+<EditForm Model="objVet" OnValidSubmit="SaveVeterinarian">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Nombre:</label>
+        <InputText @bind-Value="objVet.Name" />
+    </div>
+
+    <div>
+        <label>Teléfono:</label>
+        <InputText @bind-Value="objVet.PhoneNumber" />
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="objVet.Email" />
+    </div>
+
+    <button type="submit">Registrar Veterinario</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div>@successMessage</div>
+}
+
+@code {
+    VeterinariansEntity objVet = new VeterinariansEntity();
+
+    private string? successMessage;
+
+    private void SaveVeterinarian()
+    {
+        try
+        {
+            VeterinariansLog.CreateVeterinarian(objVet);
+            successMessage = "¡Veterinario registrado exitosamente!";
+            objVet = new VeterinariansEntity(); // Limpiar formulario
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al guardar el veterinario: {ex.InnerException?.Message ?? ex.Message}";
+        }
+    }
+
+    }
+}

@@ -3,9 +3,9 @@ using Model;
 
 namespace Logic;
 
-public class VeterinariansLog
+public static class VeterinariansLog
 {
-    public List<VeterinariansEntity> VeterinarianList()
+    public static List<VeterinariansEntity> VeterinarianList()
     {
         using (var db = new RanchMasterContext())
         {
@@ -13,7 +13,7 @@ public class VeterinariansLog
         }
     }
 
-    public void UpdateVeterinarians(VeterinariansEntity objveterinarian)
+    public static void UpdateVeterinarians(VeterinariansEntity objveterinarian)
     {
         using (var db = new RanchMasterContext())
         {
@@ -21,7 +21,7 @@ public class VeterinariansLog
             db.SaveChanges();
         }
     }
-    public void CreateVeterinarian(VeterinariansEntity objveterinarian)
+    public static void CreateVeterinarian(VeterinariansEntity objveterinarian)
     {
         using (var db = new RanchMasterContext())
         {
