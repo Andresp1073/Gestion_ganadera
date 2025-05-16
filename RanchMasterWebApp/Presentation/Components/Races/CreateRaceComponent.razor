@@ -1,0 +1,46 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Registrar Raza</h3>
+
+<EditForm Model="objRace" OnValidSubmit="SaveRace">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name">Nombre de la Raza:</label>
+        <InputText id="name" @bind-Value="objRace.Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="description">Descripción:</label>
+        <InputText id="description" @bind-Value="objRace.Description" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Raza</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
+
+@code {
+    private RacesEntity objRace = new RacesEntity();
+    private string? successMessage;
+
+    private void SaveRace()
+    {
+        try
+        {
+            RacesLog.CreateRaces(objRace); // Método lógico para insertar la raza
+            successMessage = "¡Raza registrada exitosamente!";
+            objRace = new RacesEntity(); // Limpia el formulario
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al registrar la raza: {ex.Message}";
+        }
+    }
+}
