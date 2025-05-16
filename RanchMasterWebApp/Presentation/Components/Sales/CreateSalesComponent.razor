@@ -1,0 +1,72 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+<h3>Registrar Venta</h3>
+
+<EditForm Model="objSale" OnValidSubmit="SaveSale">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Fecha de Venta:</label>
+        <InputDate @bind-Value="objSale.SaleDateTime" />
+    </div>
+
+    <div>
+        <label>Comprador:</label>
+        <InputSelect @bind-Value="objSale.IdBuyer">
+            <option value="">Seleccione</option>
+            @foreach (var buyer in buyers)
+            {
+                <option value="@buyer.IdBuyer">@buyer.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label>Animal:</label>
+        <InputSelect @bind-Value="objSale.IdAnimal">
+            <option value="">Seleccione</option>
+            @foreach (var animal in animals)
+            {
+                <option value="@animal.IdAnimal">Animal @animal.IdAnimal</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit">Registrar Venta</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div>@successMessage</div>
+}
+
+@code {
+    SalesEntity objSale = new SalesEntity();
+
+    private string? successMessage;
+
+    List<BuyersEntity> buyers = new();
+    List<AnimalsEntity> animals = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        buyers = new BuyersLog().BuyersList();
+        animals = new AnimalsLog().AnimalsList();
+    }
+
+    private void SaveSale()
+    {
+        try
+        {
+            SalesLog.CreateSales(objSale);
+            successMessage = "¡Venta registrada exitosamente!";
+            objSale = new SalesEntity(); // Limpiar formulario
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al guardar la venta: {ex.Message}";
+        }
+    }
+}
