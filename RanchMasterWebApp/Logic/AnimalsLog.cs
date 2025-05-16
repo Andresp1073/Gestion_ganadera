@@ -5,7 +5,7 @@ namespace Logic;
 
 public class AnimalsLog
 {
-    public void CreateAnimals(AnimalsEntity objAnimals)
+    public static void CreateAnimals(AnimalsEntity objAnimals)
     {
         using (var db = new RanchMasterContext())
         {
