@@ -22,7 +22,7 @@ public class ReproductionsLog
         }
     }
 
-    public void CreateReproductions(ReproductionsEntity objReproduction)
+    public static void CreateReproductions(ReproductionsEntity objReproduction)
     {
         using (var db = new RanchMasterContext())
         {
