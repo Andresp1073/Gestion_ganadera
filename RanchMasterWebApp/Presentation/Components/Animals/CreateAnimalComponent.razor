@@ -1,0 +1,116 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>CreateAnimalComponent</h3>
+
+<EditForm Model="objAnimal" OnValidSubmit="SaveAnimal">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Género (M/F):</label>
+        <select @bind="objAnimal.Gender" class="form-select">
+            <option value="">Seleccione</option>
+            <option value="M">Macho</option>
+            <option value="H">Hembra</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Edad:</label>
+        <InputNumber @bind-Value="objAnimal.Age" />
+    </div>
+
+    <div>
+        <label>Estado:</label>
+        <InputText @bind-Value="objAnimal.Status" />
+    </div>
+
+    <div>
+        <label>Ubicación:</label>
+        <InputSelect @bind-Value="objAnimal.IdLocation">
+            <option value="">Seleccione</option>
+            @foreach (var loc in locations)
+            {
+                <option value="@loc.IdLocation">@loc.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label>Raza:</label>
+        <InputSelect @bind-Value="objAnimal.IdRace">
+            <option value="">Seleccione</option>
+            @foreach (var race in races)
+            {
+                <option value="@race.IdRace">@race.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label>Horario de Alimentación:</label>
+        <InputSelect @bind-Value="objAnimal.IdSchedule">
+            <option value="">Seleccione</option>
+            @foreach (var schedule in feedingSchedules)
+            {
+                <option value="@schedule.IdSchedule">@schedule.FeedingTime.ToShortTimeString()</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label>Reproducción:</label>
+        <InputSelect @bind-Value="objAnimal.IdReproduction">
+            <option value="">Seleccione</option>
+            @foreach (var reproduction in reproductions)
+            {
+                <option value="@reproduction.IdBreeding">Reproducción @reproduction.IdBreeding</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit">Guardar Animal</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div>@successMessage</div>
+}
+
+@code {
+    // Objeto
+    AnimalsEntity objAnimal = new AnimalsEntity();
+
+    private string? successMessage;
+
+    List<LocationsEntity> locations = new();
+    List<RacesEntity> races = new();
+    List<FeedingSchedulesEntity> feedingSchedules = new();
+    List<ReproductionsEntity> reproductions = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        locations = new LocationsLog().LocationsList();
+        races = new RacesLog().RacesList();
+        feedingSchedules = new FeedingSchedulesLog().FeedingSchedulesList(); 
+        reproductions = new ReproductionsLog().ReproductionsList();
+
+    }
+
+    private void SaveAnimal()
+    {
+        try
+        {
+            AnimalsLog.CreateAnimals(objAnimal);
+            successMessage = "¡Animal registrado exitosamente!";
+            objAnimal = new AnimalsEntity(); // Limpiar formulario
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al guardar el animal: {ex.Message}";
+        }
+    }
+}

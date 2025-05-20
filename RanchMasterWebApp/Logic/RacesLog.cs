@@ -5,7 +5,7 @@ namespace Logic;
 
 public class RacesLog
 {
-    public void CreateRaces(RacesEntity objRaces)
+    public static void CreateRaces(RacesEntity objRaces)
     {
         using (var db = new RanchMasterContext())
         {
