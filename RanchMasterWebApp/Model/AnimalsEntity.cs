@@ -11,7 +11,7 @@ public class AnimalsEntity
 
     [Required]
     [Column(TypeName = "char(1)")]
-    public char Gender { get; set; }
+    public string Gender { get; set; }
     
     [Required]
     public int Age { get; set; }
@@ -24,7 +24,8 @@ public class AnimalsEntity
     
     [ForeignKey("IdSchedule")]
     public FeedingSchedulesEntity Schedule { get; set; }
-
+    public int IdSchedule { get; set; } 
+    
     // Relación con LocationsEntity
     public int IdLocation { get; set; }
     [ForeignKey("IdLocation")]
@@ -33,7 +34,8 @@ public class AnimalsEntity
     // Relación con ReproductionsEntity
     [ForeignKey("IdReproduction")]
     public ReproductionsEntity Reproduction { get; set; }
-
+    public int IdReproduction { get; set; }
+    
     // Relación con RacesEntity
     public int IdRace { get; set; }
     [ForeignKey("IdRace")]

@@ -1,0 +1,86 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Registrar Historial de Salud</h3>
+
+<EditForm Model="objHealthRecord" OnValidSubmit="SaveHealthRecord">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Diagnóstico:</label>
+        <InputText @bind-Value="objHealthRecord.Diagnosis" class="form-control" />
+    </div>
+
+    <div>
+        <label>Tratamiento:</label>
+        <InputText @bind-Value="objHealthRecord.Treatment" class="form-control" />
+    </div>
+
+    <div>
+        <label>Vacuna:</label>
+        <InputText @bind-Value="objHealthRecord.Vaccines" class="form-control" />
+    </div>
+
+    <div>
+        <label>Veterinario:</label>
+        <InputSelect @bind-Value="objHealthRecord.IdVeterinarian" class="form-select">
+            <option value="">Seleccione</option>
+            @foreach (var vet in veterinarians)
+            {
+                <option value="@vet.IdVeterinarian">@vet.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label>Animal:</label>
+        <InputSelect @bind-Value="objHealthRecord.IdAnimal" class="form-select">
+            <option value="">Seleccione</option>
+            @foreach (var animal in animals)
+            {
+                <option value="@animal.IdAnimal">@animal.Race.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar Historial</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div class="alert alert-info mt-2">@successMessage</div>
+}
+
+@code {
+    // Objeto principal
+    HealthsRecordsEntity objHealthRecord = new();
+
+    private string? successMessage;
+
+    // Listas para select
+    List<VeterinariansEntity> veterinarians = new();
+    List<AnimalsEntity> animals = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Cargar datos de apoyo
+        veterinarians = new VeterinariansLog().VeterinarianList();
+        animals = new AnimalsLog().AnimalsList();
+    }
+
+    private void SaveHealthRecord()
+    {
+        try
+        {
+            HealthRecordsLog.CreateHealthRecords(objHealthRecord);
+            successMessage = "¡Historial de salud registrado exitosamente!";
+            objHealthRecord = new(); // Limpiar formulario
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al guardar el historial de salud: {ex.InnerException?.Message??ex.Message}";
+        }
+    }
+}
