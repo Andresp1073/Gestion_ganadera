@@ -5,7 +5,7 @@ namespace Logic;
 
 public class FeedingDetailsLog
 {
-    public void CreateFeedingDetails(FeedingDetailsEntity objFeedingDetails)
+    public static void CreateFeedingDetails(FeedingDetailsEntity objFeedingDetails)
     {
         using (var db = new RanchMasterContext())
         {
