@@ -3,7 +3,7 @@ using Model;
 
 namespace Logic;
 
-public static class VeterinariansLog
+public class VeterinariansLog
 {
     public List<VeterinariansEntity> VeterinarianList()
     {
