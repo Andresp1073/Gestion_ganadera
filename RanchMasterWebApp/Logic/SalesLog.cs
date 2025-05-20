@@ -3,7 +3,7 @@ using Model;
 
 namespace Logic;
 
-public static class SalesLog
+public class SalesLog
 {
     public static List<SalesEntity> SalesList()
     {
@@ -13,7 +13,7 @@ public static class SalesLog
         }
     }
 
-    public static void UpdateSales(SalesEntity objsales)
+    public void UpdateSales(SalesEntity objsales)
     {
         using (var db = new RanchMasterContext())
         {
