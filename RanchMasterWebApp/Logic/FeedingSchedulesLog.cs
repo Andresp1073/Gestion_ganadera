@@ -5,7 +5,7 @@ namespace Logic;
 
 public class FeedingSchedulesLog
 {
-    public void CreateFeedingSheduleLog(FeedingSchedulesEntity objFeedingSheduleLog)
+    public static void CreateFeedingSheduleLog(FeedingSchedulesEntity objFeedingSheduleLog)
     {
         using (var db = new RanchMasterContext())
         {
