@@ -1,0 +1,74 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>CreateBuyerComponent</h3>
+
+<EditForm Model="objBuyer" OnValidSubmit="SaveBuyer" FormName="FrmBuyer">
+    
+    <div>
+        <label>Nombre:</label>
+        <InputText @bind-Value="objBuyer.Name" />
+    </div>
+    <div>
+        <label>Cédula:</label>
+        <InputText @bind-Value="objBuyer.Cc" />
+    </div>
+    <div>
+        <label>Teléfono:</label>
+        <InputText @bind-Value="objBuyer.PhoneNumber" />
+    </div>
+    <button type="submit">Guardar</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div>@successMessage</div>
+}
+
+@code {
+    // Instancia del comprador que se está creando
+    BuyersEntity objBuyer = new BuyersEntity();
+
+    // Mensaje para indicar el resultado de la operación
+    private string? successMessage;
+    
+    //lista
+    List<BuyersEntity> Buyers = new List<BuyersEntity>();
+    /*
+     * Método que se ejecuta al inicializar el componente.
+     * Carga la lista de categorías de forma asíncrona.
+     */
+    protected override async Task OnInitializedAsync()
+    {
+        // Carga asíncrona de categorías
+        Buyers = await Task.Run(() => BuyersLog.BuyersList());
+    }
+
+    /*
+     * Método que se ejecuta al enviar el formulario.
+     * Guarda el comprador en la base de datos.
+     */
+    private void SaveBuyer()
+    {
+        try
+        {
+            // Llama al método para crear un comprador en la capa lógica
+            BuyersLog.CreateBuyers(objBuyer);
+
+            // Muestra un mensaje de éxito
+            successMessage = $"El comprador '{objBuyer?.Name}' se guardó exitosamente!";
+
+            // Reinicia el formulario para un nuevo registro
+            objBuyer = new BuyersEntity();
+
+            //Redirecciona a la lista
+            NavManager.NavigateTo("buyer/create");
+        }
+        catch (Exception ex)
+        {
+            // Muestra el mensaje de error en caso de excepción
+            successMessage = $"Error al guardar el comprador: {ex.Message}";
+        }
+    }
+}

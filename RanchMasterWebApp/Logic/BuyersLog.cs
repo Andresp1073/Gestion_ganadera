@@ -5,7 +5,7 @@ namespace Logic;
 
 public class BuyersLog
 {
-    public List<BuyersEntity> BuyersList()
+    public  List<BuyersEntity> BuyersList()
     {
         using (var db = new RanchMasterContext())
         {
@@ -13,7 +13,7 @@ public class BuyersLog
         }
     }
 
-    public void UpdateBuyers(BuyersEntity objbuyers)
+    public  void  UpdateBuyers(BuyersEntity objbuyers)
     {
         using (var db = new RanchMasterContext())
         {
@@ -22,7 +22,7 @@ public class BuyersLog
         }
     }
 
-    public void CreateBuyers(BuyersEntity objbuyers)
+    public static void CreateBuyers(BuyersEntity objbuyers)
     {
         using (var db = new RanchMasterContext())
         {
