@@ -5,7 +5,7 @@ namespace Logic;
 
 public static class VeterinariansLog
 {
-    public static List<VeterinariansEntity> VeterinarianList()
+    public List<VeterinariansEntity> VeterinarianList()
     {
         using (var db = new RanchMasterContext())
         {
@@ -13,7 +13,7 @@ public static class VeterinariansLog
         }
     }
 
-    public static void UpdateVeterinarians(VeterinariansEntity objveterinarian)
+    public void UpdateVeterinarians(VeterinariansEntity objveterinarian)
     {
         using (var db = new RanchMasterContext())
         {
