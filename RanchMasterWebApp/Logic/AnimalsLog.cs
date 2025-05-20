@@ -1,4 +1,5 @@
 using Data;
+using Microsoft.EntityFrameworkCore;
 using Model;
 
 namespace Logic;
@@ -18,9 +19,12 @@ public class AnimalsLog
     {
         using (var db = new RanchMasterContext())
         {
-            return db.Animals.ToList();
+            return db.Animals
+                .Include(a => a.Race) // Incluye la información de la raza
+                .ToList();
         }
     }
+
 
     public void UpdateAnimals(AnimalsEntity objAnimals)
     {
