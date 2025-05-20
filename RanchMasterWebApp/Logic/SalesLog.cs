@@ -5,7 +5,7 @@ namespace Logic;
 
 public class SalesLog
 {
-    public List<SalesEntity> SalesList()
+    public static List<SalesEntity> SalesList()
     {
         using (var db = new RanchMasterContext())
         {
@@ -22,7 +22,7 @@ public class SalesLog
         }
     }
 
-    public void CreateSales(SalesEntity objsales)
+    public static void CreateSales(SalesEntity objsales)
     {
         using (var db = new RanchMasterContext())
         {

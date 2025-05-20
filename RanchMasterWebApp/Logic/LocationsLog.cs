@@ -22,7 +22,7 @@ public class LocationsLog
         }
     }
     
-    public void CreateLocations(LocationsEntity objlocations)
+    public static void CreateLocations(LocationsEntity objlocations)
     {
         using (var db = new  RanchMasterContext())
         {
