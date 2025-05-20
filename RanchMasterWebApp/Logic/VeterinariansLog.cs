@@ -21,7 +21,7 @@ public class VeterinariansLog
             db.SaveChanges();
         }
     }
-    public void CreateVeterinarian(VeterinariansEntity objveterinarian)
+    public static void CreateVeterinarian(VeterinariansEntity objveterinarian)
     {
         using (var db = new RanchMasterContext())
         {
