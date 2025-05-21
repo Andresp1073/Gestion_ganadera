@@ -11,7 +11,7 @@
     <div>
         <label>Género (M/H):</label>
         <select @bind="objAnimal.Gender" class="form-select">
-            <option value="" selected disabled hidden></option>  @* placeholder vacío *@
+            <option value="" selected disabled hidden></option>  
             <option value="M">Macho</option>
             <option value="H">Hembra</option>
         </select>
@@ -67,7 +67,7 @@
         </InputSelect>
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar Animal</button>
+    <button type="submit">Guardar Animal</button>
 </EditForm>
 
 @if (successMessage != null)
