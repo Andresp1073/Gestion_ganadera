@@ -42,7 +42,9 @@
     protected override async Task OnInitializedAsync()
     {
         // Carga asíncrona de categorías
-        Buyers = await Task.Run(() => BuyersLog.BuyersList());
+        Buyers = await Task.Run(() => new BuyersLog().BuyersList());
+
+
     }
 
     /*
@@ -57,7 +59,7 @@
             BuyersLog.CreateBuyers(objBuyer);
 
             // Muestra un mensaje de éxito
-            successMessage = $"El comprador '{objBuyer?.Name}' se guardó exitosamente!";
+            successMessage = $"Registrado exitosamente!";
 
             // Reinicia el formulario para un nuevo registro
             objBuyer = new BuyersEntity();

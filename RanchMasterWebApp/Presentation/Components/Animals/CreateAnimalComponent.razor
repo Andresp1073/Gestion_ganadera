@@ -9,7 +9,7 @@
     <ValidationSummary />
 
     <div>
-        <label>Género (M/F):</label>
+        <label>Género (M/H):</label>
         <select @bind="objAnimal.Gender" class="form-select">
             <option value="">Seleccione</option>
             <option value="M">Macho</option>
@@ -105,7 +105,7 @@
         try
         {
             AnimalsLog.CreateAnimals(objAnimal);
-            successMessage = "¡Animal registrado exitosamente!";
+            successMessage = "Registrado exitosamente";
             objAnimal = new AnimalsEntity(); // Limpiar formulario
         }
         catch (Exception ex)

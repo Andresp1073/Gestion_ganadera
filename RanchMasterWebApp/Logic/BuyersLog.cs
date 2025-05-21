@@ -5,7 +5,7 @@ namespace Logic;
 
 public class BuyersLog
 {
-    public  List<BuyersEntity> BuyersList()
+    public List<BuyersEntity> BuyersList()
     {
         using (var db = new RanchMasterContext())
         {

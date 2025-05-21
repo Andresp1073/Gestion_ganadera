@@ -6,10 +6,6 @@
 
 <EditForm Model="objLocations" OnValidSubmit="SaveProduct" FormName="FrmProduct">
     <div>
-        <label>Identifier Locations:</label>
-        <InputNumber @bind-Value="objLocations.IdLocation" />
-    </div>
-    <div>
         <label>Name:</label>
         <InputText @bind-Value="objLocations.Name" />
     </div>
@@ -49,7 +45,7 @@
             LocationsLog.CreateLocations(objLocations);
 
             // Muestra un mensaje de éxito
-            successMessage = $"La localizacion '{objLocations?.Name}' se guardó exitosamente!";
+            successMessage = $"Registrado exitosamente!";
             
             // Reinicia el formulario para un nuevo registro
             objLocations = new LocationsEntity();

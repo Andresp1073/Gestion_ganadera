@@ -6,10 +6,6 @@
 
 <EditForm Model="objReproduction" OnValidSubmit="SaveProduct" FormName="FrmProduct">
     <div>
-        <label>Identifier:</label>
-        <InputNumber @bind-Value="objReproduction.IdBreeding" />
-    </div>
-    <div>
         <label>Mathing Date:</label>
         <InputDate @bind-Value="objReproduction.MatingDate" />
     </div>
@@ -53,7 +49,7 @@
             ReproductionsLog.CreateReproductions(objReproduction);
 
             // Muestra un mensaje de éxito
-            successMessage = $"La reproduccion '{objReproduction?.IdBreeding}' se registro exitosamente";
+            successMessage = $"Registrado exitosamente";
 
             // Reinicia el formulario para un nuevo registro
             objReproduction = new ReproductionsEntity();

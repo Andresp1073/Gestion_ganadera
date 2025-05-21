@@ -14,7 +14,7 @@
 
     <div>
         <label>Teléfono:</label>
-        <InputText @bind-Value="objVet.PhoneNumber" />
+        <InputText @bind-Value="objVet.Phone" />
     </div>
 
     <div>
@@ -40,7 +40,7 @@
         try
         {
             VeterinariansLog.CreateVeterinarian(objVet);
-            successMessage = "¡Veterinario registrado exitosamente!";
+            successMessage = "Registrado exitosamente";
             objVet = new VeterinariansEntity(); // Limpiar formulario
         }
         catch (Exception ex)
@@ -49,5 +49,5 @@
         }
     }
 
-    }
+    
 }

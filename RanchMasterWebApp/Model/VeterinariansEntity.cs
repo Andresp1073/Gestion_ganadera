@@ -15,7 +15,7 @@ public class VeterinariansEntity
     
     [Required]
     [StringLength(45)]
-    public string PhoneNumber { get; set; }
+    public string Phone { get; set; }
     
     [Required]
     [StringLength(45)]

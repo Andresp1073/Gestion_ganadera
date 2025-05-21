@@ -5,10 +5,6 @@
 
 <EditForm Model="objFeedingDetails" OnValidSubmit="SaveProduct" FormName="FrmProduct">
     <div>
-        <label>Identifier:</label>
-        <InputNumber @bind-Value="objFeedingDetails.IdFeedingDetail" />
-    </div>
-    <div>
         <label>Food Type:</label>
         <InputText @bind-Value="objFeedingDetails.FoodType" />
     </div>
@@ -44,7 +40,7 @@
             FeedingDetailsLog.CreateFeedingDetails(objFeedingDetails);
 
             // Muestra un mensaje de éxito
-            successMessage = $"Los detalles de alimentacion '{objFeedingDetails?.IdFeedingDetail}' se guardó con exitó";
+            successMessage = $"Registrado Exitosamente";
             
             // Reinicia el formulario para un nuevo registro
             objFeedingDetails = new FeedingDetailsEntity();

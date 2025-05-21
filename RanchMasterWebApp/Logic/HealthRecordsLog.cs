@@ -6,7 +6,7 @@ namespace Logic;
 public class HealthRecordsLog
 {
     
-    public void CreateHealthRecords(HealthsRecordsEntity objHealthsRecords)
+    public static void CreateHealthRecords(HealthsRecordsEntity objHealthsRecords)
     {
         
         using (var db = new RanchMasterContext())

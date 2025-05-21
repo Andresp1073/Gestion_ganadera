@@ -17,7 +17,7 @@ public class AnimalsEntity
     public int Age { get; set; }
     
     [Required]
-    [StringLength(8)]
+    [StringLength(10)]
     public string Status { get; set; }
     
     //llave foranea
