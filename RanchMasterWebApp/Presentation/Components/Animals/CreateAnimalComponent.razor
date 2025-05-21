@@ -81,7 +81,7 @@
 
 @code {
     // Objeto
-    AnimalsEntity objAnimal = new AnimalsEntity();
+    AnimalsEntity objAnimal = new AnimalsEntity { Age = 0 };
 
     private string? successMessage;
 
@@ -106,7 +106,7 @@
         {
             AnimalsLog.CreateAnimals(objAnimal);
             successMessage = "Registrado exitosamente";
-            objAnimal = new AnimalsEntity(); // Limpiar formulario
+            objAnimal = new AnimalsEntity { Age = 0 }; // Limpiar formulario
         }
         catch (Exception ex)
         {

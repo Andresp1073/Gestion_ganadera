@@ -14,6 +14,7 @@ public class AnimalsEntity
     public string Gender { get; set; }
     
     [Required]
+    [Range(0, int.MaxValue, ErrorMessage = "La edad no puede ser negativa.")]
     public int Age { get; set; }
     
     [Required]
