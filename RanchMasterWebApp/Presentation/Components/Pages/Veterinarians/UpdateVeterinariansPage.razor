@@ -1,0 +1,10 @@
+@page "/Veterinarian/update/{IdVeterinarian:int}"
+@rendermode InteractiveServer
+
+<UpdateVeterinariansComponent IdVeterinarian="@IdVeterinarian"></UpdateVeterinariansComponent>
+
+
+@code {
+    [Parameter]
+    public int IdVeterinarian { get; set; }
+}

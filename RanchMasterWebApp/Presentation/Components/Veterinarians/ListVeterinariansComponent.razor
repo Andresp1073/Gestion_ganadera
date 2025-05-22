@@ -1,0 +1,43 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Lista de Veterinarios</h3>
+<a href="/Veterinarians/create">Crear veterinario</a>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var vet in veterinarians)
+    {
+        <tr>
+            <td>@vet.Name</td>
+            <td>@vet.Phone</td>
+            <td>@vet.Email</td>
+            <td>
+                <button @onclick="() => EditVeterinarian(vet.IdVeterinarian)">Editar</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    List<VeterinariansEntity> veterinarians = new();
+
+    protected override void OnInitialized()
+    {
+        veterinarians = new VeterinariansLog().VeterinarianList();
+    }
+
+    void EditVeterinarian(int id)
+    {
+        NavManager.NavigateTo($"/Veterinarian/update/{id}");
+    }
+}
