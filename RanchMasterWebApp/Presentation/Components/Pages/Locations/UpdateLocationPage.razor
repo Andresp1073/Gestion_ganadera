@@ -1,0 +1,9 @@
+@page "/location/update/{IdLocation}"
+@rendermode InteractiveServer
+
+<UpdateLocationComponent IdLocation="@IdLocation"></UpdateLocationComponent>
+
+@code {
+    [Parameter]
+    public string IdLocation { get; set; }
+}

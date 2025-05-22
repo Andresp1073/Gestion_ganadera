@@ -5,7 +5,7 @@ namespace Logic;
 
 public class LocationsLog
 {
-    public List<LocationsEntity> LocationsList()
+    public static List<LocationsEntity> LocationsList()
     {
         using (var db = new RanchMasterContext())
         {

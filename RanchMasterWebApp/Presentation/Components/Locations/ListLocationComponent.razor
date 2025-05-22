@@ -1,0 +1,72 @@
+@using Logic
+@using Model
+
+<h3>ListLocationsComponent</h3>
+
+<!-- Filtrar por tipo si lo deseas -->
+<select @onchange="TypeChanged">
+    <option value="">Todos los tipos</option>
+    @foreach (var type in locationTypes)
+    {
+        <option value="@type">@type</option>
+    }
+</select>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Capacidad</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var location in tempLocations)
+    {
+        <tr>
+            <td>@location.IdLocation</td>
+            <td>@location.Name</td>
+            <td>@location.Type</td>
+            <td>@location.Capacity</td>
+            <td><a href="location/update/@location.IdLocation">Editar</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    // Lista completa de ubicaciones
+    List<LocationsEntity> locations = new List<LocationsEntity>();
+    // Lista temporal (filtrada)
+    List<LocationsEntity> tempLocations = new List<LocationsEntity>();
+    // Lista de tipos únicos para filtro
+    List<string> locationTypes = new List<string>();
+
+    // Al inicializar el componente
+    protected override async Task OnInitializedAsync()
+    {
+        // Cargar ubicaciones
+        locations = await Task.Run(() => LocationsLog.LocationsList());
+        tempLocations = locations;
+
+        // Extraer tipos únicos para el filtro
+        locationTypes = locations.Select(l => l.Type).Distinct().ToList();
+    }
+
+    // Evento de cambio en el filtro
+    private void TypeChanged(ChangeEventArgs e)
+    {
+        string selectedType = e.Value?.ToString() ?? "";
+
+        if (string.IsNullOrEmpty(selectedType))
+        {
+            tempLocations = locations;
+        }
+        else
+        {
+            tempLocations = locations.Where(l => l.Type == selectedType).ToList();
+        }
+    }
+}
