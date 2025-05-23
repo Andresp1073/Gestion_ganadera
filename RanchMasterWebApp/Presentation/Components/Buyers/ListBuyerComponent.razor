@@ -1,0 +1,56 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Lista de Compradores</h3>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Cédula</th>
+        <th>Número de Teléfono</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (buyers.Any())
+    {
+        @foreach (var buyer in buyers)
+        {
+            <tr>
+                <td>@buyer.IdBuyer</td>
+                <td>@buyer.Name</td>
+                <td>@buyer.Cc</td>
+                <td>@buyer.PhoneNumber</td>
+                <td>
+                    <a href="@($"/buyer/update/{buyer.IdBuyer}")" class="btn btn-sm btn-info">Editar</a>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5">No hay compradores disponibles.</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    private List<BuyersEntity> buyers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var buyersLog = new BuyersLog();
+        
+        // It's generally better to await directly if the method is async or use Task.Run for blocking operations.
+        // Assuming BuyersList() might be blocking, Task.Run is fine.
+        buyers = await Task.Run(() => buyersLog.BuyersList());
+        
+        // Order by ID for consistent display
+        buyers = buyers.OrderBy(b => b.IdBuyer).ToList();
+    }
+}
