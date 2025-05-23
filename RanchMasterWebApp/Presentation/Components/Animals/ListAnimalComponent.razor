@@ -1,0 +1,87 @@
+﻿@using Logic 
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Lista de Animales</h3>
+
+<select @onchange="OnRaceChanged" class="form-select mb-3">
+    <option value="">Todas las razas</option>
+    @foreach (var race in races)
+    {
+        <option value="@race.IdRace">@race.Name</option>
+    }
+</select>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Género</th>
+            <th>Edad</th>
+            <th>Estado</th>
+            <th>Raza</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (tempAnimals.Any())
+        {
+            @foreach (var animal in tempAnimals)
+            {
+                <tr>
+                    <td>@animal.IdAnimal</td>
+                    <td>@animal.Gender</td>
+                    <td>@animal.Age</td>
+                    <td>@animal.Status</td>
+                    <td>@animal.Race?.Name</td>
+                    <td>
+                        <a href="@($"/animal/update/{animal.IdAnimal}")">Editar</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No hay animales disponibles.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<AnimalsEntity> animals = new();
+    private List<AnimalsEntity> tempAnimals = new();
+    private List<RacesEntity> races = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var animalsLog = new AnimalsLog();
+        var racesLog = new RacesLog();
+
+        // Obtener listas
+        animals = await Task.Run(() => animalsLog.AnimalsList());
+        races = await Task.Run(() => racesLog.RacesList());
+
+        // Ordenar por ID
+        animals = animals.OrderBy(a => a.IdAnimal).ToList();
+        tempAnimals = animals;
+    }
+
+    private void OnRaceChanged(ChangeEventArgs e)
+    {
+        string selected = e.Value?.ToString();
+
+        if (string.IsNullOrWhiteSpace(selected))
+        {
+            tempAnimals = animals;
+        }
+        else if (int.TryParse(selected, out int raceId))
+        {
+            tempAnimals = animals.Where(a => a.IdRace == raceId).ToList();
+        }
+
+        // Siempre ordenar después del filtro
+        tempAnimals = tempAnimals.OrderBy(a => a.IdAnimal).ToList();
+    }
+}
