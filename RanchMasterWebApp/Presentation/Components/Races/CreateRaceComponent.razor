@@ -37,6 +37,9 @@
             RacesLog.CreateRaces(objRace); // Método lógico para insertar la raza
             successMessage = "Registrado exitosamente";
             objRace = new RacesEntity(); // Limpia el formulario
+            
+            //Redirecciona a la lista
+            NavManager.NavigateTo("Race/list");
         }
         catch (Exception ex)
         {
