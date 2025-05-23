@@ -1,18 +1,17 @@
 using Data;
 using Model;
+using Microsoft.EntityFrameworkCore; // Necesitas agregar esta línea
 
 namespace Logic;
 
 public class HealthRecordsLog
 {
-    
     public static void CreateHealthRecords(HealthsRecordsEntity objHealthsRecords)
     {
-        
         using (var db = new RanchMasterContext())
         {
             db.HealthsRecords.Add(objHealthsRecords);
-            db.SaveChanges();   
+            db.SaveChanges();
         }
     }
 
@@ -20,7 +19,11 @@ public class HealthRecordsLog
     {
         using (var db = new RanchMasterContext())
         {
-            return db.HealthsRecords.ToList();
+            // Carga explícitamente las entidades relacionadas (Veterinarians y Animals)
+            return db.HealthsRecords
+                .Include(hr => hr.Veterinarians) // Incluye el veterinario asociado
+                .Include(hr => hr.Animals)      // Incluye el animal asociado
+                .ToList();
         }
     }
 
