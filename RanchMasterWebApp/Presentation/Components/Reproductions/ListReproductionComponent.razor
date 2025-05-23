@@ -1,0 +1,82 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Lista de Reproducciones</h3>
+
+<select @onchange="OnStatusChanged" class="form-select mb-3">
+    <option value="">Todos los estados</option>
+    <option value="active">Activo</option>
+    <option value="desactive">Inactivo</option>
+</select>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Fecha de Nacimiento</th>
+        <th>Estado</th>
+        <th>Fecha de Apareamiento</th>
+        <th>Crías</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (tempReproductions.Any())
+    {
+        @foreach (var reproduction in tempReproductions)
+        {
+            <tr>
+                <td>@reproduction.IdBreeding</td>
+                <td>@reproduction.Birthdate.ToShortDateString()</td>
+                <td>@reproduction.Status</td>
+                <td>@reproduction.MatingDate.ToShortDateString()</td> @* Asumiendo que MatingDate es un DateTime *@
+                <td>@reproduction.NumberOffspring</td>
+                <td>
+                    <a href="@($"/Reproduction/update/{reproduction.IdBreeding}")">Editar</a>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="6">No hay reproducciones disponibles.</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    private List<ReproductionsEntity> reproductions = new();
+    private List<ReproductionsEntity> tempReproductions = new(); // Lista temporal para el filtrado
+
+    protected override async Task OnInitializedAsync()
+    {
+        var reproductionsLog = new ReproductionsLog();
+
+        // Obtener la lista de reproducciones
+        reproductions = await Task.Run(() => reproductionsLog.ReproductionsList());
+
+        // Ordenar por ID y asignar a la lista temporal inicial
+        reproductions = reproductions.OrderBy(r => r.IdBreeding).ToList();
+        tempReproductions = reproductions; // Inicialmente, tempReproductions muestra todos los animales
+    }
+
+    private void OnStatusChanged(ChangeEventArgs e)
+    {
+        string selectedStatus = e.Value?.ToString();
+
+        if (string.IsNullOrWhiteSpace(selectedStatus))
+        {
+            tempReproductions = reproductions; // Mostrar todos si no hay filtro
+        }
+        else
+        {
+            tempReproductions = reproductions.Where(r => r.Status == selectedStatus).ToList();
+        }
+
+        // Siempre ordenar después del filtro
+        tempReproductions = tempReproductions.OrderBy(r => r.IdBreeding).ToList();
+    }
+}

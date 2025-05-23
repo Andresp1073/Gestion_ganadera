@@ -1,0 +1,112 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Actualizar Reproducción</h3>
+
+@if (notFound)
+{
+    <p><strong>Reproducción no encontrada.</strong></p>
+}
+else if (objReproduction != null)
+{
+    <EditForm Model="objReproduction" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de Nacimiento:</label>
+            <InputDate class="form-control" @bind-Value="objReproduction.Birthdate" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de Apareamiento:</label>
+            <InputDate class="form-control" @bind-Value="objReproduction.MatingDate" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Estado:</label>
+            <InputSelect class="form-select" @bind-Value="objReproduction.Status">
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Número de Crías:</label>
+            <InputNumber class="form-control" @bind-Value="objReproduction.NumberOffspring" />
+        </div>
+
+        @* Si necesitas seleccionar animales padre/madre, necesitarías cargar listas de animales
+           y usar InputSelect como en el caso de las razas de animales.
+           Por simplicidad, en este ejemplo solo se muestran las propiedades directas de ReproductionsEntity. *@
+        @*
+        <div class="mb-3">
+            <label class="form-label">Animal Padre:</label>
+            <InputSelect class="form-select" @bind-Value="objReproduction.FatherAnimalId">
+                @foreach (var animal in animals)
+                {
+                    <option value="@animal.IdAnimal">@animal.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Animal Madre:</label>
+            <InputSelect class="form-select" @bind-Value="objReproduction.MotherAnimalId">
+                @foreach (var animal in animals)
+                {
+                    <option value="@animal.IdAnimal">@animal.Name</option>
+                }
+            </InputSelect>
+        </div>
+        *@
+
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </EditForm>
+}
+else
+{
+    <p>Cargando datos de la reproducción...</p>
+}
+
+@code {
+    [Parameter]
+    public int IdBreeding { get; set; } // Recibido desde la URL, debe coincidir con el parámetro de ruta
+
+    private ReproductionsEntity? objReproduction;
+    private bool notFound = false;
+    private readonly ReproductionsLog reproductionsLog = new();
+
+    // Si planeas seleccionar animales padre/madre, necesitarías estas líneas:
+    // private List<AnimalsEntity> animals = new();
+    // private readonly AnimalsLog animalsLog = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Si planeas seleccionar animales padre/madre, descomenta y usa esta línea:
+        // animals = await Task.Run(() => animalsLog.AnimalsList());
+
+        objReproduction = await Task.Run(() =>
+            reproductionsLog.ReproductionsList().FirstOrDefault(r => r.IdBreeding == IdBreeding));
+
+        if (objReproduction == null)
+        {
+            notFound = true;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            reproductionsLog.UpdateReproductions(objReproduction!);
+            await Task.Delay(500); // Pequeño retraso para feedback visual
+            NavManager.NavigateTo("/Reproduction/list"); // Redirige a la lista de reproducciones
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al actualizar la reproducción: {ex.Message}");
+        }
+    }
+}
