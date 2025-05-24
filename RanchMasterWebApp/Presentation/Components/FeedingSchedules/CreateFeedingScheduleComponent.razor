@@ -2,15 +2,13 @@
 @using Model
 @inject NavigationManager NavManager
 
-<h3>CreateFeedingSchedulesComponent</h3>
-
 <EditForm Model="objFeedingSchedules" OnValidSubmit="SaveFeedingSchedule">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="mb-3">
-        <label class="form-label">Fecha y hora de alimentación:</label>
-        <InputDate @bind-Value="objFeedingSchedules.FeedingTime" class="form-control" />
+        <label class="form-label">Fecha de alimentación:</label>
+        <InputDate @bind-Value="selectedDate" class="form-control" />
     </div>
 
     <div class="mb-3">
@@ -19,10 +17,10 @@
             <option value="">Seleccione</option>
             @if (feedingDetails != null)
             {
-            @foreach (var detail in feedingDetails)
-            {
-            <option value="@detail.IdFeedingDetail">@detail.FoodType - @detail.Quantity kg</option>
-            }
+                @foreach (var detail in feedingDetails)
+                {
+                    <option value="@detail.IdFeedingDetail">@detail.FoodType - @detail.Quantity kg</option>
+                }
             }
         </InputSelect>
     </div>
@@ -32,31 +30,42 @@
 
 @if (!string.IsNullOrEmpty(successMessage))
 {
-<div class="alert alert-success mt-3">@successMessage</div>
+    <div class="alert alert-success mt-3">@successMessage</div>
 }
 
 @code {
-FeedingSchedulesEntity objFeedingSchedules = new();
-List<FeedingDetailsEntity> feedingDetails = new();
-private string? successMessage;
+    FeedingSchedulesEntity objFeedingSchedules = new();
+    List<FeedingDetailsEntity> feedingDetails = new();
+    private string? successMessage;
+    private DateTime selectedDate = DateTime.Today;
 
-protected override async Task OnInitializedAsync()
-{
-feedingDetails = await Task.Run(() => new FeedingDetailsLog().FeedingDetailsList());
-}
+    protected override async Task OnInitializedAsync()
+    {
+        feedingDetails = await Task.Run(() => new FeedingDetailsLog().FeedingDetailsList());
+    }
 
-private void SaveFeedingSchedule()
-{
-try
-{
-FeedingSchedulesLog.CreateFeedingSheduleLog(objFeedingSchedules);
-successMessage = $"Registrado exitosamente";
-objFeedingSchedules = new();
+    private void SaveFeedingSchedule()
+    {
+        try
+        {
+            // Toma la hora actual del sistema
+            TimeSpan horaLocal = DateTime.Now.TimeOfDay;
 
-}
-catch (Exception ex)
-{
-successMessage = $"Error al guardar: {ex.Message}";
-}
-}
+            // Une la fecha seleccionada + hora local
+            objFeedingSchedules.FeedingTime = selectedDate.Date + horaLocal;
+
+            // Guarda el registro
+            FeedingSchedulesLog.CreateFeedingSheduleLog(objFeedingSchedules);
+            successMessage = "¡Horario registrado exitosamente!";
+
+            objFeedingSchedules = new();
+            selectedDate = DateTime.Today;
+
+            NavManager.NavigateTo("/FeedingSchedules/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al guardar: {ex.Message}";
+        }
+    }
 }
