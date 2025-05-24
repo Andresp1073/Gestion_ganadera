@@ -1,0 +1,60 @@
+@using Model
+@using Logic
+@inject NavigationManager NavManager
+
+<h3>Editar Veterinario</h3>
+
+<EditForm Model="objVet" OnValidSubmit="UpdateVeterinarian">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Nombre:</label>
+        <InputText @bind-Value="objVet.Name" class="form-control" />
+    </div>
+
+    <div>
+        <label>Teléfono:</label>
+        <InputText @bind-Value="objVet.Phone" class="form-control" />
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="objVet.Email" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Actualizar Veterinario</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mt-2">@successMessage</div>
+}
+
+@code {
+    [Parameter]
+    public int IdVeterinarian { get; set; }
+
+    private VeterinariansEntity objVet = new();
+    private string? successMessage;
+
+    protected override void OnParametersSet()
+    {
+        var log = new VeterinariansLog();
+        objVet = log.VeterinarianList().FirstOrDefault(v => v.IdVeterinarian == IdVeterinarian) ?? new();
+    }
+
+    private void UpdateVeterinarian()
+    {
+        try
+        {
+            new VeterinariansLog().UpdateVeterinarians(objVet);
+            successMessage = "Veterinario actualizado exitosamente";
+            NavManager.NavigateTo("/Veterinarian/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error: {ex.InnerException?.Message ?? ex.Message}";
+        }
+    }
+}
