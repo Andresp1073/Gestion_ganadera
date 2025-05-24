@@ -1,0 +1,60 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Horarios de Alimentación</h3>
+    </div>
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>Fecha y Hora</th>
+            <th>Tipo de Alimento</th>
+            <th>Opciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var schedule in schedules)
+        {
+            <tr>
+                <td>@schedule.IdSchedule</td>
+                <td>@schedule.FeedingTime.ToString("g")</td>
+                <td>@schedule.FeedingDetail?.FoodType</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" @onclick="() => EditSchedule(schedule.IdSchedule)">Editar</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<FeedingSchedulesEntity> schedules = new();
+
+    protected override void OnInitialized()
+    {
+        var log = new FeedingSchedulesLog();
+        schedules = log.FeedingSchedulesList();
+
+        // Incluye detalles del alimento
+        foreach (var schedule in schedules)
+        {
+            schedule.FeedingDetail = GetFeedingDetail(schedule.IdFeedingDetail);
+        }
+    }
+
+    private void EditSchedule(int id)
+    {
+        NavManager.NavigateTo($"/FeedingSchedules/update/{id}");
+    }
+
+    private FeedingDetailsEntity GetFeedingDetail(int id)
+    {
+        using var db = new Data.RanchMasterContext();
+        return db.FeedingDetails.FirstOrDefault(fd => fd.IdFeedingDetail == id);
+    }
+}

@@ -1,0 +1,80 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Editar Horario de Alimentación</h3>
+
+<EditForm Model="objSchedule" OnValidSubmit="UpdateSchedule">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Fecha de Alimentación:</label>
+        <InputDate @bind-Value="datePart" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tipo de Alimento:</label>
+        <InputSelect @bind-Value="objSchedule.IdFeedingDetail" class="form-control">
+            <option value="">Seleccione</option>
+            @foreach (var detail in feedingDetails)
+            {
+                <option value="@detail.IdFeedingDetail">
+                    @detail.FoodType - @detail.Quantity kg
+                </option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-info mt-3">@successMessage</div>
+}
+
+@code {
+    [Parameter]
+    public string IdSchedule { get; set; }
+
+    FeedingSchedulesEntity objSchedule = new FeedingSchedulesEntity();
+    List<FeedingDetailsEntity> feedingDetails = new();
+    string? successMessage;
+
+    DateTime datePart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        feedingDetails = await Task.Run(() => new FeedingDetailsLog().FeedingDetailsList());
+
+        if (int.TryParse(IdSchedule, out var id))
+        {
+            using var db = new Data.RanchMasterContext();
+            objSchedule = db.FeedingSchedules.FirstOrDefault(x => x.IdSchedule == id)
+                          ?? new FeedingSchedulesEntity();
+
+            datePart = objSchedule.FeedingTime.Date;
+
+            objSchedule.FeedingDetail = db.FeedingDetails
+                .FirstOrDefault(fd => fd.IdFeedingDetail == objSchedule.IdFeedingDetail);
+        }
+    }
+
+    private void UpdateSchedule()
+    {
+        try
+        {
+            // Combina la fecha seleccionada con la hora actual del PC
+            objSchedule.FeedingTime = datePart.Date + DateTime.Now.TimeOfDay;
+
+            new FeedingSchedulesLog().UpdateFeedingSchedules(objSchedule);
+            successMessage = "¡Horario actualizado correctamente!";
+            NavManager.NavigateTo("/FeedingSchedules/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al editar: {ex.Message}";
+        }
+    }
+}
