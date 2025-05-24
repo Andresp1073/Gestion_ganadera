@@ -1,55 +1,49 @@
 @using Logic
 @using Model
 @inject NavigationManager NavManager
-<h3>CreateFeedingDetailComponent</h3>
+<h3>Crear Detalle de Alimentación</h3>
 
-<EditForm Model="objFeedingDetails" OnValidSubmit="SaveProduct" FormName="FrmProduct">
-    <div>
-        <label>Food Type:</label>
-        <InputText @bind-Value="objFeedingDetails.FoodType" />
+<EditForm Model="objFeedingDetails" OnValidSubmit="SaveDetail">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Tipo de Alimento:</label>
+        <InputText @bind-Value="objFeedingDetails.FoodType" class="form-control" />
     </div>
-    <div>
-        <label>Quantity:</label>
-        <InputNumber @bind-Value="objFeedingDetails.Quantity" />
+    <div class="mb-3">
+        <label class="form-label">Cantidad (kg):</label>
+        <InputNumber @bind-Value="objFeedingDetails.Quantity" class="form-control" />
     </div>
-    
-    <button type="submit">Guardar</button>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
 </EditForm>
 
-@if (successMessage != null)
+@if (!string.IsNullOrEmpty(successMessage))
 {
-    <div>@successMessage</div>
+    <div class="alert alert-info mt-3">@successMessage</div>
 }
 
 @code {
-    // Instancia del producto que se está creando
     FeedingDetailsEntity objFeedingDetails = new FeedingDetailsEntity();
-    
-    // Mensaje para indicar el resultado de la operación
     private string? successMessage;
-    
-    /*
-     * Método que se ejecuta al enviar el formulario.
-     * Guarda el producto en la base de datos.
-     */
-    private void SaveProduct()
+
+    private void SaveDetail()
     {
         try
         {
-            // Llama al método para crear un producto en la capa lógica
             FeedingDetailsLog.CreateFeedingDetails(objFeedingDetails);
+            successMessage = "¡Detalle registrado correctamente!";
 
-            // Muestra un mensaje de éxito
-            successMessage = $"Registrado Exitosamente";
-            
-            // Reinicia el formulario para un nuevo registro
+            // Reiniciar formulario
             objFeedingDetails = new FeedingDetailsEntity();
-            
+
+            // Volver al listado
+            NavManager.NavigateTo("/FeedingDetails/list");
         }
         catch (Exception ex)
         {
-            // Muestra el mensaje de error en caso de excepción
-            successMessage = $"Error al guardar el producto: {ex.Message}";
+            successMessage = $"Error al guardar: {ex.Message}";
         }
     }
 }
