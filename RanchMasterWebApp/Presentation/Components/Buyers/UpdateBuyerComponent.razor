@@ -1,0 +1,106 @@
+﻿
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Actualizar Comprador</h3>
+
+@if (!string.IsNullOrWhiteSpace(mensaje))
+{
+    <div class="alert @mensajeClase" role="alert">
+        @mensaje
+    </div>
+}
+
+@if (notFound)
+{
+    <p><strong>Comprador no encontrado.</strong></p>
+}
+else if (objBuyer != null)
+{
+    <EditForm Model="objBuyer" OnValidSubmit="HandleValidSubmit" FormName="ActualizarCompradorForm">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label">Nombre:</label>
+            <InputText class="form-control" @bind-Value="objBuyer.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cédula:</label>
+            <InputText class="form-control" @bind-Value="objBuyer.Cc" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Número de Teléfono:</label>
+            <InputText class="form-control" @bind-Value="objBuyer.PhoneNumber" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <button type="button" class="btn btn-secondary" @onclick="GoBackToList">Cancelar</button>
+    </EditForm>
+}
+else
+{
+    <p>Cargando datos del comprador...</p>
+}
+
+@code {
+    [Parameter]
+    public int IdBuyer { get; set; }
+
+    private BuyersEntity? objBuyer;
+    private bool notFound = false;
+    private readonly BuyersLog buyersLog = new();
+
+    private string mensaje = "";
+    private string mensajeClase = "";
+
+    protected override void OnInitialized()
+    {
+        objBuyer = buyersLog.GetBuyerById(IdBuyer);
+
+        if (objBuyer == null)
+        {
+            notFound = true;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            string resultado = buyersLog.UpdateBuyers(objBuyer!);
+
+            if (resultado == "OK")
+            {
+                mensaje = "¡Comprador actualizado exitosamente!";
+                mensajeClase = "alert-success";
+
+                // It's good practice to ensure the UI updates before navigating
+                await InvokeAsync(StateHasChanged);
+                await Task.Delay(1000); // Give user time to read the success message
+                NavManager.NavigateTo("/buyer/list");
+            }
+            else
+            {
+                mensaje = resultado;
+                mensajeClase = "alert-warning";
+            }
+        }
+        catch (Exception ex)
+        {
+            mensaje = "Error inesperado al intentar actualizar.";
+            mensajeClase = "alert-danger";
+            // For debugging, consider logging to a proper logging system in a real app
+            Console.WriteLine($"Error al actualizar el comprador: {ex.Message}");
+        }
+    }
+
+    private void GoBackToList()
+    {
+        NavManager.NavigateTo("/buyer/list");
+    }
+}
