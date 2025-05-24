@@ -1,0 +1,53 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Lista de Razas</h3>
+
+@if (races.Any())
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Opciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var race in races)
+        {
+            <tr>
+                <td>@race.IdRace</td>
+                <td>@race.Name</td>
+                <td>@race.Description</td>
+                <td>
+                    <a href="@($"/Race/update/{race.IdRace}")" class="btn btn-sm btn-info">Editar</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay razas registradas.</p>
+}
+
+
+@code {
+    private List<RacesEntity> races = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var racesLog = new RacesLog();
+        
+        // Obtener la lista de razas
+        // Se usa Task.Run para no bloquear la UI mientras se accede a la base de datos
+        races = await Task.Run(() => racesLog.RacesList()); 
+
+        // Opcional: Ordenar las razas si se desea una presentación específica
+        races = races.OrderBy(r => r.Name).ToList(); 
+    }
+}

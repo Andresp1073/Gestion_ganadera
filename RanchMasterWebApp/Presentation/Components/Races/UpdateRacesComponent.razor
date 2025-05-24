@@ -1,0 +1,85 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Actualizar Raza</h3>
+
+@if (notFound)
+{
+    <p><strong>Raza no encontrada.</strong></p>
+    <button @onclick="NavigateToList" class="btn btn-secondary mt-3">Volver a la lista de Razas</button>
+}
+else if (objRace != null)
+{
+    <EditForm Model="objRace" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="nameInput" class="form-label">Nombre:</label>
+            <InputText id="nameInput" class="form-control" @bind-Value="objRace.Name" />
+            <ValidationMessage For="@(() => objRace.Name)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="descriptionInput" class="form-label">Descripción:</label>
+            <InputTextArea id="descriptionInput" class="form-control" @bind-Value="objRace.Description" rows="3" />
+            <ValidationMessage For="@(() => objRace.Description)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <button type="button" @onclick="NavigateToList" class="btn btn-secondary ms-2">Cancelar</button>
+    </EditForm>
+}
+else
+{
+    <p>Cargando datos de la raza...</p>
+}
+
+@code {
+    [Parameter]
+    public int IdRace { get; set; } // Recibido desde la URL, e.g., /race/update/1
+
+    private RacesEntity? objRace;
+    private bool notFound = false;
+    private readonly RacesLog racesLog = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Obtener la raza específica por su ID
+        // Como RacesLog no tiene un método GetRaceById(), simularemos buscándola en la lista completa.
+        // EN UN ESCENARIO REAL: Deberías agregar un método GetRaceById(int id) a RacesLog que consulte la BD directamente.
+        objRace = await Task.Run(() =>
+            racesLog.RacesList().FirstOrDefault(r => r.IdRace == IdRace));
+
+        if (objRace == null)
+        {
+            notFound = true;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (objRace != null)
+            {
+                // Llamar al método de actualización en la lógica de negocio
+                racesLog.UpdateRaces(objRace);
+                await Task.Delay(300); // Pequeño retraso para feedback visual antes de navegar
+                NavManager.NavigateTo("/Race/list"); // Redirigir a la lista de razas
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejo de errores: Podrías loggear el error o mostrar un mensaje al usuario
+            Console.WriteLine($"Error al actualizar la raza: {ex.Message}");
+            // Aquí podrías añadir una notificación al usuario si la actualización falla
+        }
+    }
+
+    private void NavigateToList()
+    {
+        NavManager.NavigateTo("/Race/list"); // Navegar de vuelta a la lista de razas
+    }
+}
