@@ -2,44 +2,85 @@
 @using Model
 @inject NavigationManager NavManager
 
-<h3>ListSaleComponent</h3>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold">Lista de Ventas</h4> @* Título ajustado con estilo *@
+        @* Botón para crear una nueva venta, ajusta la ruta si es diferente *@
+        <a href="/Sales/create" class="btn btn-success">+ Crear Venta</a>
+    </div>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Fecha</th>
-        <th>Comprador</th>
-        <th>Animal</th>
-        <th>Opciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var sale in sales)
-    {
-        <tr>
-            <td>@sale.SaleDateTime.ToShortDateString()</td>
-            <td>@buyers.FirstOrDefault(b => b.IdBuyer == sale.IdBuyer)?.Name</td>
-            <td>Animal @sale.IdAnimal</td>
-            <td>
-                <button @onclick="() => EditSale(sale.IdSale)">Editar</button>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+    @* No se incluye la sección de filtro por estado, ya que no estaba presente en tu código original para ventas. *@
+
+    <div class="table-responsive shadow-sm border rounded bg-white"> @* Contenedor de la tabla con estilos *@
+        <table class="table table-striped table-bordered align-middle mb-0"> @* Estilo de tabla Bootstrap *@
+            <thead class="table-light"> @* Cabecera de tabla con fondo claro *@
+                <tr>
+                    <th scope="col">ID Venta</th> @* Añadido ID para claridad *@
+                    <th scope="col">Fecha</th> @* scope="col" para accesibilidad *@
+                    <th scope="col">Comprador</th>
+                    <th scope="col">Animal (ID)</th> @* Ajustado el texto para reflejar que es el ID del animal *@
+                    <th scope="col" style="width: 100px;">Opciones</th> @* Ancho fijo para la columna de opciones *@
+                </tr>
+            </thead>
+            <tbody>
+                @if (sales != null && sales.Any()) @* Verificación de datos para mostrar la tabla o un mensaje *@
+                {
+                    @foreach (var sale in sales)
+                    {
+                        <tr>
+                            <td>@sale.IdSale</td> @* Muestra el ID de la venta *@
+                            @* Asegurando el formato de fecha dd/MM/yyyy *@
+                            <td>@(sale.SaleDateTime.ToString("dd/MM/yyyy"))</td>
+                            <td>@buyers.FirstOrDefault(b => b.IdBuyer == sale.IdBuyer)?.Name</td>
+                            <td>Animal @sale.IdAnimal</td> @* Se mantiene como estaba en tu código original, ya que no hay una lista de animales cargada aquí *@
+                            <td>
+                                @* Botón de editar con estilo y ancho completo. Ajusta la ruta si es diferente, por ejemplo /sale/update/{id} *@
+                                <a class="btn btn-sm btn-primary w-100" href="@($"/Sale/update/{sale.IdSale}")">
+                                    Editar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No hay ventas disponibles.</td> @* Mensaje si no hay datos, colspan ajustado *@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 @code {
-    List<SalesEntity> sales = new();
-    List<BuyersEntity> buyers = new();
+    private List<SalesEntity> sales = new();
+    private List<BuyersEntity> buyers = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync() @* Cambiado a OnInitializedAsync para llamadas asíncronas *@
     {
-        sales = SalesLog.SalesList();
-        buyers = new BuyersLog().BuyersList();
+        try
+        {
+            // Cargar datos de forma asíncrona
+            sales = await Task.Run(() => SalesLog.SalesList());
+            buyers = await Task.Run(() => new BuyersLog().BuyersList());
+
+            // Asegurarse de que las listas no sean null
+            if (sales == null) sales = new List<SalesEntity>();
+            if (buyers == null) buyers = new List<BuyersEntity>();
+
+            // Opcional: Ordenar las ventas al cargar, por ejemplo por fecha o ID
+            sales = sales.OrderByDescending(s => s.SaleDateTime).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar ventas: {ex.Message}");
+            // En caso de error, inicializa las listas para evitar NullReferenceException
+            sales = new List<SalesEntity>();
+            buyers = new List<BuyersEntity>();
+            // Aquí podrías añadir una notificación al usuario de que hubo un error al cargar los datos
+        }
     }
 
-    void EditSale(int id)
-    {
-        NavManager.NavigateTo($"/sale/update/{id}");
-    }
+    
 }

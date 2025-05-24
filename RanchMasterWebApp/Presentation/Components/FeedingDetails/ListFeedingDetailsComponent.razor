@@ -3,32 +3,50 @@
 @inject NavigationManager NavManager
 
 <div class="container mt-4">
-    <table class="table table-hover table-bordered">
-        <thead class="table-light">
-        <tr>
-            <th>ID</th>
-            <th>Cantidad (kg)</th>
-            <th>Tipo de Alimento</th>
-            <th>Opciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var detail in feedingDetails)
-        {
-            <tr>
-                <td>@detail.IdFeedingDetail</td>
-                <td>@detail.Quantity</td>
-                <td>@detail.FoodType</td>
-                <td>
-                    <button class="btn btn-primary btn-sm"
-                            @onclick="() => EditDetail(detail.IdFeedingDetail)">
-                        Editar
-                    </button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <div class="d-flex justify-content-between align-items-center mb-3"> @* Header with title and button *@
+        <h4 class="fw-semibold">Lista de Detalles de Alimentación</h4> @* Updated title *@
+        <a href="/FeedingDetails/create" class="btn btn-success">+ Crear Detalle</a> @* Button to create new feeding detail *@
+    </div>
+
+    @* No hay filtro en tu código original para este componente, así que no se añade una sección de filtro aquí.
+       Si necesitas uno, puedes añadir una estructura similar a la del componente de reproducciones. *@
+
+    <div class="table-responsive shadow-sm border rounded bg-white"> @* Table container with shadow, border, and background *@
+        <table class="table table-striped table-bordered align-middle mb-0"> @* Main table classes *@
+            <thead class="table-light"> @* Light header background *@
+                <tr>
+                    <th scope="col">ID</th> @* Added scope="col" for accessibility *@
+                    <th scope="col">Cantidad (kg)</th>
+                    <th scope="col">Tipo de Alimento</th>
+                    <th scope="col" style="width: 100px;">Opciones</th> @* Fixed width for options column *@
+                </tr>
+            </thead>
+            <tbody>
+                @if (feedingDetails != null && feedingDetails.Any()) @* Added null check and .Any() for better handling *@
+                {
+                    @foreach (var detail in feedingDetails)
+                    {
+                        <tr>
+                            <td>@detail.IdFeedingDetail</td>
+                            <td>@detail.Quantity</td>
+                            <td>@detail.FoodType</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm w-100" @onclick="() => EditDetail(detail.IdFeedingDetail)">
+                                    Editar @* "Editar" button style and full width *@
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">No hay detalles de alimentación disponibles.</td> @* Centered message when no data, colspan adjusted *@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @code {
@@ -36,7 +54,23 @@
 
     protected override void OnInitialized()
     {
-        feedingDetails = new FeedingDetailsLog().FeedingDetailsList();
+        LoadFeedingDetails();
+    }
+
+    private void LoadFeedingDetails()
+    {
+        try
+        {
+            feedingDetails = new FeedingDetailsLog().FeedingDetailsList();
+            // Optional: Order the list if you want a consistent display order
+            feedingDetails = feedingDetails.OrderBy(d => d.IdFeedingDetail).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar detalles de alimentación: {ex.Message}");
+            // Ensure the list is not null on error
+            feedingDetails = new List<FeedingDetailsEntity>();
+        }
     }
 
     void EditDetail(int id)

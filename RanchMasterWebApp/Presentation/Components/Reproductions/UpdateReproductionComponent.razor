@@ -2,97 +2,100 @@
 @using Model
 @inject NavigationManager NavManager
 
-<h3>Actualizar Reproducción</h3>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Reproducción</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Reproduction/list")'>
+            ← Regresar
+        </button>
+    </div>
 
-@if (notFound)
-{
-    <p><strong>Reproducción no encontrada.</strong></p>
-}
-else if (objReproduction != null)
-{
-    <EditForm Model="objReproduction" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+    @if (notFound)
+    {
+        <div class="alert alert-warning shadow-sm border rounded bg-white p-3">Reproducción no encontrada.</div>
+    }
+    else if (objReproduction != null)
+    {
+        <div class="card shadow-sm border rounded bg-white"> @* Estilo de tarjeta para el formulario *@
+            <div class="card-body"> @* Contenido del cuerpo de la tarjeta *@
+                <EditForm Model="objReproduction" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-        <div class="mb-3">
-            <label class="form-label">Fecha de Nacimiento:</label>
-            <InputDate class="form-control" @bind-Value="objReproduction.Birthdate" />
-        </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Fecha de Nacimiento:</label>
+                        <InputDate class="form-control" @bind-Value="objReproduction.Birthdate" />
+                    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Fecha de Apareamiento:</label>
-            <InputDate class="form-control" @bind-Value="objReproduction.MatingDate" />
-        </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Fecha de Apareamiento:</label>
+                        <InputDate class="form-control" @bind-Value="objReproduction.MatingDate" />
+                    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Estado:</label>
-            <InputSelect class="form-select" @bind-Value="objReproduction.Status">
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
-            </InputSelect>
-        </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Estado:</label>
+                        <InputSelect class="form-select" @bind-Value="objReproduction.Status">
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                            <option value="saludable">Saludable</option>
+                            <option value="enfermo">Enfermo</option>
+                            @* Asegúrate de incluir todos los posibles estados de tu entidad ReproductionsEntity *@
+                        </InputSelect>
+                    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Número de Crías:</label>
-            <InputNumber class="form-control" @bind-Value="objReproduction.NumberOffspring" />
-        </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Número de Crías:</label>
+                        <InputNumber class="form-control" @bind-Value="objReproduction.NumberOffspring" />
+                    </div>
 
-        @* Si necesitas seleccionar animales padre/madre, necesitarías cargar listas de animales
-           y usar InputSelect como en el caso de las razas de animales.
-           Por simplicidad, en este ejemplo solo se muestran las propiedades directas de ReproductionsEntity. *@
-        @*
-        <div class="mb-3">
-            <label class="form-label">Animal Padre:</label>
-            <InputSelect class="form-select" @bind-Value="objReproduction.FatherAnimalId">
-                @foreach (var animal in animals)
+                    <div class="d-grid"> @* d-grid para que el botón ocupe todo el ancho *@
+                        <button type="submit" class="btn btn-primary">Actualizar Reproducción</button> @* Cambiado a btn-primary y texto *@
+                    </div>
+                </EditForm>
+
+                @if (!string.IsNullOrEmpty(successMessage))
                 {
-                    <option value="@animal.IdAnimal">@animal.Name</option>
+                    <div class="alert alert-success mt-3">@successMessage</div>
                 }
-            </InputSelect>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Animal Madre:</label>
-            <InputSelect class="form-select" @bind-Value="objReproduction.MotherAnimalId">
-                @foreach (var animal in animals)
+                @if (!string.IsNullOrEmpty(errorMessage))
                 {
-                    <option value="@animal.IdAnimal">@animal.Name</option>
+                    <div class="alert alert-danger mt-3">@errorMessage</div>
                 }
-            </InputSelect>
+            </div>
         </div>
-        *@
-
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    </EditForm>
-}
-else
-{
-    <p>Cargando datos de la reproducción...</p>
-}
+    }
+    else
+    {
+        <div class="alert alert-info shadow-sm border rounded bg-white p-3">Cargando datos de la reproducción...</div>
+    }
+</div>
 
 @code {
     [Parameter]
-    public int IdBreeding { get; set; } // Recibido desde la URL, debe coincidir con el parámetro de ruta
+    public int IdBreeding { get; set; }
 
     private ReproductionsEntity? objReproduction;
     private bool notFound = false;
     private readonly ReproductionsLog reproductionsLog = new();
-
-    // Si planeas seleccionar animales padre/madre, necesitarías estas líneas:
-    // private List<AnimalsEntity> animals = new();
-    // private readonly AnimalsLog animalsLog = new();
+    private string? successMessage; // Para el mensaje de éxito
+    private string? errorMessage;   // Para el mensaje de error
 
     protected override async Task OnInitializedAsync()
     {
-        // Si planeas seleccionar animales padre/madre, descomenta y usa esta línea:
-        // animals = await Task.Run(() => animalsLog.AnimalsList());
-
-        objReproduction = await Task.Run(() =>
-            reproductionsLog.ReproductionsList().FirstOrDefault(r => r.IdBreeding == IdBreeding));
-
-        if (objReproduction == null)
+        try
         {
-            notFound = true;
+            objReproduction = await Task.Run(() =>
+                reproductionsLog.ReproductionsList().FirstOrDefault(r => r.IdBreeding == IdBreeding));
+
+            if (objReproduction == null)
+            {
+                notFound = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los datos de la reproducción: {ex.Message}";
+            notFound = true; // Considerar como no encontrado si hay un error al cargar
         }
     }
 
@@ -101,12 +104,18 @@ else
         try
         {
             reproductionsLog.UpdateReproductions(objReproduction!);
-            await Task.Delay(500); // Pequeño retraso para feedback visual
-            NavManager.NavigateTo("/Reproduction/list"); // Redirige a la lista de reproducciones
+            successMessage = "Reproducción actualizada exitosamente"; // Mensaje de éxito
+            errorMessage = null; // Limpiar mensaje de error si existe
+
+            // Opcional: Puedes quitar el retraso si quieres la redirección instantánea
+            // await Task.Delay(500); 
+            NavManager.NavigateTo("/Reproduction/list");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al actualizar la reproducción: {ex.Message}");
+            errorMessage = $"Error al actualizar la reproducción: {ex.InnerException?.Message ?? ex.Message}"; // Mensaje de error detallado
+            successMessage = null; // Limpiar mensaje de éxito si existe
+            Console.WriteLine($"Error al actualizar la reproducción: {ex.Message}"); // Log en la consola para depuración
         }
     }
 }

@@ -1,59 +1,103 @@
 ﻿@using Logic
 @using Model
 @inject NavigationManager NavManager
-<h3>CreateSalesComponent</h3>
 
-<EditForm Model="objSale" OnValidSubmit="SaveSale">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div>
-        <label>Fecha de Venta:</label>
-        <InputDate @bind-Value="objSale.SaleDateTime" />
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nueva Venta</h4> @* Título ajustado para ser explícito *@
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Sale/list")'> @* Ruta de regreso consistente *@
+            ← Regresar
+        </button>
     </div>
 
-    <div>
-        <label>Comprador:</label>
-        <InputSelect @bind-Value="objSale.IdBuyer">
-            <option value="">Seleccione</option>
-            @foreach (var buyer in buyers)
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body"> @* Añadido card-body para el padding interno de la tarjeta *@
+            <EditForm Model="objSale" OnValidSubmit="SaveSale">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="saleDate" class="form-label fw-semibold">Fecha de Venta:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <InputDate id="saleDate" @bind-Value="objSale.SaleDateTime" class="form-control" /> @* Añadido class="form-control" *@
+                </div>
+
+                <div class="mb-3">
+                    <label for="buyer" class="form-label fw-semibold">Comprador:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <InputSelect id="buyer" @bind-Value="objSale.IdBuyer" class="form-select"> @* Añadido class="form-select" *@
+                        <option value="">Seleccione</option>
+                        @if (buyers != null)
+                        {
+                            @foreach (var buyer in buyers)
+                            {
+                                <option value="@buyer.IdBuyer">@buyer.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label for="animal" class="form-label fw-semibold">Animal:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <InputSelect id="animal" @bind-Value="objSale.IdAnimal" class="form-select"> @* Añadido class="form-select" *@
+                        <option value="">Seleccione</option>
+                        @if (animals != null)
+                        {
+                            @foreach (var animal in animals)
+                            {
+                                <option value="@animal.IdAnimal">Animal @animal.IdAnimal</option> @* Asumiendo que esta es la forma en que identificas los animales aquí *@
+                            }
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="d-grid"> @* Añadido d-grid para que el botón ocupe todo el ancho *@
+                    <button type="submit" class="btn btn-success">Registrar Venta</button> @* Texto del botón ajustado y estilo btn-success *@
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
             {
-                <option value="@buyer.IdBuyer">@buyer.Name</option>
+                <div class="alert alert-info mt-3">@successMessage</div>
             }
-        </InputSelect>
-    </div>
-
-    <div>
-        <label>Animal:</label>
-        <InputSelect @bind-Value="objSale.IdAnimal">
-            <option value="">Seleccione</option>
-            @foreach (var animal in animals)
+            @if (!string.IsNullOrEmpty(errorMessage)) @* Mensaje de error para mayor consistencia *@
             {
-                <option value="@animal.IdAnimal">Animal @animal.IdAnimal</option>
+                <div class="alert alert-danger mt-3">@errorMessage</div>
             }
-        </InputSelect>
+        </div>
     </div>
-
-    <button type="submit">Registrar Venta</button>
-</EditForm>
-
-@if (successMessage != null)
-{
-    <div>@successMessage</div>
-}
+</div>
 
 @code {
     SalesEntity objSale = new SalesEntity();
 
     private string? successMessage;
+    private string? errorMessage; // Variable para el mensaje de error
 
     List<BuyersEntity> buyers = new();
     List<AnimalsEntity> animals = new();
 
     protected override async Task OnInitializedAsync()
     {
-        buyers = new BuyersLog().BuyersList();
-        animals = new AnimalsLog().AnimalsList();
+        try
+        {
+            // Cargar datos de forma asíncrona
+            buyers = await Task.Run(() => new BuyersLog().BuyersList());
+            animals = await Task.Run(() => new AnimalsLog().AnimalsList());
+
+            // Asegurarse de que las listas no sean null
+            if (buyers == null) buyers = new List<BuyersEntity>();
+            if (animals == null) animals = new List<AnimalsEntity>();
+
+            // Inicializar la fecha de venta a la fecha actual por defecto
+            objSale.SaleDateTime = DateTime.Today;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar datos de soporte: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al cargar datos de soporte: {ex.Message}");
+            // Asegurar que las listas estén vacías en caso de error
+            buyers = new List<BuyersEntity>();
+            animals = new List<AnimalsEntity>();
+        }
     }
 
     private void SaveSale()
@@ -61,14 +105,21 @@
         try
         {
             SalesLog.CreateSales(objSale);
+
             successMessage = "¡Venta registrada exitosamente!";
+            errorMessage = null; // Limpiar mensaje de error
+
             objSale = new SalesEntity(); // Limpiar formulario
-            //Redirecciona a la lista
-            NavManager.NavigateTo("/sale/list");
+            objSale.SaleDateTime = DateTime.Today; // Re-inicializar la fecha
+
+            //Redirecciona a la lista. Usando ruta plural consistente /Sales/list
+            NavManager.NavigateTo("/Sale/list");
         }
         catch (Exception ex)
         {
-            successMessage = $"Error al guardar la venta: {ex.Message}";
+            successMessage = null; // Limpiar mensaje de éxito
+            errorMessage = $"Error al guardar la venta: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar la venta: {ex.Message}");
         }
     }
 }

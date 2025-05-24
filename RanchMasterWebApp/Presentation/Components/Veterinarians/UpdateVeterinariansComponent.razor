@@ -2,34 +2,47 @@
 @using Logic
 @inject NavigationManager NavManager
 
-<h3>Editar Veterinario</h3>
-
-<EditForm Model="objVet" OnValidSubmit="UpdateVeterinarian">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div>
-        <label>Nombre:</label>
-        <InputText @bind-Value="objVet.Name" class="form-control" />
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Editar Veterinario</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Veterinarian/list")'>
+            ← Regresar
+        </button>
     </div>
 
-    <div>
-        <label>Teléfono:</label>
-        <InputText @bind-Value="objVet.Phone" class="form-control" />
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body">
+            <EditForm Model="objVet" OnValidSubmit="UpdateVeterinarian">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <InputText @bind-Value="objVet.Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <InputText @bind-Value="objVet.Phone" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <InputText @bind-Value="objVet.Email" class="form-control" />
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Actualizar Veterinario</button>
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-success mt-3">@successMessage</div>
+            }
+        </div>
     </div>
-
-    <div>
-        <label>Email:</label>
-        <InputText @bind-Value="objVet.Email" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-2">Actualizar Veterinario</button>
-</EditForm>
-
-@if (!string.IsNullOrEmpty(successMessage))
-{
-    <div class="alert alert-success mt-2">@successMessage</div>
-}
+</div>
 
 @code {
     [Parameter]
@@ -50,7 +63,7 @@
         {
             new VeterinariansLog().UpdateVeterinarians(objVet);
             successMessage = "Veterinario actualizado exitosamente";
-            NavManager.NavigateTo("/Veterinarian/list");
+            NavManager.NavigateTo("/Veterinarian/list"); // Redirección automática
         }
         catch (Exception ex)
         {

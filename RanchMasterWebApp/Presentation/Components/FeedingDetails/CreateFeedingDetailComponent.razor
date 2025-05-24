@@ -1,40 +1,61 @@
 @using Logic
 @using Model
 @inject NavigationManager NavManager
-<h3>Crear Detalle de Alimentación</h3>
 
-<EditForm Model="objFeedingDetails" OnValidSubmit="SaveDetail">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div class="mb-3">
-        <label class="form-label">Tipo de Alimento:</label>
-        <InputText @bind-Value="objFeedingDetails.FoodType" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Cantidad (kg):</label>
-        <InputNumber @bind-Value="objFeedingDetails.Quantity" class="form-control" />
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nuevo Detalle de Alimentación</h4> @* Título ajustado para ser explícito *@
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/FeedingDetails/list")'>
+            ← Regresar
+        </button>
     </div>
 
-    <button type="submit" class="btn btn-success">Guardar</button>
-</EditForm>
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body"> @* Añadido card-body para el padding interno de la tarjeta *@
+            <EditForm Model="objFeedingDetails" OnValidSubmit="SaveDetail">
+                <DataAnnotationsValidator /> @* Ya estaba, se mantiene *@
+                <ValidationSummary /> @* Ya estaba, se mantiene *@
 
-@if (!string.IsNullOrEmpty(successMessage))
-{
-    <div class="alert alert-info mt-3">@successMessage</div>
-}
+                <div class="mb-3">
+                    <label for="foodType" class="form-label fw-semibold">Tipo de Alimento:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <InputText id="foodType" @bind-Value="objFeedingDetails.FoodType" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantity" class="form-label fw-semibold">Cantidad (kg):</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <InputNumber id="quantity" @bind-Value="objFeedingDetails.Quantity" class="form-control" />
+                </div>
+                
+                <div class="d-grid"> @* Añadido d-grid para que el botón ocupe todo el ancho *@
+                    <button type="submit" class="btn btn-success">Registrar Detalle</button> @* Texto del botón ajustado *@
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage)) @* Mensaje de error para mayor consistencia *@
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
 
 @code {
     FeedingDetailsEntity objFeedingDetails = new FeedingDetailsEntity();
     private string? successMessage;
+    private string? errorMessage; // Variable para el mensaje de error
 
     private void SaveDetail()
     {
         try
         {
             FeedingDetailsLog.CreateFeedingDetails(objFeedingDetails);
-            successMessage = "¡Detalle registrado correctamente!";
-
+            successMessage = "¡Detalle de alimentación registrado correctamente!";
+            errorMessage = null; // Limpiar mensaje de error
+            
             // Reiniciar formulario
             objFeedingDetails = new FeedingDetailsEntity();
 
@@ -43,7 +64,9 @@
         }
         catch (Exception ex)
         {
-            successMessage = $"Error al guardar: {ex.Message}";
+            successMessage = null; // Limpiar mensaje de éxito
+            errorMessage = $"Error al guardar el detalle de alimentación: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar el detalle: {ex.Message}"); // Para depuración
         }
     }
 }

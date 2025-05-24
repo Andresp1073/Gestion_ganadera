@@ -2,84 +2,95 @@
 @using Model
 @inject NavigationManager NavManager
 
-<h3>Actualizar Raza</h3>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Raza</h4>
+        <button class="btn btn-outline-secondary" @onclick='NavigateToList'>
+            ← Regresar
+        </button>
+    </div>
 
-@if (notFound)
-{
-    <p><strong>Raza no encontrada.</strong></p>
-    <button @onclick="NavigateToList" class="btn btn-secondary mt-3">Volver a la lista de Razas</button>
-}
-else if (objRace != null)
-{
-    <EditForm Model="objRace" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div class="mb-3">
-            <label for="nameInput" class="form-label">Nombre:</label>
-            <InputText id="nameInput" class="form-control" @bind-Value="objRace.Name" />
-            <ValidationMessage For="@(() => objRace.Name)" />
+    @if (notFound)
+    {
+        <div class="alert alert-warning">
+            <strong>Raza no encontrada.</strong>
         </div>
+    }
+    else if (objRace != null)
+    {
+        <div class="card shadow-sm border rounded bg-white">
+            <div class="card-body">
+                <EditForm Model="objRace" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-        <div class="mb-3">
-            <label for="descriptionInput" class="form-label">Descripción:</label>
-            <InputTextArea id="descriptionInput" class="form-control" @bind-Value="objRace.Description" rows="3" />
-            <ValidationMessage For="@(() => objRace.Description)" />
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <InputText @bind-Value="objRace.Name" class="form-control" />
+                        <ValidationMessage For="@(() => objRace.Name)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <InputTextArea @bind-Value="objRace.Description" class="form-control" rows="3" />
+                        <ValidationMessage For="@(() => objRace.Description)" />
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </EditForm>
+
+                @if (!string.IsNullOrEmpty(successMessage))
+                {
+                    <div class="alert alert-success mt-3">@successMessage</div>
+                }
+            </div>
         </div>
-
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <button type="button" @onclick="NavigateToList" class="btn btn-secondary ms-2">Cancelar</button>
-    </EditForm>
-}
-else
-{
-    <p>Cargando datos de la raza...</p>
-}
+    }
+    else
+    {
+        <p class="text-muted">Cargando datos de la raza...</p>
+    }
+</div>
 
 @code {
     [Parameter]
-    public int IdRace { get; set; } // Recibido desde la URL, e.g., /race/update/1
+    public int IdRace { get; set; }
 
     private RacesEntity? objRace;
     private bool notFound = false;
+    private string? successMessage;
     private readonly RacesLog racesLog = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnParametersSet()
     {
-        // Obtener la raza específica por su ID
-        // Como RacesLog no tiene un método GetRaceById(), simularemos buscándola en la lista completa.
-        // EN UN ESCENARIO REAL: Deberías agregar un método GetRaceById(int id) a RacesLog que consulte la BD directamente.
-        objRace = await Task.Run(() =>
-            racesLog.RacesList().FirstOrDefault(r => r.IdRace == IdRace));
-
+        objRace = racesLog.RacesList().FirstOrDefault(r => r.IdRace == IdRace);
         if (objRace == null)
         {
             notFound = true;
         }
     }
 
-    private async Task HandleValidSubmit()
+    private void HandleValidSubmit()
     {
         try
         {
             if (objRace != null)
             {
-                // Llamar al método de actualización en la lógica de negocio
                 racesLog.UpdateRaces(objRace);
-                await Task.Delay(300); // Pequeño retraso para feedback visual antes de navegar
-                NavManager.NavigateTo("/Race/list"); // Redirigir a la lista de razas
+                successMessage = "Raza actualizada exitosamente";
+                NavManager.NavigateTo("/Race/list"); // Redirección automática
             }
         }
         catch (Exception ex)
         {
-            // Manejo de errores: Podrías loggear el error o mostrar un mensaje al usuario
-            Console.WriteLine($"Error al actualizar la raza: {ex.Message}");
-            // Aquí podrías añadir una notificación al usuario si la actualización falla
+            successMessage = $"Error: {ex.InnerException?.Message ?? ex.Message}";
         }
     }
 
     private void NavigateToList()
     {
-        NavManager.NavigateTo("/Race/list"); // Navegar de vuelta a la lista de razas
+        NavManager.NavigateTo("/Race/list");
     }
 }

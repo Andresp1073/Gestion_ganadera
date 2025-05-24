@@ -1,72 +1,116 @@
 @using Logic
 @using Model
+@inject NavigationManager NavManager
 
-<h3>ListLocationsComponent</h3>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3"> @* mb-3 for margin-bottom *@
+        <h4 class="fw-semibold">Lista de Ubicaciones</h4> @* Title as seen in the Animal list *@
+        <a href="/Location/create" class="btn btn-success">+ Crear Ubicación</a> @* Button to create new location, mimicking "+ Crear Animal" *@
+    </div>
 
-<!-- Filtrar por tipo si lo deseas -->
-<select @onchange="TypeChanged">
-    <option value="">Todos los tipos</option>
-    @foreach (var type in locationTypes)
-    {
-        <option value="@type">@type</option>
-    }
-</select>
+    <div class="mb-3"> @* Div for the filter dropdown *@
+        <label for="typeFilter" class="form-label fw-semibold">Filtrar por tipo:</label> @* Label for filter *@
+        <select id="typeFilter" @onchange="TypeChanged" class="form-select w-auto"> @* Select with Bootstrap classes *@
+            <option value="">Todos los tipos</option> @* Default option *@
+            @foreach (var type in locationTypes)
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+    </div>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Tipo</th>
-        <th>Capacidad</th>
-        <th>Opciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var location in tempLocations)
-    {
-        <tr>
-            <td>@location.IdLocation</td>
-            <td>@location.Name</td>
-            <td>@location.Type</td>
-            <td>@location.Capacity</td>
-            <td><a href="location/update/@location.IdLocation">Editar</a></td>
-        </tr>
-    }
-    </tbody>
-</table>
+    <div class="table-responsive shadow-sm border rounded bg-white"> @* Table container with shadow, border, and background *@
+        <table class="table table-striped table-bordered align-middle mb-0"> @* Main table classes *@
+            <thead class="table-light"> @* Light header background *@
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Capacidad</th>
+                    <th scope="col" style="width: 100px;">Opciones</th> @* Fixed width for options column *@
+                </tr>
+            </thead>
+            <tbody>
+                @if (tempLocations != null && tempLocations.Any())
+                {
+                    @foreach (var location in tempLocations)
+                    {
+                        <tr>
+                            <td>@location.IdLocation</td>
+                            <td>@location.Name</td>
+                            <td>@location.Type</td> @* Displaying Type *@
+                            <td>@location.Capacity</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm w-100" @onclick='() => NavManager.NavigateTo($"/Location/update/{location.IdLocation}")'>
+                                    Editar @* "Editar" button style and navigation *@
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No hay ubicaciones disponibles.</td> @* Centered message when no data, colspan matches number of columns *@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 @code {
-    // Lista completa de ubicaciones
-    List<LocationsEntity> locations = new List<LocationsEntity>();
-    // Lista temporal (filtrada)
-    List<LocationsEntity> tempLocations = new List<LocationsEntity>();
-    // Lista de tipos únicos para filtro
-    List<string> locationTypes = new List<string>();
+    List<LocationsEntity> locations = new List<LocationsEntity>(); // Full list of locations
+    List<LocationsEntity> tempLocations = new List<LocationsEntity>(); // Filtered list displayed
+    List<string> locationTypes = new List<string>(); // Unique types for the filter dropdown
 
-    // Al inicializar el componente
     protected override async Task OnInitializedAsync()
     {
-        // Cargar ubicaciones
-        locations = await Task.Run(() => LocationsLog.LocationsList());
-        tempLocations = locations;
-
-        // Extraer tipos únicos para el filtro
-        locationTypes = locations.Select(l => l.Type).Distinct().ToList();
+        await LoadLocations();
     }
 
-    // Evento de cambio en el filtro
+    private async Task LoadLocations()
+    {
+        try
+        {
+            locations = await Task.Run(() => LocationsLog.LocationsList());
+
+            // Ensure lists are not null after loading
+            if (locations == null)
+            {
+                locations = new List<LocationsEntity>();
+            }
+
+            // Populate unique types for the filter and add "Todos los tipos" option
+            locationTypes = locations.Select(l => l.Type).Distinct().OrderBy(t => t).ToList(); // Order types alphabetically
+            locationTypes.Insert(0, ""); // Add empty string for "Todos los tipos" at the beginning
+
+            // Initialize tempLocations with all locations, sorted by ID
+            tempLocations = new List<LocationsEntity>(locations.OrderBy(l => l.IdLocation));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar ubicaciones: {ex.Message}");
+            // Set lists to empty and provide default filter option on error
+            locations = new List<LocationsEntity>();
+            tempLocations = new List<LocationsEntity>();
+            locationTypes = new List<string> { "" }; // Just "Todos los tipos" if loading fails
+        }
+    }
+
     private void TypeChanged(ChangeEventArgs e)
     {
-        string selectedType = e.Value?.ToString() ?? "";
+        string? selectedType = e.Value?.ToString();
 
         if (string.IsNullOrEmpty(selectedType))
         {
-            tempLocations = locations;
+            // If no filter selected, show all locations, sorted
+            tempLocations = new List<LocationsEntity>(locations.OrderBy(l => l.IdLocation));
         }
         else
         {
-            tempLocations = locations.Where(l => l.Type == selectedType).ToList();
+            // Apply filter and sort the filtered results
+            tempLocations = locations.Where(l => l.Type == selectedType).OrderBy(l => l.IdLocation).ToList();
         }
     }
 }

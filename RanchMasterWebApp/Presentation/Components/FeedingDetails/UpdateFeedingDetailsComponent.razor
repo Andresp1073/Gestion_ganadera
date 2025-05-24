@@ -2,30 +2,47 @@
 @using Model
 @inject NavigationManager NavManager
 
-<EditForm Model="objDetail" OnValidSubmit="UpdateDetail">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div class="mb-3">
-        <label class="form-label">Cantidad (kg):</label>
-        <InputNumber @bind-Value="objDetail.Quantity" class="form-control" />
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Detalle de Alimentación</h4> @* Título ajustado con estilo *@
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/FeedingDetails/list")'>
+            ← Regresar @* Botón para volver al listado *@
+        </button>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Tipo de Alimento:</label>
-        <InputText @bind-Value="objDetail.FoodType" class="form-control" />
+    <div class="card shadow-sm border rounded bg-white"> @* Contenedor principal con estilo de tarjeta *@
+        <div class="card-body"> @* Cuerpo de la tarjeta para padding *@
+            <EditForm Model="objDetail" OnValidSubmit="UpdateDetail">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="quantityInput" class="form-label fw-semibold">Cantidad (kg):</label> @* Label con estilo y atributo 'for' *@
+                    <InputNumber id="quantityInput" @bind-Value="objDetail.Quantity" class="form-control" /> @* Input con estilo y atributo 'id' *@
+                </div>
+
+                <div class="mb-3">
+                    <label for="foodTypeInput" class="form-label fw-semibold">Tipo de Alimento:</label> @* Label con estilo y atributo 'for' *@
+                    <InputText id="foodTypeInput" @bind-Value="objDetail.FoodType" class="form-control" /> @* Input con estilo y atributo 'id' *@
+                </div>
+
+                <div class="d-grid"> @* Contenedor para botón de ancho completo *@
+                    <button type="submit" class="btn btn-primary">Actualizar Detalle</button> @* Botón con estilo y texto ajustado *@
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                @* Mensaje dinámico: alert-success si es éxito, alert-danger si contiene "Error" *@
+                <div class="alert @(successMessage.Contains("Error") ? "alert-danger" : "alert-success") mt-3">@successMessage</div>
+            }
+        </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Actualizar</button>
-</EditForm>
-
-@if (!string.IsNullOrEmpty(successMessage))
-{
-    <div class="alert alert-info mt-3">@successMessage</div>
-}
+</div>
 
 @code {
-    [Parameter] public int IdFeedingDetail { get; set; }
+    [Parameter]
+    public int IdFeedingDetail { get; set; }
 
     FeedingDetailsEntity objDetail = new();
     string? successMessage;
@@ -41,13 +58,15 @@
     {
         try
         {
+            // Se mantiene el llamado a UpdateRaces según tu código original.
             new FeedingDetailsLog().UpdateRaces(objDetail);
             successMessage = "¡Detalle actualizado correctamente!";
             NavManager.NavigateTo("/FeedingDetails/list");
         }
         catch (Exception ex)
         {
-            successMessage = $"Error al actualizar: {ex.Message}";
+            successMessage = $"Error al actualizar: {ex.InnerException?.Message ?? ex.Message}"; // Mensaje de error más detallado
+            Console.WriteLine($"Error al actualizar: {ex.Message}"); // Para depuración
         }
     }
 }

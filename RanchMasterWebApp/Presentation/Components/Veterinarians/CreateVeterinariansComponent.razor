@@ -1,38 +1,51 @@
 ﻿@using Logic
 @using Model
 @inject NavigationManager NavManager
-<h3>CreateVeterinarianPage</h3>
 
-<EditForm Model="objVet" OnValidSubmit="SaveVeterinarian">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div>
-        <label>Nombre:</label>
-        <InputText @bind-Value="objVet.Name" />
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nuevo Veterinario</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Veterinarian/list")'>
+            ← Regresar
+        </button>
     </div>
 
-    <div>
-        <label>Teléfono:</label>
-        <InputText @bind-Value="objVet.Phone" />
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body">
+            <EditForm Model="objVet" OnValidSubmit="SaveVeterinarian">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <InputText id="nombre" class="form-control" @bind-Value="objVet.Name" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <InputText id="telefono" class="form-control" @bind-Value="objVet.Phone" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <InputText id="email" class="form-control" @bind-Value="objVet.Email" />
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Registrar Veterinario</button>
+                </div>
+            </EditForm>
+
+            @if (successMessage != null)
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+        </div>
     </div>
-
-    <div>
-        <label>Email:</label>
-        <InputText @bind-Value="objVet.Email" />
-    </div>
-
-    <button type="submit">Registrar Veterinario</button>
-</EditForm>
-
-@if (successMessage != null)
-{
-    <div>@successMessage</div>
-}
+</div>
 
 @code {
     VeterinariansEntity objVet = new VeterinariansEntity();
-
     private string? successMessage;
 
     private void SaveVeterinarian()
@@ -40,14 +53,13 @@
         try
         {
             VeterinariansLog.CreateVeterinarian(objVet);
-            successMessage = "Registrado exitosamente";
+            successMessage = "Veterinario registrado exitosamente.";
             objVet = new VeterinariansEntity(); // Limpiar formulario
+            NavManager.NavigateTo("/Veterinarian/list"); // Redirección automática
         }
         catch (Exception ex)
         {
-            successMessage = $"Error al guardar el veterinario: {ex.InnerException?.Message ?? ex.Message}";
+            successMessage = $"Error: {ex.InnerException?.Message ?? ex.Message}";
         }
     }
-
-    
 }

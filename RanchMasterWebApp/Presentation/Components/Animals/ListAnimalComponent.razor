@@ -2,52 +2,61 @@
 @using Model
 @inject NavigationManager NavManager
 
-<h3>Lista de Animales</h3>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold">Lista de Animales</h4>
+        <a href="/animals/create" class="btn btn-success">+ Crear Animal</a>
+    </div>
 
-<select @onchange="OnRaceChanged" class="form-select mb-3">
-    <option value="">Todas las razas</option>
-    @foreach (var race in races)
-    {
-        <option value="@race.IdRace">@race.Name</option>
-    }
-</select>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Género</th>
-            <th>Edad</th>
-            <th>Estado</th>
-            <th>Raza</th>
-            <th>Opciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (tempAnimals.Any())
-        {
-            @foreach (var animal in tempAnimals)
+    <div class="mb-3">
+        <select @onchange="OnRaceChanged" class="form-select" aria-label="Filtro por raza">
+            <option value="">Todas las razas</option>
+            @foreach (var race in races)
             {
-                <tr>
-                    <td>@animal.IdAnimal</td>
-                    <td>@animal.Gender</td>
-                    <td>@animal.Age</td>
-                    <td>@animal.Status</td>
-                    <td>@animal.Race?.Name</td>
-                    <td>
-                        <a href="@($"/animal/update/{animal.IdAnimal}")">Editar</a>
-                    </td>
-                </tr>
+                <option value="@race.IdRace">@race.Name</option>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="6">No hay animales disponibles.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </select>
+    </div>
+
+    <div class="table-responsive shadow-sm border rounded bg-white">
+        <table class="table table-striped table-bordered align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Género</th>
+                    <th>Edad</th>
+                    <th>Estado</th>
+                    <th>Raza</th>
+                    <th style="width: 100px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (tempAnimals.Any())
+                {
+                    @foreach (var animal in tempAnimals)
+                    {
+                        <tr>
+                            <td>@animal.IdAnimal</td>
+                            <td>@animal.Gender</td>
+                            <td>@animal.Age</td>
+                            <td>@animal.Status</td>
+                            <td>@animal.Race?.Name</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm w-100" @onclick="() => EditAnimal(animal.IdAnimal)">Editar</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No hay animales disponibles.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 @code {
     private List<AnimalsEntity> animals = new();
@@ -59,11 +68,9 @@
         var animalsLog = new AnimalsLog();
         var racesLog = new RacesLog();
 
-        // Obtener listas
         animals = await Task.Run(() => animalsLog.AnimalsList());
         races = await Task.Run(() => racesLog.RacesList());
 
-        // Ordenar por ID
         animals = animals.OrderBy(a => a.IdAnimal).ToList();
         tempAnimals = animals;
     }
@@ -81,7 +88,11 @@
             tempAnimals = animals.Where(a => a.IdRace == raceId).ToList();
         }
 
-        // Siempre ordenar después del filtro
         tempAnimals = tempAnimals.OrderBy(a => a.IdAnimal).ToList();
+    }
+
+    private void EditAnimal(int id)
+    {
+        NavManager.NavigateTo($"/animal/update/{id}");
     }
 }

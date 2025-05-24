@@ -1,51 +1,59 @@
-﻿
-@using Logic
+﻿@using Logic
 @using Model
 @inject NavigationManager NavManager
 
-<h3>Actualizar Comprador</h3>
-
-@if (!string.IsNullOrWhiteSpace(mensaje))
-{
-    <div class="alert @mensajeClase" role="alert">
-        @mensaje
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Comprador</h4>
+        <button class="btn btn-outline-secondary" @onclick="GoBackToList">
+            ← Regresar
+        </button>
     </div>
-}
 
-@if (notFound)
-{
-    <p><strong>Comprador no encontrado.</strong></p>
-}
-else if (objBuyer != null)
-{
-    <EditForm Model="objBuyer" OnValidSubmit="HandleValidSubmit" FormName="ActualizarCompradorForm">
+    @if (notFound)
+    {
+        <div class="alert alert-warning shadow-sm border rounded bg-white p-3">Comprador no encontrado.</div>
+    }
+    else if (objBuyer != null)
+    {
+        <div class="card shadow-sm border rounded bg-white">
+            <div class="card-body">
+                <EditForm Model="objBuyer" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre:</label>
+                        <InputText class="form-control" @bind-Value="objBuyer.Name" />
+                    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Nombre:</label>
-            <InputText class="form-control" @bind-Value="objBuyer.Name" />
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Cédula:</label>
+                        <InputText class="form-control" @bind-Value="objBuyer.Cc" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Número de Teléfono:</label>
+                        <InputText class="form-control" @bind-Value="objBuyer.PhoneNumber" />
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-primary me-md-2">Guardar Cambios</button>
+                    </div>
+                </EditForm>
+
+                @if (!string.IsNullOrWhiteSpace(mensaje))
+                {
+                    <div class="alert @mensajeClase mt-3">@mensaje</div>
+                }
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Cédula:</label>
-            <InputText class="form-control" @bind-Value="objBuyer.Cc" />
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Número de Teléfono:</label>
-            <InputText class="form-control" @bind-Value="objBuyer.PhoneNumber" />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <button type="button" class="btn btn-secondary" @onclick="GoBackToList">Cancelar</button>
-    </EditForm>
-}
-else
-{
-    <p>Cargando datos del comprador...</p>
-}
+    }
+    else
+    {
+        <div class="alert alert-info shadow-sm border rounded bg-white p-3">Cargando datos del comprador...</div>
+    }
+</div>
 
 @code {
     [Parameter]
@@ -77,24 +85,22 @@ else
             if (resultado == "OK")
             {
                 mensaje = "¡Comprador actualizado exitosamente!";
-                mensajeClase = "alert-success";
+                mensajeClase = "alert alert-success";
 
-                // It's good practice to ensure the UI updates before navigating
                 await InvokeAsync(StateHasChanged);
-                await Task.Delay(1000); // Give user time to read the success message
+                await Task.Delay(1000);
                 NavManager.NavigateTo("/buyer/list");
             }
             else
             {
                 mensaje = resultado;
-                mensajeClase = "alert-warning";
+                mensajeClase = "alert alert-warning";
             }
         }
         catch (Exception ex)
         {
             mensaje = "Error inesperado al intentar actualizar.";
-            mensajeClase = "alert-danger";
-            // For debugging, consider logging to a proper logging system in a real app
+            mensajeClase = "alert alert-danger";
             Console.WriteLine($"Error al actualizar el comprador: {ex.Message}");
         }
     }

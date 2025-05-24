@@ -2,41 +2,64 @@
 @using Model
 @inject NavigationManager NavManager
 
-<h3>UpdateLocationComponent</h3>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Ubicación</h4> @* Título ajustado *@
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Location/list")'>
+            ← Regresar
+        </button>
+    </div>
 
-<EditForm Model="objLocation" OnValidSubmit="UpdateLocation" FormName="FrmLocation">
-    <div>
-        <label>Nombre:</label>
-        <InputText @bind-Value="objLocation.Name" class="form-control" />
-    </div>
-    <div>
-        <label>Tipo:</label>
-        <InputText @bind-Value="objLocation.Type" class="form-control" />
-    </div>
-    <div>
-        <label>Capacidad:</label>
-        <InputNumber @bind-Value="objLocation.Capacity" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Actualizar</button>
-</EditForm>
+    @* No hay 'notFound' en tu código original, así que no lo incluimos condicionalmente aquí.
+       El 'objLocation' siempre se inicializa a 'new LocationsEntity()' si no se encuentra. *@
+    <div class="card shadow-sm border rounded bg-white"> @* Estilo de tarjeta para el formulario *@
+        <div class="card-body"> @* Contenido del cuerpo de la tarjeta *@
+            <EditForm Model="objLocation" OnValidSubmit="UpdateLocation" FormName="FrmLocation">
+                <DataAnnotationsValidator /> @* Añadido para validación (asumiendo que tienes atributos en tu modelo) *@
+                <ValidationSummary /> @* Añadido para mostrar errores de validación *@
 
-@if (!string.IsNullOrEmpty(successMessage))
-{
-    <p>@successMessage</p>
-}
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold">Nombre:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <InputText id="name" @bind-Value="objLocation.Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="type" class="form-label fw-semibold">Tipo:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <InputText id="type" @bind-Value="objLocation.Type" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="capacity" class="form-label fw-semibold">Capacidad:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <InputNumber id="capacity" @bind-Value="objLocation.Capacity" class="form-control" />
+                </div>
+
+                <div class="d-grid"> @* d-grid para que el botón ocupe todo el ancho *@
+                    <button type="submit" class="btn btn-primary">Actualizar Ubicación</button> @* Texto y estilo del botón ajustados *@
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert @(successMessage.Contains("Error") ? "alert-danger" : "alert-success") mt-3">@successMessage</div> @* Estilo dinámico para éxito/error *@
+            }
+        </div>
+    </div>
+</div>
 
 @code {
     [Parameter]
-    public string IdLocation { get; set; }
+    public string IdLocation { get; set; } // Se mantiene como string según tu solicitud.
 
     LocationsEntity objLocation = new LocationsEntity();
     private string? successMessage;
+    // No se usa 'errorMessage' separado, se gestiona con 'successMessage' y su contenido.
 
     protected override async Task OnInitializedAsync()
     {
+        // Se mantiene la lógica original de tu código para el IdLocation como string.
         objLocation = await Task.Run(() => LocationsLog.LocationsList()
-                          .FirstOrDefault(l => l.IdLocation.ToString() == IdLocation)) 
-                      ?? new LocationsEntity();
+                          .FirstOrDefault(l => l.IdLocation.ToString() == IdLocation))
+                      ?? new LocationsEntity(); // Si no se encuentra, inicializa una nueva entidad vacía.
     }
 
     private void UpdateLocation()
@@ -47,12 +70,14 @@
             log.UpdateLocation(objLocation);
 
             successMessage = $"La ubicación '{objLocation?.Name}' se actualizó exitosamente!";
-            objLocation = new LocationsEntity();
+            objLocation = new LocationsEntity(); // Se mantiene esta línea según tu código original.
             NavManager.NavigateTo("/location/list");
         }
         catch (Exception ex)
         {
-            successMessage = $"Error al actualizar la ubicación: {ex.Message}";
+            // El mensaje de error ahora se asigna a successMessage para mantener el estilo original.
+            successMessage = $"Error al actualizar la ubicación: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al actualizar la ubicación: {ex.Message}"); // Para depuración
         }
     }
 }
