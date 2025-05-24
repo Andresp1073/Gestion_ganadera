@@ -77,6 +77,8 @@
             HealthRecordsLog.CreateHealthRecords(objHealthRecord);
             successMessage = "Registrado exitosamente";
             objHealthRecord = new(); // Limpiar formulario
+            //Redirecciona a la lista
+            NavManager.NavigateTo("/HealthRecord/list");
         }
         catch (Exception ex)
         {

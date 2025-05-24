@@ -1,0 +1,59 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>Lista de Historiales de Salud</h3>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Diagnóstico</th>
+        <th>Tratamiento</th>
+        <th>Veterinario</th>
+        <th>Vacunas</th>
+        <th>Animal</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (healthRecords.Any())
+    {
+        @foreach (var record in healthRecords)
+        {
+            <tr>
+                <td>@record.IdHealth</td>
+                <td>@record.Diagnosis</td>
+                <td>@record.Treatment</td>
+                <td>@record.Veterinarians?.Name</td> @* Asumiendo que Veterinarians tiene una propiedad Name *@
+                <td>@record.Vaccines</td>
+                <td>@record.Animals.IdAnimal</td> @* Asumiendo que Animals tiene una propiedad Name *@
+                <td>
+                    <a href="@($"healthrecords/update/{record.IdHealth}")">Editar</a>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="7">No hay historiales de salud disponibles.</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    private List<HealthsRecordsEntity> healthRecords = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var healthRecordsLog = new HealthRecordsLog();
+
+        // Obtener la lista de historiales de salud con las relaciones cargadas
+        healthRecords = await Task.Run(() => healthRecordsLog.HealthsRecordsList());
+
+        // Ordenar por ID
+        healthRecords = healthRecords.OrderBy(hr => hr.IdHealth).ToList();
+    }
+}
