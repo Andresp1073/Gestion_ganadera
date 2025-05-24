@@ -1,0 +1,53 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<EditForm Model="objDetail" OnValidSubmit="UpdateDetail">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Cantidad (kg):</label>
+        <InputNumber @bind-Value="objDetail.Quantity" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tipo de Alimento:</label>
+        <InputText @bind-Value="objDetail.FoodType" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-info mt-3">@successMessage</div>
+}
+
+@code {
+    [Parameter] public int IdFeedingDetail { get; set; }
+
+    FeedingDetailsEntity objDetail = new();
+    string? successMessage;
+
+    protected override void OnInitialized()
+    {
+        var list = new FeedingDetailsLog().FeedingDetailsList();
+        objDetail = list.FirstOrDefault(d => d.IdFeedingDetail == IdFeedingDetail)
+                    ?? new FeedingDetailsEntity();
+    }
+
+    private void UpdateDetail()
+    {
+        try
+        {
+            new FeedingDetailsLog().UpdateRaces(objDetail);
+            successMessage = "¡Detalle actualizado correctamente!";
+            NavManager.NavigateTo("/FeedingDetails/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al actualizar: {ex.Message}";
+        }
+    }
+}

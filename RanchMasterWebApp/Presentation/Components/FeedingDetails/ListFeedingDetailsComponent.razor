@@ -1,0 +1,46 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <table class="table table-hover table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>Cantidad (kg)</th>
+            <th>Tipo de Alimento</th>
+            <th>Opciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var detail in feedingDetails)
+        {
+            <tr>
+                <td>@detail.IdFeedingDetail</td>
+                <td>@detail.Quantity</td>
+                <td>@detail.FoodType</td>
+                <td>
+                    <button class="btn btn-primary btn-sm"
+                            @onclick="() => EditDetail(detail.IdFeedingDetail)">
+                        Editar
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    List<FeedingDetailsEntity> feedingDetails = new();
+
+    protected override void OnInitialized()
+    {
+        feedingDetails = new FeedingDetailsLog().FeedingDetailsList();
+    }
+
+    void EditDetail(int id)
+    {
+        NavManager.NavigateTo($"/FeedingDetails/update/{id}");
+    }
+}
