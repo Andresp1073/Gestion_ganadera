@@ -88,7 +88,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        locations = new LocationsLog().LocationsList();
+        locations = LocationsLog.LocationsList();
         races = new RacesLog().RacesList();
         feedingSchedules = new FeedingSchedulesLog().FeedingSchedulesList(); 
         reproductions = new ReproductionsLog().ReproductionsList();

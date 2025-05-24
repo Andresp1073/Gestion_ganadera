@@ -1,0 +1,58 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>UpdateLocationComponent</h3>
+
+<EditForm Model="objLocation" OnValidSubmit="UpdateLocation" FormName="FrmLocation">
+    <div>
+        <label>Nombre:</label>
+        <InputText @bind-Value="objLocation.Name" class="form-control" />
+    </div>
+    <div>
+        <label>Tipo:</label>
+        <InputText @bind-Value="objLocation.Type" class="form-control" />
+    </div>
+    <div>
+        <label>Capacidad:</label>
+        <InputNumber @bind-Value="objLocation.Capacity" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <p>@successMessage</p>
+}
+
+@code {
+    [Parameter]
+    public string IdLocation { get; set; }
+
+    LocationsEntity objLocation = new LocationsEntity();
+    private string? successMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        objLocation = await Task.Run(() => LocationsLog.LocationsList()
+                          .FirstOrDefault(l => l.IdLocation.ToString() == IdLocation)) 
+                      ?? new LocationsEntity();
+    }
+
+    private void UpdateLocation()
+    {
+        try
+        {
+            LocationsLog log = new();
+            log.UpdateLocation(objLocation);
+
+            successMessage = $"La ubicación '{objLocation?.Name}' se actualizó exitosamente!";
+            objLocation = new LocationsEntity();
+            NavManager.NavigateTo("/location/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al actualizar la ubicación: {ex.Message}";
+        }
+    }
+}
