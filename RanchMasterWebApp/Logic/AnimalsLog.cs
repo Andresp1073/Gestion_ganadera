@@ -20,7 +20,10 @@ public class AnimalsLog
         using (var db = new RanchMasterContext())
         {
             return db.Animals
-                .Include(a => a.Race) // Incluye la información de la raza
+                .Include(a => a.Race)
+                .Include(a => a.Location)
+                .Include(a => a.Schedule)
+                .Include(a => a.Reproduction)
                 .ToList();
         }
     }
@@ -30,8 +33,19 @@ public class AnimalsLog
     {
         using (var db = new RanchMasterContext())
         {
-            db.Animals.Update(objAnimals);
-            db.SaveChanges();
+            var existingAnimal = db.Animals.FirstOrDefault(a => a.IdAnimal == objAnimals.IdAnimal);
+            if (existingAnimal != null)
+            {
+                existingAnimal.Gender = objAnimals.Gender;
+                existingAnimal.Age = objAnimals.Age;
+                existingAnimal.Status = objAnimals.Status;
+                existingAnimal.IdRace = objAnimals.IdRace;
+                existingAnimal.IdLocation = objAnimals.IdLocation;
+                existingAnimal.IdSchedule = objAnimals.IdSchedule;
+                existingAnimal.IdReproduction = objAnimals.IdReproduction;
+
+                db.SaveChanges();
+            }
         }
     }
     
