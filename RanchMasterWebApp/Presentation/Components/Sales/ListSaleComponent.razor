@@ -1,0 +1,45 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<h3>ListSaleComponent</h3>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Fecha</th>
+        <th>Comprador</th>
+        <th>Animal</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var sale in sales)
+    {
+        <tr>
+            <td>@sale.SaleDateTime.ToShortDateString()</td>
+            <td>@buyers.FirstOrDefault(b => b.IdBuyer == sale.IdBuyer)?.Name</td>
+            <td>Animal @sale.IdAnimal</td>
+            <td>
+                <button @onclick="() => EditSale(sale.IdSale)">Editar</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    List<SalesEntity> sales = new();
+    List<BuyersEntity> buyers = new();
+
+    protected override void OnInitialized()
+    {
+        sales = SalesLog.SalesList();
+        buyers = new BuyersLog().BuyersList();
+    }
+
+    void EditSale(int id)
+    {
+        NavManager.NavigateTo($"/sale/update/{id}");
+    }
+}

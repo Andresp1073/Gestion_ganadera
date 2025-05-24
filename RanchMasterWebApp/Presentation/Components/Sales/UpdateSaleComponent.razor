@@ -1,9 +1,10 @@
-﻿@using Logic
+@using Logic
 @using Model
 @inject NavigationManager NavManager
-<h3>CreateSalesComponent</h3>
 
-<EditForm Model="objSale" OnValidSubmit="SaveSale">
+<h3>UpdateSaleComponent</h3>
+
+<EditForm Model="objSale" OnValidSubmit="UpdateSale">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -34,7 +35,7 @@
         </InputSelect>
     </div>
 
-    <button type="submit">Registrar Venta</button>
+    <button type="submit">Actualizar Venta</button>
 </EditForm>
 
 @if (successMessage != null)
@@ -43,32 +44,32 @@
 }
 
 @code {
-    SalesEntity objSale = new SalesEntity();
+    [Parameter]
+    public int IdSale { get; set; }
 
-    private string? successMessage;
-
+    SalesEntity objSale = new();
     List<BuyersEntity> buyers = new();
     List<AnimalsEntity> animals = new();
+    string? successMessage;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         buyers = new BuyersLog().BuyersList();
         animals = new AnimalsLog().AnimalsList();
+        objSale = SalesLog.SalesList().FirstOrDefault(s => s.IdSale == IdSale) ?? new();
     }
 
-    private void SaveSale()
+    void UpdateSale()
     {
         try
         {
-            SalesLog.CreateSales(objSale);
-            successMessage = "¡Venta registrada exitosamente!";
-            objSale = new SalesEntity(); // Limpiar formulario
-            //Redirecciona a la lista
+            new SalesLog().UpdateSales(objSale);
+            successMessage = "¡Venta actualizada correctamente!";
             NavManager.NavigateTo("/sale/list");
         }
         catch (Exception ex)
         {
-            successMessage = $"Error al guardar la venta: {ex.Message}";
+            successMessage = $"Error: {ex.Message}";
         }
     }
 }
