@@ -70,19 +70,38 @@
         buyers = new BuyersLog().BuyersList();
         animals = new AnimalsLog().AnimalsList();
         objSale = SalesLog.SalesList().FirstOrDefault(s => s.IdSale == IdSale) ?? new();
+
+        // Filtrar animales ya vendidos en otras ventas, pero permitir el que pertenece a esta venta
+        var vendidos = SalesLog.SalesList()
+            .Where(s => s.IdSale != IdSale)
+            .Select(s => s.IdAnimal)
+            .ToHashSet();
+
+        animals = animals
+            .Where(a => !vendidos.Contains(a.IdAnimal) || a.IdAnimal == objSale.IdAnimal)
+            .ToList();
     }
 
     void UpdateSale()
     {
         try
         {
+            var ventas = SalesLog.SalesList();
+            bool yaVendido = ventas.Any(s => s.IdAnimal == objSale.IdAnimal && s.IdSale != objSale.IdSale);
+
+            if (yaVendido)
+            {
+                successMessage = "Este animal ya está registrado en otra venta. No se puede volver a asignar.";
+                return;
+            }
+
             new SalesLog().UpdateSales(objSale);
             successMessage = "¡Venta actualizada correctamente!";
             NavManager.NavigateTo("/sale/list");
         }
         catch (Exception ex)
         {
-            successMessage = $"Error: {ex.Message}";
+            successMessage = $"Error: {ex.InnerException?.Message ?? ex.Message}";
         }
     }
 }

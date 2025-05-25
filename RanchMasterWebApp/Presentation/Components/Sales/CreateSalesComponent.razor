@@ -70,7 +70,7 @@
     SalesEntity objSale = new SalesEntity();
 
     private string? successMessage;
-    private string? errorMessage; // Variable para el mensaje de error
+    private string? errorMessage;
 
     List<BuyersEntity> buyers = new();
     List<AnimalsEntity> animals = new();
@@ -79,22 +79,22 @@
     {
         try
         {
-            // Cargar datos de forma asíncrona
             buyers = await Task.Run(() => new BuyersLog().BuyersList());
             animals = await Task.Run(() => new AnimalsLog().AnimalsList());
 
-            // Asegurarse de que las listas no sean null
             if (buyers == null) buyers = new List<BuyersEntity>();
             if (animals == null) animals = new List<AnimalsEntity>();
 
-            // Inicializar la fecha de venta a la fecha actual por defecto
+            // Filtrar animales ya vendidos
+            var vendidos = SalesLog.SalesList().Select(s => s.IdAnimal).ToHashSet();
+            animals = animals.Where(a => !vendidos.Contains(a.IdAnimal)).ToList();
+
             objSale.SaleDateTime = DateTime.Today;
         }
         catch (Exception ex)
         {
             errorMessage = $"Error al cargar datos de soporte: {ex.InnerException?.Message ?? ex.Message}";
             Console.WriteLine($"Error al cargar datos de soporte: {ex.Message}");
-            // Asegurar que las listas estén vacías en caso de error
             buyers = new List<BuyersEntity>();
             animals = new List<AnimalsEntity>();
         }
@@ -104,20 +104,29 @@
     {
         try
         {
+            var salesLog = new SalesLog();
+
+            // Verificar si el animal ya fue vendido
+            if (salesLog.IsAnimalSold(objSale.IdAnimal))
+            {
+                errorMessage = "Este animal ya ha sido vendido. No puede registrarse nuevamente.";
+                successMessage = null;
+                return;
+            }
+
             SalesLog.CreateSales(objSale);
 
             successMessage = "¡Venta registrada exitosamente!";
-            errorMessage = null; // Limpiar mensaje de error
+            errorMessage = null;
 
-            objSale = new SalesEntity(); // Limpiar formulario
-            objSale.SaleDateTime = DateTime.Today; // Re-inicializar la fecha
-
+            objSale = new SalesEntity();
+            objSale.SaleDateTime = DateTime.Today;
 
             NavManager.NavigateTo("/Sale/list");
         }
         catch (Exception ex)
         {
-            successMessage = null; // Limpiar mensaje de éxito
+            successMessage = null;
             errorMessage = $"Error al guardar la venta: {ex.InnerException?.Message ?? ex.Message}";
             Console.WriteLine($"Error al guardar la venta: {ex.Message}");
         }

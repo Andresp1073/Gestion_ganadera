@@ -30,4 +30,11 @@ public class SalesLog
             db.SaveChanges();
         }
     }
+    public bool IsAnimalSold(int idAnimal)
+    {
+        using (var db = new RanchMasterContext())
+        {
+            return db.Sales.Any(s => s.IdAnimal == idAnimal);
+        }
+    }
 }
