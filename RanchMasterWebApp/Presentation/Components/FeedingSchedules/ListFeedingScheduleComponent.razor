@@ -2,15 +2,18 @@
 @using Model
 @inject NavigationManager NavManager
 
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-semibold">Horarios de Alimentación</h4> @* Título ajustado con estilo *@
-        @* Añadido botón "Crear Horario" similar a otras listas *@
-        <a href="/FeedingSchedules/create" class="btn btn-success">+ Crear Horario</a>
-    </div>
+        <h4 class="fw-semibold mb-0">Horarios de Alimentación</h4>
 
-    @* No hay filtro en tu código original para este componente, así que no se añade una sección de filtro aquí.
-       Si necesitas uno, puedes añadir una estructura similar a la del componente de reproducciones. *@
+        <div class="d-flex">
+            <a href="/FeedingSchedules/create" class="btn btn-success me-2">+ Crear Horario</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
+    </div>
 
     <div class="table-responsive shadow-sm border rounded bg-white"> @* Contenedor de la tabla con estilos *@
         <table class="table table-striped table-bordered align-middle mb-0"> @* Estilo de tabla Bootstrap *@

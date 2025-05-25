@@ -4,26 +4,26 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-semibold">Registrar Nueva Venta</h4> @* Título ajustado para ser explícito *@
-        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Sale/list")'> @* Ruta de regreso consistente *@
+        <h4 class="fw-semibold">Registrar Nueva Venta</h4> 
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Sale/list")'> 
             ← Regresar
         </button>
     </div>
 
     <div class="card shadow-sm border rounded bg-white">
-        <div class="card-body"> @* Añadido card-body para el padding interno de la tarjeta *@
+        <div class="card-body"> 
             <EditForm Model="objSale" OnValidSubmit="SaveSale">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
 
                 <div class="mb-3">
-                    <label for="saleDate" class="form-label fw-semibold">Fecha de Venta:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
-                    <InputDate id="saleDate" @bind-Value="objSale.SaleDateTime" class="form-control" /> @* Añadido class="form-control" *@
+                    <label for="saleDate" class="form-label fw-semibold">Fecha de Venta:</label> 
+                    <InputDate id="saleDate" @bind-Value="objSale.SaleDateTime" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="buyer" class="form-label fw-semibold">Comprador:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
-                    <InputSelect id="buyer" @bind-Value="objSale.IdBuyer" class="form-select"> @* Añadido class="form-select" *@
+                    <label for="buyer" class="form-label fw-semibold">Comprador:</label> 
+                    <InputSelect id="buyer" @bind-Value="objSale.IdBuyer" class="form-select"> 
                         <option value="">Seleccione</option>
                         @if (buyers != null)
                         {
@@ -36,21 +36,21 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="animal" class="form-label fw-semibold">Animal:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
-                    <InputSelect id="animal" @bind-Value="objSale.IdAnimal" class="form-select"> @* Añadido class="form-select" *@
+                    <label for="animal" class="form-label fw-semibold">Animal:</label> 
+                    <InputSelect id="animal" @bind-Value="objSale.IdAnimal" class="form-select">
                         <option value="">Seleccione</option>
                         @if (animals != null)
                         {
                             @foreach (var animal in animals)
                             {
-                                <option value="@animal.IdAnimal">Animal @animal.IdAnimal</option> @* Asumiendo que esta es la forma en que identificas los animales aquí *@
+                                <option value="@animal.IdAnimal">Animal @animal.IdAnimal</option> 
                             }
                         }
                     </InputSelect>
                 </div>
 
-                <div class="d-grid"> @* Añadido d-grid para que el botón ocupe todo el ancho *@
-                    <button type="submit" class="btn btn-success">Registrar Venta</button> @* Texto del botón ajustado y estilo btn-success *@
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-success">Registrar Venta</button> 
                 </div>
             </EditForm>
 
@@ -58,7 +58,7 @@
             {
                 <div class="alert alert-info mt-3">@successMessage</div>
             }
-            @if (!string.IsNullOrEmpty(errorMessage)) @* Mensaje de error para mayor consistencia *@
+            @if (!string.IsNullOrEmpty(errorMessage)) 
             {
                 <div class="alert alert-danger mt-3">@errorMessage</div>
             }
@@ -112,7 +112,7 @@
             objSale = new SalesEntity(); // Limpiar formulario
             objSale.SaleDateTime = DateTime.Today; // Re-inicializar la fecha
 
-            //Redirecciona a la lista. Usando ruta plural consistente /Sales/list
+
             NavManager.NavigateTo("/Sale/list");
         }
         catch (Exception ex)

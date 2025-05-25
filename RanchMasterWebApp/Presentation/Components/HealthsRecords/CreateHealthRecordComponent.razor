@@ -4,36 +4,36 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-semibold">Registrar Nuevo Historial de Salud</h4> @* Título ajustado para ser explícito *@
+        <h4 class="fw-semibold">Registrar Nuevo Historial de Salud</h4> 
         <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/HealthRecord/list")'>
             ← Regresar
         </button>
     </div>
 
     <div class="card shadow-sm border rounded bg-white">
-        <div class="card-body"> @* Añadido card-body para el padding interno de la tarjeta *@
+        <div class="card-body"> 
             <EditForm Model="objHealthRecord" OnValidSubmit="SaveHealthRecord">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
 
                 <div class="mb-3">
-                    <label for="diagnosis" class="form-label fw-semibold">Diagnóstico:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="diagnosis" class="form-label fw-semibold">Diagnóstico:</label> 
                     <InputText id="diagnosis" @bind-Value="objHealthRecord.Diagnosis" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="treatment" class="form-label fw-semibold">Tratamiento:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="treatment" class="form-label fw-semibold">Tratamiento:</label>
                     <InputText id="treatment" @bind-Value="objHealthRecord.Treatment" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="vaccines" class="form-label fw-semibold">Vacuna:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="vaccines" class="form-label fw-semibold">Vacuna:</label> 
                     <InputText id="vaccines" @bind-Value="objHealthRecord.Vaccines" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="veterinarian" class="form-label fw-semibold">Veterinario:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
-                    <InputSelect id="veterinarian" @bind-Value="objHealthRecord.IdVeterinarian" class="form-select"> @* Cambiado a form-select *@
+                    <label for="veterinarian" class="form-label fw-semibold">Veterinario:</label> 
+                    <InputSelect id="veterinarian" @bind-Value="objHealthRecord.IdVeterinarian" class="form-select"> 
                         <option value="">Seleccione</option>
                         @if (veterinarians != null)
                         {
@@ -46,21 +46,21 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="animal" class="form-label fw-semibold">Animal:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
-                    <InputSelect id="animal" @bind-Value="objHealthRecord.IdAnimal" class="form-select"> @* Cambiado a form-select *@
+                    <label for="animal" class="form-label fw-semibold">Animal:</label> 
+                    <InputSelect id="animal" @bind-Value="objHealthRecord.IdAnimal" class="form-select">
                         <option value="">Seleccione</option>
                         @if (animals != null)
                         {
                             @foreach (var animal in animals)
                             {
-                                <option value="@animal.IdAnimal">@animal.Race?.Name - ID: @animal.IdAnimal</option> @* Se añadió Race?.Name y el ID *@
+                                <option value="@animal.IdAnimal">@animal.Race?.Name - ID: @animal.IdAnimal</option> 
                             }
                         }
                     </InputSelect>
                 </div>
 
-                <div class="d-grid"> @* Añadido d-grid para que el botón ocupe todo el ancho *@
-                    <button type="submit" class="btn btn-success">Registrar Historial</button> @* Texto del botón ajustado *@
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-success">Registrar Historial</button> 
                 </div>
             </EditForm>
 
@@ -68,7 +68,7 @@
             {
                 <div class="alert alert-info mt-3">@successMessage</div>
             }
-            @if (!string.IsNullOrEmpty(errorMessage)) @* Mensaje de error para mayor consistencia *@
+            @if (!string.IsNullOrEmpty(errorMessage))
             {
                 <div class="alert alert-danger mt-3">@errorMessage</div>
             }
@@ -119,7 +119,7 @@
 
             objHealthRecord = new(); // Limpiar formulario
             //Redirecciona a la lista
-            NavManager.NavigateTo("/HealthRecords/list"); // Corregido: redirige a /HealthRecords/list (plural)
+            NavManager.NavigateTo("/HealthRecords/list"); 
         }
         catch (Exception ex)
         {

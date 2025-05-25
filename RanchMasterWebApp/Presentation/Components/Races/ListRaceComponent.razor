@@ -2,11 +2,19 @@
 @using Model
 @inject NavigationManager NavManager
 
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-semibold">Lista de Razas</h4>
-        <a href="/Race/create" class="btn btn-success">+ Crear Raza</a>
+
+        <div class="d-flex">
+            <a href="/Race/create" class="btn btn-success me-2">+ Crear Raza</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
     </div>
+
 
     @if (races.Any())
     {

@@ -5,7 +5,13 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-semibold">Lista de Veterinarios</h4>
-        <a href="/Veterinarians/create" class="btn btn-success">+ Crear Veterinario</a>
+
+        <div class="d-flex">
+            <a href="/Veterinarians/create" class="btn btn-success me-2">+ Crear Veterinario</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
     </div>
 
     <div class="table-responsive shadow-sm border rounded bg-white">

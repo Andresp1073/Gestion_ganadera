@@ -10,37 +10,35 @@
         </button>
     </div>
 
-    @* No hay 'notFound' en tu código original, así que no lo incluimos condicionalmente aquí.
-       El 'objLocation' siempre se inicializa a 'new LocationsEntity()' si no se encuentra. *@
-    <div class="card shadow-sm border rounded bg-white"> @* Estilo de tarjeta para el formulario *@
-        <div class="card-body"> @* Contenido del cuerpo de la tarjeta *@
+    <div class="card shadow-sm border rounded bg-white"> 
+        <div class="card-body"> 
             <EditForm Model="objLocation" OnValidSubmit="UpdateLocation" FormName="FrmLocation">
-                <DataAnnotationsValidator /> @* Añadido para validación (asumiendo que tienes atributos en tu modelo) *@
-                <ValidationSummary /> @* Añadido para mostrar errores de validación *@
+                <DataAnnotationsValidator />  
+                <ValidationSummary />
 
                 <div class="mb-3">
-                    <label for="name" class="form-label fw-semibold">Nombre:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="name" class="form-label fw-semibold">Nombre:</label>
                     <InputText id="name" @bind-Value="objLocation.Name" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="type" class="form-label fw-semibold">Tipo:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="type" class="form-label fw-semibold">Tipo:</label> 
                     <InputText id="type" @bind-Value="objLocation.Type" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="capacity" class="form-label fw-semibold">Capacidad:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="capacity" class="form-label fw-semibold">Capacidad:</label> 
                     <InputNumber id="capacity" @bind-Value="objLocation.Capacity" class="form-control" />
                 </div>
 
-                <div class="d-grid"> @* d-grid para que el botón ocupe todo el ancho *@
-                    <button type="submit" class="btn btn-primary">Actualizar Ubicación</button> @* Texto y estilo del botón ajustados *@
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-primary">Actualizar Ubicación</button> 
                 </div>
             </EditForm>
 
             @if (!string.IsNullOrEmpty(successMessage))
             {
-                <div class="alert @(successMessage.Contains("Error") ? "alert-danger" : "alert-success") mt-3">@successMessage</div> @* Estilo dinámico para éxito/error *@
+                <div class="alert @(successMessage.Contains("Error") ? "alert-danger" : "alert-success") mt-3">@successMessage</div> 
             }
         </div>
     </div>
@@ -77,7 +75,7 @@
         {
             // El mensaje de error ahora se asigna a successMessage para mantener el estilo original.
             successMessage = $"Error al actualizar la ubicación: {ex.InnerException?.Message ?? ex.Message}";
-            Console.WriteLine($"Error al actualizar la ubicación: {ex.Message}"); // Para depuración
+            Console.WriteLine($"Error al actualizar la ubicación: {ex.Message}");
         }
     }
 }

@@ -4,35 +4,35 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-semibold">Registrar Nueva Ubicación</h4> @* Título ajustado para ser explícito *@
+        <h4 class="fw-semibold">Registrar Nueva Ubicación</h4> 
         <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Location/list")'>
             ← Regresar
         </button>
     </div>
 
     <div class="card shadow-sm border rounded bg-white">
-        <div class="card-body"> @* Añadido card-body para el padding interno de la tarjeta *@
+        <div class="card-body"> 
             <EditForm Model="objLocations" OnValidSubmit="SaveProduct" FormName="FrmProduct">
-                <DataAnnotationsValidator /> @* Añadido DataAnnotationsValidator para validación *@
-                <ValidationSummary /> @* Añadido ValidationSummary para mostrar errores de validación *@
+                <DataAnnotationsValidator />
+                <ValidationSummary /> 
 
                 <div class="mb-3">
-                    <label for="name" class="form-label fw-semibold">Nombre:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="name" class="form-label fw-semibold">Nombre:</label>
                     <InputText id="name" @bind-Value="objLocations.Name" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="type" class="form-label fw-semibold">Tipo:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="type" class="form-label fw-semibold">Tipo:</label> 
                     <InputText id="type" @bind-Value="objLocations.Type" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="capacity" class="form-label fw-semibold">Capacidad:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="capacity" class="form-label fw-semibold">Capacidad:</label> 
                     <InputNumber id="capacity" @bind-Value="objLocations.Capacity" class="form-control" />
                 </div>
                 
-                <div class="d-grid"> @* Añadido d-grid para que el botón ocupe todo el ancho *@
-                    <button type="submit" class="btn btn-success">Registrar Ubicación</button> @* Texto del botón ajustado *@
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-success">Registrar Ubicación</button> 
                 </div>
             </EditForm>
 
@@ -40,7 +40,7 @@
             {
                 <div class="alert alert-info mt-3">@successMessage</div>
             }
-            @if (!string.IsNullOrEmpty(errorMessage)) @* Mensaje de error para mayor consistencia *@
+            @if (!string.IsNullOrEmpty(errorMessage)) 
             {
                 <div class="alert alert-danger mt-3">@errorMessage</div>
             }

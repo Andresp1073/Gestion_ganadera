@@ -3,13 +3,15 @@
 @inject NavigationManager NavManager
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3"> @* Header with title and button *@
-        <h4 class="fw-semibold">Lista de Detalles de Alimentación</h4> @* Updated title *@
-        <a href="/FeedingDetails/create" class="btn btn-success">+ Crear Detalle</a> @* Button to create new feeding detail *@
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold mb-0">Lista de Detalles de Alimentación</h4>
+        <div class="d-flex">
+            <a href="/FeedingDetails/create" class="btn btn-success me-2">+ Crear Detalle</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
     </div>
-
-    @* No hay filtro en tu código original para este componente, así que no se añade una sección de filtro aquí.
-       Si necesitas uno, puedes añadir una estructura similar a la del componente de reproducciones. *@
 
     <div class="table-responsive shadow-sm border rounded bg-white"> @* Table container with shadow, border, and background *@
         <table class="table table-striped table-bordered align-middle mb-0"> @* Main table classes *@

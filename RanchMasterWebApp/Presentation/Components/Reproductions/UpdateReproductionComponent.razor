@@ -16,8 +16,8 @@
     }
     else if (objReproduction != null)
     {
-        <div class="card shadow-sm border rounded bg-white"> @* Estilo de tarjeta para el formulario *@
-            <div class="card-body"> @* Contenido del cuerpo de la tarjeta *@
+        <div class="card shadow-sm border rounded bg-white">
+            <div class="card-body"> 
                 <EditForm Model="objReproduction" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
@@ -37,7 +37,7 @@
                         <InputSelect class="form-select" @bind-Value="objReproduction.Status">
                             <option value="Activo">Activo</option>
                             <option value="Inactivo">Inactivo</option>
-                            @* Asegúrate de incluir todos los posibles estados de tu entidad ReproductionsEntity *@
+
                         </InputSelect>
                     </div>
 
@@ -46,7 +46,7 @@
                         <InputNumber class="form-control" @bind-Value="objReproduction.NumberOffspring" />
                     </div>
 
-                    <div class="d-grid"> @* d-grid para que el botón ocupe todo el ancho *@
+                    <div class="d-grid"> 
                         <button type="submit" class="btn btn-primary">Actualizar Reproducción</button> @* Cambiado a btn-primary y texto *@
                     </div>
                 </EditForm>
@@ -105,15 +105,14 @@
             successMessage = "Reproducción actualizada exitosamente"; // Mensaje de éxito
             errorMessage = null; // Limpiar mensaje de error si existe
 
-            // Opcional: Puedes quitar el retraso si quieres la redirección instantánea
-            // await Task.Delay(500); 
+
             NavManager.NavigateTo("/Reproduction/list");
         }
         catch (Exception ex)
         {
             errorMessage = $"Error al actualizar la reproducción: {ex.InnerException?.Message ?? ex.Message}"; // Mensaje de error detallado
-            successMessage = null; // Limpiar mensaje de éxito si existe
-            Console.WriteLine($"Error al actualizar la reproducción: {ex.Message}"); // Log en la consola para depuración
+            successMessage = null; 
+            Console.WriteLine($"Error al actualizar la reproducción: {ex.Message}"); 
         }
     }
 }
