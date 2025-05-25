@@ -51,7 +51,7 @@
 
 <style>
     .custom-nav-link {
-        color: #212529; /* texto oscuro */
+        color: #212529;
         padding: 5px 10px;
         text-decoration: none;
         transition: all 0.3s ease;
@@ -60,8 +60,8 @@
     }
 
     .custom-nav-link:hover {
-        background-color: rgba(0, 0, 0, 0.05); /* Fondo ligeramente más oscuro */
-        color: #000; /* texto negro */
+        background-color: rgba(0, 0, 0, 0.05);
+        color: #000;
     }
 
     .custom-nav-link::after {
@@ -69,18 +69,22 @@
         display: block;
         width: 0;
         height: 2px;
-        background-color: #198754; /* verde Bootstrap */
+        background-color: #198754;
         transition: width 0.3s;
         position: absolute;
         bottom: 0;
         left: 0;
     }
 
-    .custom-nav-link:hover::after {
+    .custom-nav-link:hover::after,
+    .custom-nav-link.active::after {
         width: 100%;
     }
 
     .custom-nav-link.active {
         font-weight: bold;
+        color: #212529 !important; /* fuerza el color del texto */
     }
+
+
 </style>

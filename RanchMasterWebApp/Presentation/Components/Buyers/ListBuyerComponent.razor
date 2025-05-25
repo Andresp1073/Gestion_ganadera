@@ -2,11 +2,19 @@
 @using Model
 @inject NavigationManager NavManager
 
+
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-semibold">Lista de Compradores</h4>
-        <a href="/buyer/create" class="btn btn-success">+ Crear Comprador</a>
+        <h4 class="fw-semibold mb-0">Lista de Compradores</h4>
+        <div class="d-flex">
+            <a href="/buyer/create" class="btn btn-success">+ Crear Comprador</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
     </div>
+
 
     <div class="table-responsive shadow-sm border rounded bg-white">
         <table class="table table-striped table-bordered align-middle mb-0">
@@ -20,7 +28,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (buyers != null && buyers.Any()) @* Añadido null check por seguridad *@
+                @if (buyers != null && buyers.Any()) 
                 {
                     @foreach (var buyer in buyers)
                     {
@@ -62,7 +70,7 @@
         catch (Exception ex)
         {
             Console.WriteLine($"Error al cargar compradores: {ex.Message}");
-            buyers = new List<BuyersEntity>(); // Prevenir errores por listas nulas
+            buyers = new List<BuyersEntity>(); 
         }
     }
 }
