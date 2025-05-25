@@ -89,8 +89,7 @@
 
             // Populate unique types for the filter and add "Todos los tipos" option
             locationTypes = locations.Select(l => l.Type).Distinct().OrderBy(t => t).ToList(); // Order types alphabetically
-            locationTypes.Insert(0, ""); // Add empty string for "Todos los tipos" at the beginning
-
+            
             // Initialize tempLocations with all locations, sorted by ID
             tempLocations = new List<LocationsEntity>(locations.OrderBy(l => l.IdLocation));
         }
