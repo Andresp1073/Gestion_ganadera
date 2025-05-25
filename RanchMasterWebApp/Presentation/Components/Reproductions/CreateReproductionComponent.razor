@@ -29,10 +29,11 @@
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Estado:</label>
                     <InputSelect class="form-select" @bind-Value="objReproduction.Status">
+                        <option disabled selected hidden value=""></option>
                         <option value="Activo">Activo</option>
                         <option value="Inactivo">Inactivo</option>
-
                     </InputSelect>
+                    <ValidationMessage For="@(() => objReproduction.Status)" />
                 </div>
 
                 <div class="mb-3">
@@ -66,13 +67,13 @@
     protected override void OnInitialized()
     {
         InicializarFechas();
+        objReproduction.Status = ""; // Estado vacío por defecto
     }
 
     private void InicializarFechas()
     {
         var hoy = DateTime.Today;
 
-        // Solo inicializar si están en su valor por defecto
         if (objReproduction.MatingDate == default)
             objReproduction.MatingDate = hoy;
 
@@ -90,7 +91,8 @@
             errorMessage = null;
 
             objReproduction = new ReproductionsEntity();
-            InicializarFechas(); // Volver a poner la fecha actual después de limpiar el modelo
+            InicializarFechas();
+            objReproduction.Status = ""; // Reestablecer el estado vacío
 
             NavManager.NavigateTo("/Reproduction/list");
         }
