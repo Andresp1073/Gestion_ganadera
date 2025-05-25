@@ -1,0 +1,109 @@
+﻿@page "/about"
+@using Microsoft.AspNetCore.Components.Routing
+@inject NavigationManager NavManager
+
+<section class="bg-light-accent py-5 mt-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold">Acerca de Nosotros</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            Conoce más sobre Ranch Master y nuestra misión de transformar la gestión ganadera
+        </p>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="display-5 fw-bold mb-4">Nuestra Historia</h2>
+                <p class="text-muted">
+                    Ranch Master nació en 2020 de la necesidad de modernizar la gestión ganadera...
+                </p>
+                <p class="text-muted">
+                    Desde nuestros inicios, hemos trabajado estrechamente con ganaderos...
+                </p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="bi bi-truck display-1 text-success"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Nuestros Valores</h2>
+            <p class="text-muted">Los principios que guían nuestro trabajo y desarrollo</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var valor in valores)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="me-3"><i class="@valor.Icono text-success"></i></div>
+                                <h5 class="card-title mb-0">@valor.Titulo</h5>
+                            </div>
+                            <p class="card-text text-muted">@valor.Descripcion</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Nuestro Impacto</h2>
+            <p class="text-muted">Cómo Ranch Master está transformando la gestión ganadera</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+            @foreach (var stat in estadisticas)
+            {
+                <div class="col">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <h3 class="display-4 fw-bold text-success">@stat.Cifra</h3>
+                            <p class="fw-medium">@stat.Texto</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light-accent">
+    <div class="container text-center py-4">
+        <h2 class="display-5 fw-bold">¿Listo para transformar tu rancho?</h2>
+        <p class="lead text-muted mx-auto mb-4" style="max-width: 700px;">
+            Únete a cientos de ganaderos que ya están mejorando su gestión con Ranch Master
+        </p>
+        <NavLink class="btn btn-success btn-lg" href="/">Comenzar Ahora</NavLink>
+    </div>
+</section>
+
+@code {
+    private List<(string Icono, string Titulo, string Descripcion)> valores = new()
+    {
+        ("bi bi-people", "Compromiso con el Cliente", "Escuchamos activamente a nuestros usuarios..."),
+        ("bi bi-tree", "Sostenibilidad", "Promovemos prácticas ganaderas sostenibles..."),
+        ("bi bi-award", "Excelencia", "Nos esforzamos por la excelencia..."),
+        ("bi bi-bullseye", "Innovación", "Buscamos nuevas formas de mejorar..."),
+        ("bi bi-clock-history", "Tradición y Modernidad", "Respetamos la tradición ganadera...")
+    };
+
+    private List<(string Cifra, string Texto)> estadisticas = new()
+    {
+        ("500+", "Ranchos Activos"),
+        ("50,000+", "Animales Gestionados"),
+        ("15", "Países"),
+        ("30%", "Aumento en Productividad")
+    };
+}

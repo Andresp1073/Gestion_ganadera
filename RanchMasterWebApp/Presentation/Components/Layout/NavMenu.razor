@@ -1,73 +1,56 @@
-﻿
-<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Presentation</a>
+
+        <a class="navbar-brand text-success fw-bold me-4" href="/">Ranch Master</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/Race/list">Razas</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/animals/list">Animales</NavLink>
+                </li>
+                <li class="nav-item">
+
+                    <NavLink class="nav-link text-dark" href="/Reproduction/list">Reproducción</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/FeedingDetails/list">Alimentación</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/location/list">Ubicaciones</NavLink>
+                </li>
+
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/FeedingSchedules/list">Horario De Alimentacion</NavLink>
+                </li>
+
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/Veterinarian/list">Veterinarios</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/healthRecord/list">Salud</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/sale/list">Ventas</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/buyer/list">Compradores</NavLink>
+                </li>
+
+            </ul>
+        </div>
     </div>
-</div>
-
-<input type="checkbox" title="Navigation menu" class="navbar-toggler"/>
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/Race/list" Match="NavLinkMatch.All">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Races
-            </NavLink>
-        </div>
-        
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/animals/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Animals
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/Reproduction/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Reproductions
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/location/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Locations
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="FeedingDetails/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> FeedingDetails
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/FeedingSchedules/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> FeedingSchedules
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/Veterinarian/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Veterinarians
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/healthRecord/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> HealthRecords
-            </NavLink>
-        </div>
-        
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/sale/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Sales
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/buyer/list">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Buyers
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
+</nav>

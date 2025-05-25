@@ -4,40 +4,44 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-semibold">Registrar Nueva Reproducción</h4> @* Título ajustado para ser explícito *@
+        <h4 class="fw-semibold">Registrar Nueva Reproducción</h4>
         <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Reproduction/list")'>
             ← Regresar
         </button>
     </div>
 
     <div class="card shadow-sm border rounded bg-white">
-        <div class="card-body"> @* Añadido card-body para el padding interno de la tarjeta *@
+        <div class="card-body">
             <EditForm Model="objReproduction" OnValidSubmit="SaveProduct">
-                <DataAnnotationsValidator /> @* Añadido DataAnnotationsValidator *@
-                <ValidationSummary /> @* Añadido ValidationSummary *@
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
                 <div class="mb-3">
-                    <label for="matingDate" class="form-label fw-semibold">Fecha de Apareamiento:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="matingDate" class="form-label fw-semibold">Fecha de Apareamiento:</label>
                     <InputDate id="matingDate" @bind-Value="objReproduction.MatingDate" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="numOffspring" class="form-label fw-semibold">Número de Crías:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
+                    <label for="numOffspring" class="form-label fw-semibold">Número de Crías:</label>
                     <InputNumber id="numOffspring" @bind-Value="objReproduction.NumberOffspring" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="status" class="form-label fw-semibold">Estado:</label> @* for e id para accesibilidad y fw-semibold para negrita *@
-                    <InputText id="status" @bind-Value="objReproduction.Status" class="form-control" />
+                    <label class="form-label fw-semibold">Estado:</label>
+                    <InputSelect class="form-select" @bind-Value="objReproduction.Status">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                        @* Asegúrate de incluir todos los posibles estados de tu entidad ReproductionsEntity *@
+                    </InputSelect>
                 </div>
 
-                <div class="mb-3"> @* Añadido el campo de Fecha de Nacimiento que faltaba en el formulario proporcionado *@
+                <div class="mb-3">
                     <label for="birthdate" class="form-label fw-semibold">Fecha de Nacimiento:</label>
                     <InputDate id="birthdate" @bind-Value="objReproduction.Birthdate" class="form-control" />
                 </div>
 
-                <div class="d-grid"> @* Añadido d-grid para que el botón ocupe todo el ancho *@
-                    <button type="submit" class="btn btn-success">Registrar Reproducción</button> @* Texto del botón ajustado *@
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Registrar Reproducción</button>
                 </div>
             </EditForm>
 
@@ -45,7 +49,7 @@
             {
                 <div class="alert alert-info mt-3">@successMessage</div>
             }
-            @if (!string.IsNullOrEmpty(errorMessage)) @* Mensaje de error para mayor consistencia *@
+            @if (!string.IsNullOrEmpty(errorMessage))
             {
                 <div class="alert alert-danger mt-3">@errorMessage</div>
             }
@@ -57,13 +61,23 @@
     ReproductionsEntity objReproduction = new ReproductionsEntity();
 
     private string? successMessage;
-    private string? errorMessage; // Variable para el mensaje de error
+    private string? errorMessage;
 
     protected override void OnInitialized()
     {
-        objReproduction.MatingDate = DateTime.Today;
-        // Considera inicializar Birthdate si también quieres que tenga la fecha actual por defecto
-        // objReproduction.Birthdate = DateTime.Today; 
+        InicializarFechas();
+    }
+
+    private void InicializarFechas()
+    {
+        var hoy = DateTime.Today;
+
+        // Solo inicializar si están en su valor por defecto
+        if (objReproduction.MatingDate == default)
+            objReproduction.MatingDate = hoy;
+
+        if (objReproduction.Birthdate == default)
+            objReproduction.Birthdate = hoy;
     }
 
     private void SaveProduct()
@@ -73,19 +87,18 @@
             ReproductionsLog.CreateReproductions(objReproduction);
 
             successMessage = "Reproducción registrada exitosamente.";
-            errorMessage = null; // Limpiar mensaje de error
-            
-            objReproduction = new ReproductionsEntity(); // Limpiar formulario para un nuevo registro
-            // Volver a inicializar MatingDate si el formulario se limpia y se desea que tenga la fecha actual
-            objReproduction.MatingDate = DateTime.Today;
+            errorMessage = null;
+
+            objReproduction = new ReproductionsEntity();
+            InicializarFechas(); // Volver a poner la fecha actual después de limpiar el modelo
 
             NavManager.NavigateTo("/Reproduction/list");
         }
         catch (Exception ex)
         {
-            successMessage = null; // Limpiar mensaje de éxito
+            successMessage = null;
             errorMessage = $"Error al guardar la reproducción: {ex.InnerException?.Message ?? ex.Message}";
-            Console.WriteLine($"Error al guardar la reproducción: {ex.Message}"); // Para depuración
+            Console.WriteLine($"Error al guardar la reproducción: {ex.Message}");
         }
     }
 }
