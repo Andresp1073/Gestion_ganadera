@@ -57,7 +57,7 @@
     {
         var racesLog = new RacesLog();
         races = await Task.Run(() => racesLog.RacesList());
-        races = races.OrderBy(r => r.Name).ToList();
+        races = races.OrderBy(r => r.IdRace).ToList();
     }
 
     private void EditRace(int id)
