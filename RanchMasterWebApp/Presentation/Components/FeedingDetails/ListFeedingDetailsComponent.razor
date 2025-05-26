@@ -13,18 +13,18 @@
         </div>
     </div>
 
-    <div class="table-responsive shadow-sm border rounded bg-white"> @* Table container with shadow, border, and background *@
-        <table class="table table-striped table-bordered align-middle mb-0"> @* Main table classes *@
-            <thead class="table-light"> @* Light header background *@
+    <div class="table-responsive shadow-sm border rounded bg-white">
+        <table class="table table-hover table-striped table-bordered align-middle mb-0">
+            <thead class="table-light">
                 <tr>
-                    <th scope="col">ID</th> @* Added scope="col" for accessibility *@
+                    <th scope="col">ID</th>
                     <th scope="col">Cantidad (kg)</th>
                     <th scope="col">Tipo de Alimento</th>
-                    <th scope="col" style="width: 100px;">Opciones</th> @* Fixed width for options column *@
+                    <th scope="col" style="width: 100px;">Opciones</th>
                 </tr>
             </thead>
             <tbody>
-                @if (feedingDetails != null && feedingDetails.Any()) @* Added null check and .Any() for better handling *@
+                @if (feedingDetails != null && feedingDetails.Any())
                 {
                     @foreach (var detail in feedingDetails)
                     {
@@ -34,7 +34,7 @@
                             <td>@detail.FoodType</td>
                             <td>
                                 <button class="btn btn-primary btn-sm w-100" @onclick="() => EditDetail(detail.IdFeedingDetail)">
-                                    Editar @* "Editar" button style and full width *@
+                                    Editar
                                 </button>
                             </td>
                         </tr>
@@ -43,7 +43,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="4" class="text-center">No hay detalles de alimentación disponibles.</td> @* Centered message when no data, colspan adjusted *@
+                        <td colspan="4" class="text-center">No hay detalles de alimentación disponibles.</td>
                     </tr>
                 }
             </tbody>
@@ -64,13 +64,11 @@
         try
         {
             feedingDetails = new FeedingDetailsLog().FeedingDetailsList();
-            // Optional: Order the list if you want a consistent display order
             feedingDetails = feedingDetails.OrderBy(d => d.IdFeedingDetail).ToList();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error al cargar detalles de alimentación: {ex.Message}");
-            // Ensure the list is not null on error
             feedingDetails = new List<FeedingDetailsEntity>();
         }
     }

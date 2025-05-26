@@ -14,9 +14,8 @@
         </div>
     </div>
 
-
     <div class="table-responsive shadow-sm border rounded bg-white"> 
-        <table class="table table-striped table-bordered align-middle mb-0"> 
+        <table class="table table-hover table-striped table-bordered align-middle mb-0"> 
             <thead class="table-light"> 
                 <tr>
                     <th scope="col">ID</th> 
@@ -68,16 +67,14 @@
         {
             var healthRecordsLog = new HealthRecordsLog();
 
-            // Obtener la lista de historiales de salud con las relaciones cargadas
+            
             healthRecords = await Task.Run(() => healthRecordsLog.HealthsRecordsList());
-
-            // Ordenar por ID
             healthRecords = healthRecords.OrderBy(hr => hr.IdHealth).ToList();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error al cargar historiales de salud: {ex.Message}");
-            healthRecords = new List<HealthsRecordsEntity>(); // Asegurarse de que la lista no sea null en caso de error
+            healthRecords = new List<HealthsRecordsEntity>(); 
         }
     }
 }
