@@ -12,32 +12,32 @@
 
     <div class="card shadow-sm border rounded bg-white">
         <div class="card-body">
-            <EditForm Model="objAnimal" OnValidSubmit="SaveAnimal">
+            <EditForm Model="objAnimal" OnValidSubmit="SaveAnimal" FormName="FrmAnimal">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
 
                 <div class="mb-3">
-                    <label for="gender" class="form-label">Género (M/H):</label>
-                    <select id="gender" class="form-select" @bind="objAnimal.Gender">
-                        <option value="" disabled hidden>Seleccione género</option>
+                    <label for="gender" class="form-label fw-semibold">Género:</label>
+                    <InputSelect id="gender" @bind-Value="objAnimal.Gender" class="form-select">
+                        <option value="">Seleccione género</option>
                         <option value="M">Macho</option>
                         <option value="H">Hembra</option>
-                    </select>
+                    </InputSelect>
                 </div>
 
                 <div class="mb-3">
-                    <label for="age" class="form-label">Edad:</label>
-                    <InputNumber id="age" class="form-control" @bind-Value="objAnimal.Age" />
+                    <label for="age" class="form-label fw-semibold">Edad:</label>
+                    <InputNumber id="age" @bind-Value="objAnimal.Age" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="status" class="form-label">Estado de salud:</label>
-                    <InputText id="status" class="form-control" @bind-Value="objAnimal.Status" />
+                    <label for="status" class="form-label fw-semibold">Estado de salud:</label>
+                    <InputText id="status" @bind-Value="objAnimal.Status" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="location" class="form-label">Ubicación:</label>
-                    <InputSelect id="location" class="form-select" @bind-Value="objAnimal.IdLocation">
+                    <label for="location" class="form-label fw-semibold">Ubicación:</label>
+                    <InputSelect id="location" @bind-Value="objAnimal.IdLocation" class="form-select">
                         <option value="" disabled hidden>Seleccione ubicación</option>
                         @foreach (var loc in locations)
                         {
@@ -47,8 +47,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="race" class="form-label">Raza:</label>
-                    <InputSelect id="race" class="form-select" @bind-Value="objAnimal.IdRace">
+                    <label for="race" class="form-label fw-semibold">Raza:</label>
+                    <InputSelect id="race" @bind-Value="objAnimal.IdRace" class="form-select">
                         <option value="" disabled hidden>Seleccione raza</option>
                         @foreach (var race in races)
                         {
@@ -58,8 +58,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="feedingSchedule" class="form-label">Horario de Alimentación:</label>
-                    <InputSelect id="feedingSchedule" class="form-select" @bind-Value="objAnimal.IdSchedule">
+                    <label for="feedingSchedule" class="form-label fw-semibold">Horario de Alimentación:</label>
+                    <InputSelect id="feedingSchedule" @bind-Value="objAnimal.IdSchedule" class="form-select">
                         <option value="" disabled hidden>Seleccione horario</option>
                         @foreach (var schedule in feedingSchedules)
                         {
@@ -68,9 +68,9 @@
                     </InputSelect>
                 </div>
 
-                <div class="mb-4">
-                    <label for="reproduction" class="form-label">Reproducción:</label>
-                    <InputSelect id="reproduction" class="form-select" @bind-Value="objAnimal.IdReproduction">
+                <div class="mb-3">
+                    <label for="reproduction" class="form-label fw-semibold">Reproducción:</label>
+                    <InputSelect id="reproduction" @bind-Value="objAnimal.IdReproduction" class="form-select">
                         <option value="" disabled hidden>Seleccione reproducción</option>
                         @foreach (var reproduction in reproductions)
                         {
@@ -84,9 +84,13 @@
                 </div>
             </EditForm>
 
-            @if (successMessage != null)
+            @if (!string.IsNullOrEmpty(successMessage))
             {
                 <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
             }
         </div>
     </div>
@@ -96,6 +100,7 @@
     AnimalsEntity objAnimal = new AnimalsEntity { Age = 0 };
 
     private string? successMessage;
+    private string? errorMessage;
 
     List<LocationsEntity> locations = new();
     List<RacesEntity> races = new();
@@ -115,13 +120,16 @@
         try
         {
             AnimalsLog.CreateAnimals(objAnimal);
-            successMessage = "Registrado exitosamente";
-            objAnimal = new AnimalsEntity { Age = 0 }; // Limpiar formulario
+            successMessage = "Animal registrado exitosamente.";
+            errorMessage = null;
+            objAnimal = new AnimalsEntity { Age = 0 };
             NavManager.NavigateTo("/animals/list");
         }
         catch (Exception ex)
         {
-            successMessage = $"Error al guardar el animal: {ex.Message}";
+            successMessage = null;
+            errorMessage = $"Error al guardar el animal: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar el animal: {ex.Message}");
         }
     }
 }
