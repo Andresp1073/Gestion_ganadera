@@ -5,22 +5,22 @@ WORKDIR /src
 # Copiamos toda la solución
 COPY . .
 
-# 🔹 Restaura TODAS las dependencias de la solución
+# Restaura TODA la solución (evita descargas paralelas que a veces fallan en CI)
 RUN dotnet restore ./RanchMasterWebApp.sln --disable-parallel
 
-# 🔹 Publica SOLO el proyecto Presentation (sin volver a restaurar)
-RUN dotnet publish ./Presentation/Presentation.csproj -c Release -o /app/publish --no-restore
+# 👉 Paso extra para ver errores con más detalle antes del publish
+RUN dotnet build ./Presentation/Presentation.csproj -c Release --no-restore -v detailed
+
+# Publica sin restaurar de nuevo
+RUN dotnet publish ./Presentation/Presentation.csproj -c Release -o /app/publish --no-restore -v detailed
 
 # ------- Runtime stage -------
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 
-# Copiamos el publish
 COPY --from=build /app/publish .
 
-# La app escuchará en 8080 dentro del contenedor
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
-# Tu ensamblado final se llama Presentation.dll
 ENTRYPOINT ["dotnet", "Presentation.dll"]
