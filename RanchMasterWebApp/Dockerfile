@@ -5,9 +5,11 @@ WORKDIR /src
 # Copiamos toda la solución
 COPY . .
 
-# Restaura y publica SOLO el proyecto Presentation (restaura refs transitivas)
-RUN dotnet restore ./Presentation/Presentation.csproj
-RUN dotnet publish ./Presentation/Presentation.csproj -c Release -o /app/publish
+# 🔹 Restaura TODAS las dependencias de la solución
+RUN dotnet restore ./RanchMasterWebApp.sln --disable-parallel
+
+# 🔹 Publica SOLO el proyecto Presentation (sin volver a restaurar)
+RUN dotnet publish ./Presentation/Presentation.csproj -c Release -o /app/publish --no-restore
 
 # ------- Runtime stage -------
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
