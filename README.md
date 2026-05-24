@@ -120,3 +120,4 @@ RanchMasterWebApp/
 │
 ├── RanchMasterWebApp.sln  # Solución principal
 └── .gitignore             # Archivos ignorados por Git
+```
