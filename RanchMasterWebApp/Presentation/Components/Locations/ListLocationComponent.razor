@@ -1,0 +1,116 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3"> 
+        <h4 class="fw-semibold">Lista de Ubicaciones</h4>
+        <div class="d-flex">
+            <a href="/Location/create" class="btn btn-success me-2">+ Crear Ubicación</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
+    </div>
+
+    <div class="mb-3"> 
+        <label for="typeFilter" class="form-label fw-semibold">Filtrar por tipo:</label>
+        <select id="typeFilter" @onchange="TypeChanged" class="form-select w-auto"> 
+            <option value="">Todos los tipos</option> 
+            @foreach (var type in locationTypes)
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+    </div>
+
+    <div class="table-responsive shadow-sm border rounded bg-white"> 
+        <table class="table table-striped table-bordered table-hover align-middle mb-0"> 
+            <thead class="table-light"> 
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Capacidad</th>
+                    <th scope="col" style="width: 100px;">Opciones</th> 
+                </tr>
+            </thead>
+            <tbody>
+                @if (tempLocations != null && tempLocations.Any())
+                {
+                    @foreach (var location in tempLocations)
+                    {
+                        <tr>
+                            <td>@location.IdLocation</td>
+                            <td>@location.Name</td>
+                            <td>@location.Type</td> 
+                            <td>@location.Capacity</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm w-100" @onclick='() => NavManager.NavigateTo($"/Location/update/{location.IdLocation}")'>
+                                    Editar 
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No hay ubicaciones disponibles.</td> 
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    List<LocationsEntity> locations = new List<LocationsEntity>(); 
+    List<LocationsEntity> tempLocations = new List<LocationsEntity>();
+    List<string> locationTypes = new List<string>(); 
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadLocations();
+    }
+
+    private async Task LoadLocations()
+    {
+        try
+        {
+            locations = await Task.Run(() => LocationsLog.LocationsList());
+
+            if (locations == null)
+            {
+                locations = new List<LocationsEntity>();
+            }
+
+            // Populate unique types for the filter and add "Todos los tipos" option
+            locationTypes = locations.Select(l => l.Type).Distinct().OrderBy(t => t).ToList();
+            
+            // Initialize tempLocations with all locations, sorted by ID
+            tempLocations = new List<LocationsEntity>(locations.OrderBy(l => l.IdLocation));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar ubicaciones: {ex.Message}");
+            locations = new List<LocationsEntity>();
+            tempLocations = new List<LocationsEntity>();
+            locationTypes = new List<string> { "" }; 
+        }
+    }
+
+    private void TypeChanged(ChangeEventArgs e)
+    {
+        string? selectedType = e.Value?.ToString();
+
+        if (string.IsNullOrEmpty(selectedType))
+        {
+            tempLocations = new List<LocationsEntity>(locations.OrderBy(l => l.IdLocation));
+        }
+        else
+        {
+            tempLocations = locations.Where(l => l.Type == selectedType).OrderBy(l => l.IdLocation).ToList();
+        }
+    }
+}

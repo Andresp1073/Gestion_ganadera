@@ -1,0 +1,80 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold mb-0">Lista de Detalles de Alimentación</h4>
+        <div class="d-flex">
+            <a href="/FeedingDetails/create" class="btn btn-success me-2">+ Crear Detalle</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive shadow-sm border rounded bg-white">
+        <table class="table table-hover table-striped table-bordered align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Cantidad (kg)</th>
+                    <th scope="col">Tipo de Alimento</th>
+                    <th scope="col" style="width: 100px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (feedingDetails != null && feedingDetails.Any())
+                {
+                    @foreach (var detail in feedingDetails)
+                    {
+                        <tr>
+                            <td>@detail.IdFeedingDetail</td>
+                            <td>@detail.Quantity</td>
+                            <td>@detail.FoodType</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm w-100" @onclick="() => EditDetail(detail.IdFeedingDetail)">
+                                    Editar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">No hay detalles de alimentación disponibles.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    List<FeedingDetailsEntity> feedingDetails = new();
+
+    protected override void OnInitialized()
+    {
+        LoadFeedingDetails();
+    }
+
+    private void LoadFeedingDetails()
+    {
+        try
+        {
+            feedingDetails = new FeedingDetailsLog().FeedingDetailsList();
+            feedingDetails = feedingDetails.OrderBy(d => d.IdFeedingDetail).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar detalles de alimentación: {ex.Message}");
+            feedingDetails = new List<FeedingDetailsEntity>();
+        }
+    }
+
+    void EditDetail(int id)
+    {
+        NavManager.NavigateTo($"/FeedingDetails/update/{id}");
+    }
+}

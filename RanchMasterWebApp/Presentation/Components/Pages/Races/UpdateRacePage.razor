@@ -1,0 +1,13 @@
+﻿@page "/Race/update/{IdRace:int}"
+@rendermode InteractiveServer
+
+
+
+<UpdateRacesComponent IdRace="@IdRace"></UpdateRacesComponent>
+
+@code {
+    [Parameter]
+    public int IdRace { get; set; }
+
+
+}

@@ -1,0 +1,72 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Detalle de Alimentación</h4> 
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/FeedingDetails/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body"> 
+            <EditForm Model="objDetail" OnValidSubmit="UpdateDetail">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="quantityInput" class="form-label fw-semibold">Cantidad (kg):</label> 
+                    <InputNumber id="quantityInput" @bind-Value="objDetail.Quantity" class="form-control" /> 
+                </div>
+
+                <div class="mb-3">
+                    <label for="foodTypeInput" class="form-label fw-semibold">Tipo de Alimento:</label> 
+                    <InputText id="foodTypeInput" @bind-Value="objDetail.FoodType" class="form-control" /> 
+                </div>
+
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-primary">Actualizar Detalle</button>
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                
+                <div class="alert @(successMessage.Contains("Error") ? "alert-danger" : "alert-success") mt-3">@successMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int IdFeedingDetail { get; set; }
+
+    FeedingDetailsEntity objDetail = new();
+    string? successMessage;
+
+    protected override void OnInitialized()
+    {
+        var list = new FeedingDetailsLog().FeedingDetailsList();
+        objDetail = list.FirstOrDefault(d => d.IdFeedingDetail == IdFeedingDetail)
+                    ?? new FeedingDetailsEntity();
+    }
+
+    private void UpdateDetail()
+    {
+        try
+        {
+            // Se mantiene el llamado a UpdateRaces según tu código original.
+            new FeedingDetailsLog().UpdateRaces(objDetail);
+            successMessage = "¡Detalle actualizado correctamente!";
+            NavManager.NavigateTo("/FeedingDetails/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al actualizar: {ex.InnerException?.Message ?? ex.Message}"; // Mensaje de error más detallado
+            Console.WriteLine($"Error al actualizar: {ex.Message}"); 
+        }
+    }
+}

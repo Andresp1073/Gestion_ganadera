@@ -1,0 +1,171 @@
+﻿@using Logic
+@using Model
+@using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Historial de Salud</h4> 
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/HealthRecord/list")'> 
+            ← Regresar
+        </button>
+    </div>
+
+    @if (notFound)
+    {
+        <div class="alert alert-warning shadow-sm border rounded bg-white p-3">Historial de salud no encontrado.</div>
+    }
+    else if (objHealthRecord != null)
+    {
+        <div class="card shadow-sm border rounded bg-white"> 
+            <div class="card-body">
+                <EditForm Model="objHealthRecord" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="mb-3">
+                        <label for="diagnosis" class="form-label fw-semibold">Diagnóstico:</label> 
+                        <InputText id="diagnosis" class="form-control" @bind-Value="objHealthRecord.Diagnosis" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="treatment" class="form-label fw-semibold">Tratamiento:</label> 
+                        <InputText id="treatment" class="form-control" @bind-Value="objHealthRecord.Treatment" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="vaccines" class="form-label fw-semibold">Vacunas:</label> 
+                        <InputText id="vaccines" class="form-control" @bind-Value="objHealthRecord.Vaccines" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="veterinarian" class="form-label fw-semibold">Veterinario:</label>
+                        <InputSelect id="veterinarian" class="form-select" @bind-Value="objHealthRecord.IdVeterinarian">
+                            <option value="">Seleccione un Veterinario</option> 
+                            @if (veterinarians != null)
+                            {
+                                @foreach (var vet in veterinarians)
+                                {
+                                    <option value="@vet.IdVeterinarian">@vet.Name</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="animal" class="form-label fw-semibold">Animal:</label>
+                        <InputSelect id="animal" class="form-select" @bind-Value="objHealthRecord.IdAnimal">
+                            <option value="">Seleccione un Animal</option>
+                            @if (animals != null)
+                            {
+                                @foreach (var animal in animals)
+                                {
+                                    <option value="@animal.IdAnimal">@animal.IdAnimal - @animal.Gender</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="d-flex justify-content-start mt-4"> 
+                        <button type="submit" class="btn btn-primary">Actualizar Historial</button>
+                         
+                    </div>
+                </EditForm>
+
+                @if (!string.IsNullOrEmpty(successMessage))
+                {
+                    <div class="alert alert-success mt-3">@successMessage</div>
+                }
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger mt-3">@errorMessage</div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info shadow-sm border rounded bg-white p-3">Cargando datos del historial de salud...</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int IdHealth { get; set; } // Recibido desde la URL
+
+    private HealthsRecordsEntity? objHealthRecord;
+    private List<VeterinariansEntity> veterinarians = new();
+    private List<AnimalsEntity> animals = new();
+    private bool notFound = false;
+    private string? successMessage; // Para el mensaje de éxito
+    private string? errorMessage;   // Para el mensaje de error
+
+    // Instancia tus clases Log aquí
+    private readonly HealthRecordsLog healthRecordsLog = new();
+    private readonly VeterinariansLog veterinariansLog = new();
+    private readonly AnimalsLog animalsLog = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Cargar las listas de veterinarios y animales para los dropdowns
+            veterinarians = await Task.Run(() => veterinariansLog.VeterinarianList());
+            animals = await Task.Run(() => animalsLog.AnimalsList());
+
+            // Asegurarse de que las listas no sean null
+            if (veterinarians == null) veterinarians = new List<VeterinariansEntity>();
+            if (animals == null) animals = new List<AnimalsEntity>();
+
+            // Cargar el historial de salud específico
+            objHealthRecord = await Task.Run(() =>
+                healthRecordsLog.HealthsRecordsList().FirstOrDefault(hr => hr.IdHealth == IdHealth));
+
+            if (objHealthRecord == null)
+            {
+                notFound = true;
+                // Si no se encuentra, inicializa objHealthRecord para evitar NullReferenceException
+                objHealthRecord = new HealthsRecordsEntity();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los datos del historial: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al inicializar el componente de actualización: {ex.Message}");
+            notFound = true; // Considerar como no encontrado si hay un error al cargar
+            objHealthRecord = new HealthsRecordsEntity(); // Inicializar para evitar NullReferenceException
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (objHealthRecord != null)
+            {
+                healthRecordsLog.UpdateHealthsRecords(objHealthRecord);
+                successMessage = "Historial de salud actualizado exitosamente."; // Mensaje de éxito
+                errorMessage = null; // Limpiar mensaje de error si existe
+
+                // await Task.Delay(500); // Pequeño retraso para feedback visual (opcional)
+                NavManager.NavigateTo("/Healthrecord/list"); // Navegar a la lista de historiales de salud (ruta consistente)
+            }
+            else
+            {
+                errorMessage = "No hay un historial de salud para actualizar.";
+                successMessage = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al actualizar el historial de salud: {ex.InnerException?.Message ?? ex.Message}"; // Mensaje de error detallado
+            successMessage = null; // Limpiar mensaje de éxito si existe
+            Console.WriteLine($"Error al actualizar el historial de salud: {ex.Message}"); // Log en la consola para depuración
+        }
+    }
+
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/Healthrecord/list"); // Ruta de regreso consistente
+    }
+}

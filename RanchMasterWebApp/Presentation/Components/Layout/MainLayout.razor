@@ -1,0 +1,26 @@
+﻿@inherits LayoutComponentBase
+
+<!-- Barra de navegación -->
+<NavMenu />
+
+<!-- Contenido principal -->
+<div class="main-content">
+
+
+    <article class="content px-4">
+        @Body
+    </article>
+</div>
+
+<!-- Mensaje de error de Blazor -->
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+<style>
+    .main-content {
+        margin-top: 70px; /* Espacio para la barra de navegación */
+    }
+</style>

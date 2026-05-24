@@ -1,0 +1,13 @@
+﻿@page "/healthrecords/update/{IdHealth:int}"
+@rendermode InteractiveServer
+
+
+
+<UpdateHealthRecordComponent IdHealth="@IdHealth"></UpdateHealthRecordComponent>
+
+@code {
+    [Parameter]
+    public int IdHealth { get; set; }
+
+
+}

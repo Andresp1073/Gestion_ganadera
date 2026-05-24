@@ -1,0 +1,155 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Editar Horario de Alimentación</h4> @* Título ajustado con estilo *@
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/FeedingSchedules/list")'>
+            ← Regresar @* Botón para volver al listado *@
+        </button>
+    </div>
+
+    @if (notFound)
+    {
+        <div class="alert alert-warning shadow-sm border rounded bg-white p-3">Horario de Alimentación no encontrado.</div>
+    }
+    else if (objSchedule != null)
+    {
+        <div class="card shadow-sm border rounded bg-white"> @* Contenedor principal con estilo de tarjeta *@
+            <div class="card-body"> @* Cuerpo de la tarjeta para padding *@
+                <EditForm Model="objSchedule" OnValidSubmit="UpdateSchedule">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="mb-3">
+                        <label for="feedingDate" class="form-label fw-semibold">Fecha de Alimentación:</label> @* Label con estilo y atributo 'for' *@
+                        <InputDate id="feedingDate" @bind-Value="datePart" class="form-control" /> @* Input con estilo y atributo 'id' *@
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="foodTypeSelect" class="form-label fw-semibold">Tipo de Alimento:</label> @* Label con estilo y atributo 'for' *@
+                        <InputSelect id="foodTypeSelect" @bind-Value="objSchedule.IdFeedingDetail" class="form-select"> @* InputSelect con estilo y atributo 'id' *@
+                            <option value="">Seleccione</option>
+                            @if (feedingDetails != null)
+                            {
+                                @foreach (var detail in feedingDetails)
+                                {
+                                    <option value="@detail.IdFeedingDetail">
+                                        @detail.FoodType - @detail.Quantity kg
+                                    </option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="d-grid"> @* Contenedor para botón de ancho completo *@
+                        <button type="submit" class="btn btn-primary">Actualizar Horario</button> @* Botón con estilo y texto ajustado *@
+                    </div>
+                </EditForm>
+
+                @if (!string.IsNullOrEmpty(successMessage))
+                {
+                    <div class="alert alert-success mt-3">@successMessage</div>
+                }
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger mt-3">@errorMessage</div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info shadow-sm border rounded bg-white p-3">Cargando datos del horario de alimentación...</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string IdSchedule { get; set; } // Se mantiene como string según tu código original.
+
+    private FeedingSchedulesEntity? objSchedule; // Se usa tipo nulo para manejar estados de carga/no encontrado.
+    private List<FeedingDetailsEntity> feedingDetails = new();
+    private string? successMessage;
+    private string? errorMessage; // Para el mensaje de error.
+    private bool notFound = false; // Variable para controlar si el horario no fue encontrado.
+
+    private DateTime datePart; // Para vincular solo la parte de la fecha.
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            feedingDetails = await Task.Run(() => new FeedingDetailsLog().FeedingDetailsList());
+            // Asegurarse de que la lista no sea null incluso si no hay detalles
+            if (feedingDetails == null)
+            {
+                feedingDetails = new List<FeedingDetailsEntity>();
+            }
+
+            if (int.TryParse(IdSchedule, out var id))
+            {
+                using var db = new Data.RanchMasterContext();
+                objSchedule = await Task.Run(() => db.FeedingSchedules.FirstOrDefault(x => x.IdSchedule == id));
+
+                if (objSchedule == null)
+                {
+                    notFound = true;
+                    // Opcional: Reiniciar objSchedule a una instancia vacía si no se encuentra para evitar NRE en el formulario si se renderiza.
+                    objSchedule = new FeedingSchedulesEntity();
+                }
+                else
+                {
+                    datePart = objSchedule.FeedingTime.Date;
+
+                    // Asegurarse de que FeedingDetail se carga correctamente si es necesario en la UI para display
+                    // Esto es opcional si solo necesitas IdFeedingDetail para el InputSelect.
+                    objSchedule.FeedingDetail = await Task.Run(() => db.FeedingDetails
+                        .FirstOrDefault(fd => fd.IdFeedingDetail == objSchedule.IdFeedingDetail));
+                }
+            }
+            else
+            {
+                // Si el IdSchedule no es un entero válido
+                notFound = true;
+                errorMessage = "ID de horario no válido.";
+                objSchedule = new FeedingSchedulesEntity(); // Inicializar para evitar NRE.
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los datos del horario: {ex.InnerException?.Message ?? ex.Message}";
+            notFound = true; // Considerar como no encontrado si hay un error al cargar.
+            objSchedule = new FeedingSchedulesEntity(); // Inicializar para evitar NRE.
+            Console.WriteLine($"Error al cargar el horario: {ex.Message}"); // Para depuración.
+        }
+    }
+
+    private void UpdateSchedule()
+    {
+        try
+        {
+            if (objSchedule == null)
+            {
+                errorMessage = "No se ha cargado ningún horario para actualizar.";
+                successMessage = null;
+                return;
+            }
+
+            // Combina la fecha seleccionada con la hora actual del PC
+            objSchedule.FeedingTime = datePart.Date + DateTime.Now.TimeOfDay;
+
+            new FeedingSchedulesLog().UpdateFeedingSchedules(objSchedule); // Asumiendo UpdateFeedingSchedules
+            successMessage = "¡Horario actualizado correctamente!";
+            errorMessage = null; // Limpiar mensaje de error si existe.
+            NavManager.NavigateTo("/FeedingSchedules/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = null; // Limpiar mensaje de éxito si existe.
+            errorMessage = $"Error al actualizar el horario: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al editar: {ex.Message}"); // Para depuración.
+        }
+    }
+}

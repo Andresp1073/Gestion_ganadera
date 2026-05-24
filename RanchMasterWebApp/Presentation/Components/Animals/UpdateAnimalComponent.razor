@@ -1,0 +1,105 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Animal</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/animals/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body">
+            @if (notFound)
+            {
+                <div class="alert alert-danger">Animal no encontrado.</div>
+            }
+            else if (objAnimal != null)
+            {
+                <EditForm Model="objAnimal" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="mb-3">
+                        <label class="form-label">Género</label>
+                        <InputText class="form-control" @bind-Value="objAnimal.Gender" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Edad</label>
+                        <InputNumber class="form-control" @bind-Value="objAnimal.Age" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Estado de salud</label>
+                        <InputText class="form-control" @bind-Value="objAnimal.Status" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Raza</label>
+                        <InputSelect class="form-select" @bind-Value="objAnimal.IdRace">
+                            @foreach (var r in races)
+                            {
+                                <option value="@r.IdRace">@r.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </EditForm>
+
+                @if (!string.IsNullOrEmpty(successMessage))
+                {
+                    <div class="alert alert-success mt-3">@successMessage</div>
+                }
+            }
+            else
+            {
+                <p>Cargando datos del animal...</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int IdAnimal { get; set; }
+
+    private AnimalsEntity? objAnimal;
+    private List<RacesEntity> races = new();
+    private bool notFound = false;
+    private string? successMessage;
+    private readonly AnimalsLog animalsLog = new();
+    private readonly RacesLog racesLog = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        races = await Task.Run(() => racesLog.RacesList());
+        objAnimal = await Task.Run(() => 
+            animalsLog.AnimalsList().FirstOrDefault(a => a.IdAnimal == IdAnimal));
+
+        if (objAnimal == null)
+        {
+            notFound = true;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            animalsLog.UpdateAnimals(objAnimal!);
+            successMessage = "Animal actualizado exitosamente";
+            await Task.Delay(500);
+            NavManager.NavigateTo("/animals/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error: {ex.InnerException?.Message ?? ex.Message}";
+        }
+    }
+}

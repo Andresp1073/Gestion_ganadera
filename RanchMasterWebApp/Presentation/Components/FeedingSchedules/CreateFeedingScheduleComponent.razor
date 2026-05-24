@@ -1,0 +1,107 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nuevo Horario de Alimentación</h4> 
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/FeedingSchedules/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body">
+            <EditForm Model="objFeedingSchedules" OnValidSubmit="SaveFeedingSchedule">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="feedingDate" class="form-label fw-semibold">Fecha de alimentación:</label> 
+                    <InputDate id="feedingDate" @bind-Value="selectedDate" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="feedingDetail" class="form-label fw-semibold">Detalle de alimentación:</label>  
+                    <InputSelect id="feedingDetail" @bind-Value="objFeedingSchedules.IdFeedingDetail" class="form-select"> 
+                        <option value="">Seleccione</option>
+                        @if (feedingDetails != null)
+                        {
+                            @foreach (var detail in feedingDetails)
+                            {
+                                <option value="@detail.IdFeedingDetail">@detail.FoodType - @detail.Quantity kg</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-success">Registrar Horario</button> 
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage)) 
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    FeedingSchedulesEntity objFeedingSchedules = new();
+    List<FeedingDetailsEntity> feedingDetails = new();
+    private string? successMessage;
+    private string? errorMessage; 
+    private DateTime selectedDate = DateTime.Today;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            feedingDetails = await Task.Run(() => new FeedingDetailsLog().FeedingDetailsList());
+          
+            if (feedingDetails == null)
+            {
+                feedingDetails = new List<FeedingDetailsEntity>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar detalles de alimentación: {ex.Message}");
+            feedingDetails = new List<FeedingDetailsEntity>(); 
+        }
+    }
+
+    private void SaveFeedingSchedule()
+    {
+        try
+        {
+            // Toma la hora actual del sistema
+            TimeSpan horaLocal = DateTime.Now.TimeOfDay;
+
+            // Une la fecha seleccionada + hora local
+            objFeedingSchedules.FeedingTime = selectedDate.Date + horaLocal;
+
+            // Guarda el registro
+            FeedingSchedulesLog.CreateFeedingSheduleLog(objFeedingSchedules);
+            successMessage = "¡Horario registrado exitosamente!";
+            errorMessage = null; // Limpiar mensaje de error
+
+            objFeedingSchedules = new();
+            selectedDate = DateTime.Today;
+
+            NavManager.NavigateTo("/FeedingSchedules/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = null; // Limpiar mensaje de éxito
+            errorMessage = $"Error al guardar el horario: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar el horario: {ex.Message}");
+        }
+    }
+}

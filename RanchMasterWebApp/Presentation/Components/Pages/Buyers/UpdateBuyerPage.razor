@@ -1,0 +1,11 @@
+﻿@page "/buyer/update/{IdBuyer:int}"
+@rendermode InteractiveServer
+
+
+
+<UpdateBuyerComponent IdBuyer="@IdBuyer"></UpdateBuyerComponent>
+
+@code {
+    [Parameter]
+    public int IdBuyer { get; set; }
+}

@@ -1,0 +1,118 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Reproducción</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Reproduction/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    @if (notFound)
+    {
+        <div class="alert alert-warning shadow-sm border rounded bg-white p-3">Reproducción no encontrada.</div>
+    }
+    else if (objReproduction != null)
+    {
+        <div class="card shadow-sm border rounded bg-white">
+            <div class="card-body"> 
+                <EditForm Model="objReproduction" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Fecha de Nacimiento:</label>
+                        <InputDate class="form-control" @bind-Value="objReproduction.Birthdate" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Fecha de Apareamiento:</label>
+                        <InputDate class="form-control" @bind-Value="objReproduction.MatingDate" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Estado:</label>
+                        <InputSelect class="form-select" @bind-Value="objReproduction.Status">
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+
+                        </InputSelect>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Número de Crías:</label>
+                        <InputNumber class="form-control" @bind-Value="objReproduction.NumberOffspring" />
+                    </div>
+
+                    <div class="d-grid"> 
+                        <button type="submit" class="btn btn-primary">Actualizar Reproducción</button> @* Cambiado a btn-primary y texto *@
+                    </div>
+                </EditForm>
+
+                @if (!string.IsNullOrEmpty(successMessage))
+                {
+                    <div class="alert alert-success mt-3">@successMessage</div>
+                }
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger mt-3">@errorMessage</div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info shadow-sm border rounded bg-white p-3">Cargando datos de la reproducción...</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int IdBreeding { get; set; }
+
+    private ReproductionsEntity? objReproduction;
+    private bool notFound = false;
+    private readonly ReproductionsLog reproductionsLog = new();
+    private string? successMessage; // Para el mensaje de éxito
+    private string? errorMessage;   // Para el mensaje de error
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            objReproduction = await Task.Run(() =>
+                reproductionsLog.ReproductionsList().FirstOrDefault(r => r.IdBreeding == IdBreeding));
+
+            if (objReproduction == null)
+            {
+                notFound = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los datos de la reproducción: {ex.Message}";
+            notFound = true; // Considerar como no encontrado si hay un error al cargar
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            reproductionsLog.UpdateReproductions(objReproduction!);
+            successMessage = "Reproducción actualizada exitosamente"; // Mensaje de éxito
+            errorMessage = null; // Limpiar mensaje de error si existe
+
+
+            NavManager.NavigateTo("/Reproduction/list");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al actualizar la reproducción: {ex.InnerException?.Message ?? ex.Message}"; // Mensaje de error detallado
+            successMessage = null; 
+            Console.WriteLine($"Error al actualizar la reproducción: {ex.Message}"); 
+        }
+    }
+}

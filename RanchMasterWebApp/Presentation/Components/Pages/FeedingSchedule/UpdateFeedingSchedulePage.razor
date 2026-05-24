@@ -1,0 +1,9 @@
+@page "/FeedingSchedules/update/{IdSchedule}"
+@rendermode InteractiveServer
+
+<UpdateFeedingScheduleComponent IdSchedule="@IdSchedule" />
+
+@code {
+    [Parameter]
+    public string IdSchedule { get; set; }
+}

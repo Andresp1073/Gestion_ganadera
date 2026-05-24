@@ -1,0 +1,134 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nueva Venta</h4> 
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Sale/list")'> 
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body"> 
+            <EditForm Model="objSale" OnValidSubmit="SaveSale">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="saleDate" class="form-label fw-semibold">Fecha de Venta:</label> 
+                    <InputDate id="saleDate" @bind-Value="objSale.SaleDateTime" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="buyer" class="form-label fw-semibold">Comprador:</label> 
+                    <InputSelect id="buyer" @bind-Value="objSale.IdBuyer" class="form-select"> 
+                        <option value="">Seleccione</option>
+                        @if (buyers != null)
+                        {
+                            @foreach (var buyer in buyers)
+                            {
+                                <option value="@buyer.IdBuyer">@buyer.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label for="animal" class="form-label fw-semibold">Animal:</label> 
+                    <InputSelect id="animal" @bind-Value="objSale.IdAnimal" class="form-select">
+                        <option value="">Seleccione</option>
+                        @if (animals != null)
+                        {
+                            @foreach (var animal in animals)
+                            {
+                                <option value="@animal.IdAnimal">Animal @animal.IdAnimal</option> 
+                            }
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-success">Registrar Venta</button> 
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage)) 
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    SalesEntity objSale = new SalesEntity();
+
+    private string? successMessage;
+    private string? errorMessage;
+
+    List<BuyersEntity> buyers = new();
+    List<AnimalsEntity> animals = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            buyers = await Task.Run(() => new BuyersLog().BuyersList());
+            animals = await Task.Run(() => new AnimalsLog().AnimalsList());
+
+            if (buyers == null) buyers = new List<BuyersEntity>();
+            if (animals == null) animals = new List<AnimalsEntity>();
+
+            // Filtrar animales ya vendidos
+            var vendidos = SalesLog.SalesList().Select(s => s.IdAnimal).ToHashSet();
+            animals = animals.Where(a => !vendidos.Contains(a.IdAnimal)).ToList();
+
+            objSale.SaleDateTime = DateTime.Today;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar datos de soporte: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al cargar datos de soporte: {ex.Message}");
+            buyers = new List<BuyersEntity>();
+            animals = new List<AnimalsEntity>();
+        }
+    }
+
+    private void SaveSale()
+    {
+        try
+        {
+            var salesLog = new SalesLog();
+
+            // Verificar si el animal ya fue vendido
+            if (salesLog.IsAnimalSold(objSale.IdAnimal))
+            {
+                errorMessage = "Este animal ya ha sido vendido. No puede registrarse nuevamente.";
+                successMessage = null;
+                return;
+            }
+
+            SalesLog.CreateSales(objSale);
+
+            successMessage = "¡Venta registrada exitosamente!";
+            errorMessage = null;
+
+            objSale = new SalesEntity();
+            objSale.SaleDateTime = DateTime.Today;
+
+            NavManager.NavigateTo("/Sale/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = null;
+            errorMessage = $"Error al guardar la venta: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar la venta: {ex.Message}");
+        }
+    }
+}

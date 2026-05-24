@@ -1,0 +1,96 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Raza</h4>
+        <button class="btn btn-outline-secondary" @onclick='NavigateToList'>
+            ← Regresar
+        </button>
+    </div>
+
+    @if (notFound)
+    {
+        <div class="alert alert-warning">
+            <strong>Raza no encontrada.</strong>
+        </div>
+    }
+    else if (objRace != null)
+    {
+        <div class="card shadow-sm border rounded bg-white">
+            <div class="card-body">
+                <EditForm Model="objRace" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <InputText @bind-Value="objRace.Name" class="form-control" />
+                        <ValidationMessage For="@(() => objRace.Name)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <InputTextArea @bind-Value="objRace.Description" class="form-control" rows="3" />
+                        <ValidationMessage For="@(() => objRace.Description)" />
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </EditForm>
+
+                @if (!string.IsNullOrEmpty(successMessage))
+                {
+                    <div class="alert alert-success mt-3">@successMessage</div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">Cargando datos de la raza...</p>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int IdRace { get; set; }
+
+    private RacesEntity? objRace;
+    private bool notFound = false;
+    private string? successMessage;
+    private readonly RacesLog racesLog = new();
+
+    protected override void OnParametersSet()
+    {
+        objRace = racesLog.RacesList().FirstOrDefault(r => r.IdRace == IdRace);
+        if (objRace == null)
+        {
+            notFound = true;
+        }
+    }
+
+    private void HandleValidSubmit()
+    {
+        try
+        {
+            if (objRace != null)
+            {
+                racesLog.UpdateRaces(objRace);
+                successMessage = "Raza actualizada exitosamente";
+                NavManager.NavigateTo("/Race/list"); // Redirección automática
+            }
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error: {ex.InnerException?.Message ?? ex.Message}";
+        }
+    }
+
+    private void NavigateToList()
+    {
+        NavManager.NavigateTo("/Race/list");
+    }
+}

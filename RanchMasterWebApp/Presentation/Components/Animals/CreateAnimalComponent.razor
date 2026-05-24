@@ -1,0 +1,135 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nuevo Animal</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/animals/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body">
+            <EditForm Model="objAnimal" OnValidSubmit="SaveAnimal" FormName="FrmAnimal">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="gender" class="form-label fw-semibold">Género:</label>
+                    <InputSelect id="gender" @bind-Value="objAnimal.Gender" class="form-select">
+                        <option value="">Seleccione género</option>
+                        <option value="M">Macho</option>
+                        <option value="H">Hembra</option>
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label for="age" class="form-label fw-semibold">Edad:</label>
+                    <InputNumber id="age" @bind-Value="objAnimal.Age" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="status" class="form-label fw-semibold">Estado de salud:</label>
+                    <InputText id="status" @bind-Value="objAnimal.Status" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="location" class="form-label fw-semibold">Ubicación:</label>
+                    <InputSelect id="location" @bind-Value="objAnimal.IdLocation" class="form-select">
+                        <option value="" disabled hidden>Seleccione ubicación</option>
+                        @foreach (var loc in locations)
+                        {
+                            <option value="@loc.IdLocation">@loc.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label for="race" class="form-label fw-semibold">Raza:</label>
+                    <InputSelect id="race" @bind-Value="objAnimal.IdRace" class="form-select">
+                        <option value="" disabled hidden>Seleccione raza</option>
+                        @foreach (var race in races)
+                        {
+                            <option value="@race.IdRace">@race.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label for="feedingSchedule" class="form-label fw-semibold">Horario de Alimentación:</label>
+                    <InputSelect id="feedingSchedule" @bind-Value="objAnimal.IdSchedule" class="form-select">
+                        <option value="" disabled hidden>Seleccione horario</option>
+                        @foreach (var schedule in feedingSchedules)
+                        {
+                            <option value="@schedule.IdSchedule">@schedule.FeedingTime.ToShortTimeString()</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label for="reproduction" class="form-label fw-semibold">Reproducción:</label>
+                    <InputSelect id="reproduction" @bind-Value="objAnimal.IdReproduction" class="form-select">
+                        <option value="" disabled hidden>Seleccione reproducción</option>
+                        @foreach (var reproduction in reproductions)
+                        {
+                            <option value="@reproduction.IdBreeding">Reproducción @reproduction.IdBreeding</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Registrar Animal</button>
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    AnimalsEntity objAnimal = new AnimalsEntity { Age = 0 };
+
+    private string? successMessage;
+    private string? errorMessage;
+
+    List<LocationsEntity> locations = new();
+    List<RacesEntity> races = new();
+    List<FeedingSchedulesEntity> feedingSchedules = new();
+    List<ReproductionsEntity> reproductions = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        locations = LocationsLog.LocationsList();
+        races = new RacesLog().RacesList();
+        feedingSchedules = new FeedingSchedulesLog().FeedingSchedulesList();
+        reproductions = new ReproductionsLog().ReproductionsList();
+    }
+
+    private void SaveAnimal()
+    {
+        try
+        {
+            AnimalsLog.CreateAnimals(objAnimal);
+            successMessage = "Animal registrado exitosamente.";
+            errorMessage = null;
+            objAnimal = new AnimalsEntity { Age = 0 };
+            NavManager.NavigateTo("/animals/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = null;
+            errorMessage = $"Error al guardar el animal: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar el animal: {ex.Message}");
+        }
+    }
+}

@@ -1,0 +1,131 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nuevo Historial de Salud</h4> 
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/HealthRecord/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body"> 
+            <EditForm Model="objHealthRecord" OnValidSubmit="SaveHealthRecord">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="diagnosis" class="form-label fw-semibold">Diagnóstico:</label> 
+                    <InputText id="diagnosis" @bind-Value="objHealthRecord.Diagnosis" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="treatment" class="form-label fw-semibold">Tratamiento:</label>
+                    <InputText id="treatment" @bind-Value="objHealthRecord.Treatment" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="vaccines" class="form-label fw-semibold">Vacuna:</label> 
+                    <InputText id="vaccines" @bind-Value="objHealthRecord.Vaccines" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="veterinarian" class="form-label fw-semibold">Veterinario:</label> 
+                    <InputSelect id="veterinarian" @bind-Value="objHealthRecord.IdVeterinarian" class="form-select"> 
+                        <option value="">Seleccione</option>
+                        @if (veterinarians != null)
+                        {
+                            @foreach (var vet in veterinarians)
+                            {
+                                <option value="@vet.IdVeterinarian">@vet.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label for="animal" class="form-label fw-semibold">Animal:</label> 
+                    <InputSelect id="animal" @bind-Value="objHealthRecord.IdAnimal" class="form-select">
+                        <option value="">Seleccione</option>
+                        @if (animals != null)
+                        {
+                            @foreach (var animal in animals)
+                            {
+                                <option value="@animal.IdAnimal">@animal.Race?.Name - ID: @animal.IdAnimal</option> 
+                            }
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-success">Registrar Historial</button> 
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    // Objeto principal
+    HealthsRecordsEntity objHealthRecord = new();
+
+    private string? successMessage;
+    private string? errorMessage; // Variable para el mensaje de error
+
+    // Listas para select
+    List<VeterinariansEntity> veterinarians = new();
+    List<AnimalsEntity> animals = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Cargar datos de apoyo
+            veterinarians = await Task.Run(() => new VeterinariansLog().VeterinarianList());
+            animals = await Task.Run(() => new AnimalsLog().AnimalsList());
+
+            // Asegurarse de que las listas no sean null
+            if (veterinarians == null) veterinarians = new List<VeterinariansEntity>();
+            if (animals == null) animals = new List<AnimalsEntity>();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar datos de soporte: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al cargar datos de soporte: {ex.Message}");
+            // Asegurar que las listas estén vacías en caso de error
+            veterinarians = new List<VeterinariansEntity>();
+            animals = new List<AnimalsEntity>();
+        }
+    }
+
+    private void SaveHealthRecord()
+    {
+        try
+        {
+            HealthRecordsLog.CreateHealthRecords(objHealthRecord);
+            successMessage = "Historial de salud registrado exitosamente.";
+            errorMessage = null; // Limpiar mensaje de error
+
+            objHealthRecord = new(); // Limpiar formulario
+            //Redirecciona a la lista
+            NavManager.NavigateTo("/HealthRecord/list"); 
+        }
+        catch (Exception ex)
+        {
+            successMessage = null; // Limpiar mensaje de éxito
+            errorMessage = $"Error al guardar el historial de salud: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar el historial de salud: {ex.Message}");
+        }
+    }
+}

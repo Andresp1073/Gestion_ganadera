@@ -1,0 +1,13 @@
+﻿@page "/Reproduction/update/{IdReproduction:int}"
+@rendermode InteractiveServer
+
+
+
+<UpdateReproductionComponent IdBreeding="@IdReproduction"></UpdateReproductionComponent>
+
+@code {
+    [Parameter]
+    public int IdReproduction { get; set; }
+
+
+}

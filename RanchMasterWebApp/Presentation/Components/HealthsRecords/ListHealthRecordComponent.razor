@@ -1,0 +1,80 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold">Lista de Historiales de Salud</h4> 
+
+        <div class="d-flex">
+            <a href="/HealthRecord/create" class="btn btn-success me-2">+ Crear Historial</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive shadow-sm border rounded bg-white"> 
+        <table class="table table-hover table-striped table-bordered align-middle mb-0"> 
+            <thead class="table-light"> 
+                <tr>
+                    <th scope="col">ID</th> 
+                    <th scope="col">Diagnóstico</th>
+                    <th scope="col">Tratamiento</th>
+                    <th scope="col">Veterinario</th>
+                    <th scope="col">Vacunas</th>
+                    <th scope="col">Animal (ID)</th> 
+                    <th scope="col" style="width: 100px;">Opciones</th> 
+                </tr>
+            </thead>
+            <tbody>
+                @if (healthRecords != null && healthRecords.Any()) 
+                {
+                    @foreach (var record in healthRecords)
+                    {
+                        <tr>
+                            <td>@record.IdHealth</td>
+                            <td>@record.Diagnosis</td>
+                            <td>@record.Treatment</td>
+                            <td>@record.Veterinarians?.Name</td> 
+                            <td>@record.Vaccines</td>
+                            <td>@record.Animals?.IdAnimal</td> 
+                            <td>
+                                <a class="btn btn-sm btn-primary w-100" href="@($"/healthrecords/update/{record.IdHealth}")">
+                                    Editar 
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">No hay historiales de salud disponibles.</td> 
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<HealthsRecordsEntity> healthRecords = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var healthRecordsLog = new HealthRecordsLog();
+
+            
+            healthRecords = await Task.Run(() => healthRecordsLog.HealthsRecordsList());
+            healthRecords = healthRecords.OrderBy(hr => hr.IdHealth).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar historiales de salud: {ex.Message}");
+            healthRecords = new List<HealthsRecordsEntity>(); 
+        }
+    }
+}

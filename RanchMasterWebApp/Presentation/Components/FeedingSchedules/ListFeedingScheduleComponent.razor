@@ -1,0 +1,94 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold mb-0">Horarios de Alimentación</h4>
+
+        <div class="d-flex">
+            <a href="/FeedingSchedules/create" class="btn btn-success me-2">+ Crear Horario</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive shadow-sm border rounded bg-white"> 
+        <table class="table table-hover table-striped table-bordered align-middle mb-0"> 
+            <thead class="table-light"> 
+                <tr>
+                    <th scope="col">ID</th> 
+                    <th scope="col">Fecha y Hora</th>
+                    <th scope="col">Tipo de Alimento</th>
+                    <th scope="col" style="width: 100px;">Opciones</th> 
+                </tr>
+            </thead>
+            <tbody>
+                @if (schedules != null && schedules.Any()) 
+                {
+                    @foreach (var schedule in schedules)
+                    {
+                        <tr>
+                            <td>@schedule.IdSchedule</td>
+                            <td>@schedule.FeedingTime.ToString("dd/MM/yyyy HH:mm")</td> 
+                            <td>@schedule.FeedingDetail?.FoodType</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary w-100" href="@($"/FeedingSchedules/update/{schedule.IdSchedule}")">
+                                    Editar 
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">No hay horarios de alimentación disponibles.</td> 
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<FeedingSchedulesEntity> schedules = new();
+
+    protected override async Task OnInitializedAsync() 
+    {
+        await LoadFeedingSchedules();
+    }
+
+    private async Task LoadFeedingSchedules()
+    {
+        try
+        {
+            var log = new FeedingSchedulesLog();
+            schedules = await Task.Run(() => log.FeedingSchedulesList()); 
+
+            // Ordenar al cargar inicialmente
+            schedules = schedules.OrderBy(s => s.FeedingTime).ToList(); 
+            foreach (var schedule in schedules)
+            {
+                schedule.FeedingDetail = await Task.Run(() => GetFeedingDetail(schedule.IdFeedingDetail));
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar horarios de alimentación: {ex.Message}");
+            schedules = new List<FeedingSchedulesEntity>(); 
+        }
+    }
+
+    private void EditSchedule(int id)
+    {
+        NavManager.NavigateTo($"/FeedingSchedules/update/{id}");
+    }
+
+    private FeedingDetailsEntity GetFeedingDetail(int id)
+    {
+        using var db = new Data.RanchMasterContext();
+        return db.FeedingDetails.FirstOrDefault(fd => fd.IdFeedingDetail == id);
+    }
+}

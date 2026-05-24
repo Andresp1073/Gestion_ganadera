@@ -1,0 +1,107 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Actualizar Venta</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/sale/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body">
+            <EditForm Model="objSale" OnValidSubmit="UpdateSale">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Fecha de Venta:</label>
+                    <InputDate class="form-control" @bind-Value="objSale.SaleDateTime" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Comprador:</label>
+                    <InputSelect class="form-select" @bind-Value="objSale.IdBuyer">
+                        <option value="">Seleccione</option>
+                        @foreach (var buyer in buyers)
+                        {
+                            <option value="@buyer.IdBuyer">@buyer.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Animal:</label>
+                    <InputSelect class="form-select" @bind-Value="objSale.IdAnimal">
+                        <option value="">Seleccione</option>
+                        @foreach (var animal in animals)
+                        {
+                            <option value="@animal.IdAnimal">Animal @animal.IdAnimal</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Actualizar Venta</button>
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-success mt-3">@successMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int IdSale { get; set; }
+
+    SalesEntity objSale = new();
+    List<BuyersEntity> buyers = new();
+    List<AnimalsEntity> animals = new();
+    string? successMessage;
+
+    protected override void OnInitialized()
+    {
+        buyers = new BuyersLog().BuyersList();
+        animals = new AnimalsLog().AnimalsList();
+        objSale = SalesLog.SalesList().FirstOrDefault(s => s.IdSale == IdSale) ?? new();
+
+        // Filtrar animales ya vendidos en otras ventas, pero permitir el que pertenece a esta venta
+        var vendidos = SalesLog.SalesList()
+            .Where(s => s.IdSale != IdSale)
+            .Select(s => s.IdAnimal)
+            .ToHashSet();
+
+        animals = animals
+            .Where(a => !vendidos.Contains(a.IdAnimal) || a.IdAnimal == objSale.IdAnimal)
+            .ToList();
+    }
+
+    void UpdateSale()
+    {
+        try
+        {
+            var ventas = SalesLog.SalesList();
+            bool yaVendido = ventas.Any(s => s.IdAnimal == objSale.IdAnimal && s.IdSale != objSale.IdSale);
+
+            if (yaVendido)
+            {
+                successMessage = "Este animal ya está registrado en otra venta. No se puede volver a asignar.";
+                return;
+            }
+
+            new SalesLog().UpdateSales(objSale);
+            successMessage = "¡Venta actualizada correctamente!";
+            NavManager.NavigateTo("/sale/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error: {ex.InnerException?.Message ?? ex.Message}";
+        }
+    }
+}

@@ -1,0 +1,88 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nueva Ubicación</h4> 
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Location/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body"> 
+            <EditForm Model="objLocations" OnValidSubmit="SaveProduct" FormName="FrmProduct">
+                <DataAnnotationsValidator />
+                <ValidationSummary /> 
+
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold">Nombre:</label>
+                    <InputText id="name" @bind-Value="objLocations.Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="type" class="form-label fw-semibold">Tipo:</label> 
+                    <InputText id="type" @bind-Value="objLocations.Type" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="capacity" class="form-label fw-semibold">Capacidad:</label> 
+                    <InputNumber id="capacity" @bind-Value="objLocations.Capacity" class="form-control" />
+                </div>
+                
+                <div class="d-grid"> 
+                    <button type="submit" class="btn btn-success">Registrar Ubicación</button> 
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage)) 
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    // Instancia de la ubicación que se está creando
+    LocationsEntity objLocations = new LocationsEntity();
+    
+    // Mensaje para indicar el resultado de la operación
+    private string? successMessage;
+    private string? errorMessage; // Variable para el mensaje de error
+
+    /*
+     * Método que se ejecuta al enviar el formulario.
+     * Guarda la ubicación en la base de datos.
+     */
+    private void SaveProduct() // Podrías considerar renombrarlo a SaveLocation para mayor claridad
+    {
+        try
+        {
+            // Llama al método para crear una ubicación en la capa lógica
+            LocationsLog.CreateLocations(objLocations);
+
+            // Muestra un mensaje de éxito
+            successMessage = "Ubicación registrada exitosamente.";
+            errorMessage = null; // Limpiar mensaje de error si existe
+            
+            // Reinicia el formulario para un nuevo registro
+            objLocations = new LocationsEntity();
+            
+            // Redirecciona a la lista de ubicaciones
+            NavManager.NavigateTo("/Location/list");
+        }
+        catch (Exception ex)
+        {
+            // Muestra el mensaje de error en caso de excepción
+            successMessage = null; // Limpiar mensaje de éxito si existe
+            errorMessage = $"Error al guardar la ubicación: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar la ubicación: {ex.Message}"); // Para depuración
+        }
+    }
+}

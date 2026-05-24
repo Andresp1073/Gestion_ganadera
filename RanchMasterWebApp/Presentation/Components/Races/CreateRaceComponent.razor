@@ -1,0 +1,60 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nueva Raza</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/Race/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body">
+            <EditForm Model="objRace" OnValidSubmit="SaveRace">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre de la Raza</label>
+                    <InputText id="name" @bind-Value="objRace.Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción</label>
+                    <InputTextArea id="description" @bind-Value="objRace.Description" class="form-control" rows="3" />
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Guardar Raza</button>
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private RacesEntity objRace = new RacesEntity();
+    private string? successMessage;
+
+    private void SaveRace()
+    {
+        try
+        {
+            RacesLog.CreateRaces(objRace);
+            successMessage = "Raza registrada exitosamente.";
+            objRace = new RacesEntity(); // Limpiar formulario
+            NavManager.NavigateTo("/Race/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = $"Error al registrar la raza: {ex.InnerException?.Message ?? ex.Message}";
+        }
+    }
+}

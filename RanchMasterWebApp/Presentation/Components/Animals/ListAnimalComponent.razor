@@ -1,0 +1,103 @@
+﻿@using Logic 
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold mb-0">Lista de Animales</h4>
+        <div class="d-flex">
+            <a href="/animals/create" class="btn btn-success me-2">+ Crear Animal</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <select @onchange="OnRaceChanged" class="form-select" aria-label="Filtro por raza">
+            <option value="">Todas las razas</option>
+            @foreach (var race in races)
+            {
+                <option value="@race.IdRace">@race.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="table-responsive shadow-sm border rounded bg-white">
+        <table class="table table-hover table-striped table-bordered align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Género</th>
+                    <th>Edad</th>
+                    <th>Estado de salud</th>
+                    <th>Raza</th>
+                    <th style="width: 100px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (tempAnimals.Any())
+                {
+                    @foreach (var animal in tempAnimals)
+                    {
+                        <tr>
+                            <td>@animal.IdAnimal</td>
+                            <td>@animal.Gender</td>
+                            <td>@animal.Age</td>
+                            <td>@animal.Status</td>
+                            <td>@animal.Race?.Name</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm w-100" @onclick="() => EditAnimal(animal.IdAnimal)">Editar</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No hay animales disponibles.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<AnimalsEntity> animals = new();
+    private List<AnimalsEntity> tempAnimals = new();
+    private List<RacesEntity> races = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var animalsLog = new AnimalsLog();
+        var racesLog = new RacesLog();
+
+        animals = await Task.Run(() => animalsLog.AnimalsList());
+        races = await Task.Run(() => racesLog.RacesList());
+
+        animals = animals.OrderBy(a => a.IdAnimal).ToList();
+        tempAnimals = animals;
+    }
+
+    private void OnRaceChanged(ChangeEventArgs e)
+    {
+        string selected = e.Value?.ToString();
+
+        if (string.IsNullOrWhiteSpace(selected))
+        {
+            tempAnimals = animals;
+        }
+        else if (int.TryParse(selected, out int raceId))
+        {
+            tempAnimals = animals.Where(a => a.IdRace == raceId).ToList();
+        }
+
+        tempAnimals = tempAnimals.OrderBy(a => a.IdAnimal).ToList();
+    }
+
+    private void EditAnimal(int id)
+    {
+        NavManager.NavigateTo($"/animal/update/{id}");
+    }
+}

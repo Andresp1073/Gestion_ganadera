@@ -1,0 +1,10 @@
+@page "/FeedingDetails/update/{IdFeedingDetail:int}"
+@rendermode InteractiveServer
+
+
+
+<UpdateFeedingDetailsComponent IdFeedingDetail="@IdFeedingDetail" />
+
+@code {
+    [Parameter] public int IdFeedingDetail { get; set; }
+}

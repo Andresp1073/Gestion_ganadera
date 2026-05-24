@@ -1,0 +1,84 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nuevo Comprador</h4>
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/buyer/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body">
+            <EditForm Model="objBuyer" OnValidSubmit="SaveBuyer">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="buyerName" class="form-label fw-semibold">Nombre:</label>
+                    <InputText id="buyerName" @bind-Value="objBuyer.Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="buyerCc" class="form-label fw-semibold">Cédula:</label>
+                    <InputText id="buyerCc" @bind-Value="objBuyer.Cc" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="buyerPhone" class="form-label fw-semibold">Teléfono:</label>
+                    <InputText id="buyerPhone" @bind-Value="objBuyer.PhoneNumber" class="form-control" />
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Registrar Comprador</button>
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    BuyersEntity objBuyer = new BuyersEntity();
+
+    private string? successMessage;
+    private string? errorMessage;
+
+    List<BuyersEntity> Buyers = new List<BuyersEntity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Buyers = await Task.Run(() => new BuyersLog().BuyersList());
+    }
+
+    private void SaveBuyer()
+    {
+        try
+        {
+            BuyersLog.CreateBuyers(objBuyer);
+
+            successMessage = "Comprador registrado exitosamente.";
+            errorMessage = null;
+
+            objBuyer = new BuyersEntity();
+
+            NavManager.NavigateTo("/buyer/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = null;
+            errorMessage = $"Error al guardar el comprador: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar el comprador: {ex.Message}");
+        }
+    }
+}

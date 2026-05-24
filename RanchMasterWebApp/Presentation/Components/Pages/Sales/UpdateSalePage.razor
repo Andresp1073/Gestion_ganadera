@@ -1,0 +1,13 @@
+@page "/sale/update/{IdSale:int}"
+@rendermode InteractiveServer
+
+<UpdateSaleComponent IdSale="@IdSale"></UpdateSaleComponent>
+
+@code {
+    [Parameter]
+    public int IdSale { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        IdSale = IdSale;
+    }
+}

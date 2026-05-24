@@ -1,0 +1,67 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold">Lista de Razas</h4>
+
+        <div class="d-flex">
+            <a href="/Race/create" class="btn btn-success me-2">+ Crear Raza</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
+    </div>
+
+
+    @if (races.Any())
+    {
+        <div class="table-responsive shadow-sm border rounded bg-white">
+            <table class="table table-striped table-bordered table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col" style="width: 100px;">Opciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var race in races)
+                {
+                    <tr>
+                        <td>@race.IdRace</td>
+                        <td>@race.Name</td>
+                        <td>@race.Description</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm w-100" @onclick="() => EditRace(race.IdRace)">Editar</button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning mt-3">No hay razas registradas.</div>
+    }
+</div>
+
+@code {
+    private List<RacesEntity> races = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var racesLog = new RacesLog();
+        races = await Task.Run(() => racesLog.RacesList());
+        races = races.OrderBy(r => r.IdRace).ToList();
+    }
+
+    private void EditRace(int id)
+    {
+        NavManager.NavigateTo($"/Race/update/{id}");
+    }
+}

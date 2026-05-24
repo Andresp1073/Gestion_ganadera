@@ -1,0 +1,72 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold mb-0">Lista de Compradores</h4>
+        <div class="d-flex">
+            <a href="/buyer/create" class="btn btn-success me-2">+ Crear Comprador</a>
+            <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/")'>
+                ← Regresar al Inicio
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive shadow-sm border rounded bg-white">
+        <table class="table table-hover table-striped table-bordered align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Cédula</th>
+                    <th>Número de Teléfono</th>
+                    <th style="width: 100px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (buyers != null && buyers.Any()) 
+                {
+                    @foreach (var buyer in buyers)
+                    {
+                        <tr>
+                            <td>@buyer.IdBuyer</td>
+                            <td>@buyer.Name</td>
+                            <td>@buyer.Cc</td>
+                            <td>@buyer.PhoneNumber</td>
+                            <td>
+                                <a href="@($"/buyer/update/{buyer.IdBuyer}")" class="btn btn-sm btn-primary w-100">Editar</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No hay compradores disponibles.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<BuyersEntity> buyers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var buyersLog = new BuyersLog();
+            buyers = await Task.Run(() => buyersLog.BuyersList());
+
+            buyers = buyers.OrderBy(b => b.IdBuyer).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar compradores: {ex.Message}");
+            buyers = new List<BuyersEntity>(); 
+        }
+    }
+}

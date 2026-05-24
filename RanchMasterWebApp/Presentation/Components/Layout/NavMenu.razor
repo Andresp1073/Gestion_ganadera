@@ -1,0 +1,90 @@
+﻿@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-success fw-bold me-4" href="/">Ranch Master</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mt-3">
+                
+                <li class="nav-item"></li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/Race/list">Razas</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/animals/list">Animales</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/Reproduction/list">Reproducción</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/FeedingDetails/list">Alimentación</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/location/list">Ubicaciones</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/FeedingSchedules/list">Horario De Alimentacion</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/Veterinarian/list">Veterinarios</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/healthRecord/list">Salud</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/sale/list">Ventas</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="custom-nav-link" href="/buyer/list">Compradores</NavLink>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .custom-nav-link {
+        color: #212529;
+        padding: 5px 10px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+        position: relative;
+    }
+
+    .custom-nav-link:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: #000;
+    }
+
+    .custom-nav-link::after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 2px;
+        background-color: #198754;
+        transition: width 0.3s;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    .custom-nav-link:hover::after,
+    .custom-nav-link.active::after {
+        width: 100%;
+    }
+
+    .custom-nav-link.active {
+        font-weight: bold;
+        color: #212529 !important; /* fuerza el color del texto */
+    }
+
+
+</style>

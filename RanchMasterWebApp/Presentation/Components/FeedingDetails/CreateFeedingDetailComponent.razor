@@ -1,0 +1,72 @@
+@using Logic
+@using Model
+@inject NavigationManager NavManager
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Registrar Nuevo Detalle de Alimentación</h4> 
+        <button class="btn btn-outline-secondary" @onclick='() => NavManager.NavigateTo("/FeedingDetails/list")'>
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="card shadow-sm border rounded bg-white">
+        <div class="card-body"> 
+            <EditForm Model="objFeedingDetails" OnValidSubmit="SaveDetail">
+                <DataAnnotationsValidator /> 
+                <ValidationSummary /> 
+
+                <div class="mb-3">
+                    <label for="foodType" class="form-label fw-semibold">Tipo de Alimento:</label> 
+                    <InputText id="foodType" @bind-Value="objFeedingDetails.FoodType" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantity" class="form-label fw-semibold">Cantidad (kg):</label> 
+                    <InputNumber id="quantity" @bind-Value="objFeedingDetails.Quantity" class="form-control" />
+                </div>
+                
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Registrar Detalle</button> 
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-info mt-3">@successMessage</div>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage)) 
+            {
+                <div class="alert alert-danger mt-3">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    FeedingDetailsEntity objFeedingDetails = new FeedingDetailsEntity();
+    private string? successMessage;
+    private string? errorMessage; // Variable para el mensaje de error
+
+    private void SaveDetail()
+    {
+        try
+        {
+            FeedingDetailsLog.CreateFeedingDetails(objFeedingDetails);
+            successMessage = "¡Detalle de alimentación registrado correctamente!";
+            errorMessage = null; // Limpiar mensaje de error
+            
+            // Reiniciar formulario
+            objFeedingDetails = new FeedingDetailsEntity();
+
+            // Volver al listado
+            NavManager.NavigateTo("/FeedingDetails/list");
+        }
+        catch (Exception ex)
+        {
+            successMessage = null; // Limpiar mensaje de éxito
+            errorMessage = $"Error al guardar el detalle de alimentación: {ex.InnerException?.Message ?? ex.Message}";
+            Console.WriteLine($"Error al guardar el detalle: {ex.Message}"); // Para depuración
+        }
+    }
+}
