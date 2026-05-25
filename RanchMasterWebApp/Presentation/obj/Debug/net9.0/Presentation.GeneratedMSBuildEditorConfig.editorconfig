@@ -9,49 +9,293 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Presentation
 build_property.RootNamespace = Presentation
-build_property.ProjectDir = /home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/
+build_property.ProjectDir = C:\Users\Andres\Music\gestion-ganadera-app\RanchMasterWebApp\Presentation\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation
+build_property.MSBuildProjectDirectory = C:\Users\Andres\Music\gestion-ganadera-app\RanchMasterWebApp\Presentation
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/App.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Animals/CreateAnimalComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBbmltYWxzXENyZWF0ZUFuaW1hbENvbXBvbmVudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Db3VudGVyLnJhem9y
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Animals/ListAnimalComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBbmltYWxzXExpc3RBbmltYWxDb21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Error.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Animals/UpdateAnimalComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBbmltYWxzXFVwZGF0ZUFuaW1hbENvbXBvbmVudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Home.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9XZWF0aGVyLnJhem9y
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Buyers/CreateBuyerComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xCdXllcnNcQ3JlYXRlQnV5ZXJDb21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Routes.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Sb3V0ZXMucmF6b3I=
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Buyers/ListBuyerComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xCdXllcnNcTGlzdEJ1eWVyQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/_Imports.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9fSW1wb3J0cy5yYXpvcg==
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Buyers/UpdateBuyerComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xCdXllcnNcVXBkYXRlQnV5ZXJDb21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Layout/MainLayout.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTWFpbkxheW91dC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-ofav8gjs4c
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/FeedingDetails/CreateFeedingDetailComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGZWVkaW5nRGV0YWlsc1xDcmVhdGVGZWVkaW5nRGV0YWlsQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
 
-[/home/fup/Documentos/Ranch Master/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Layout/NavMenu.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTmF2TWVudS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-bd70en3p2j
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/FeedingDetails/ListFeedingDetailsComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGZWVkaW5nRGV0YWlsc1xMaXN0RmVlZGluZ0RldGFpbHNDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/FeedingDetails/UpdateFeedingDetailsComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGZWVkaW5nRGV0YWlsc1xVcGRhdGVGZWVkaW5nRGV0YWlsc0NvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/FeedingSchedules/CreateFeedingScheduleComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGZWVkaW5nU2NoZWR1bGVzXENyZWF0ZUZlZWRpbmdTY2hlZHVsZUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/FeedingSchedules/ListFeedingScheduleComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGZWVkaW5nU2NoZWR1bGVzXExpc3RGZWVkaW5nU2NoZWR1bGVDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/FeedingSchedules/UpdateFeedingScheduleComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGZWVkaW5nU2NoZWR1bGVzXFVwZGF0ZUZlZWRpbmdTY2hlZHVsZUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/HealthsRecords/CreateHealthRecordComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xIZWFsdGhzUmVjb3Jkc1xDcmVhdGVIZWFsdGhSZWNvcmRDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/HealthsRecords/ListHealthRecordComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xIZWFsdGhzUmVjb3Jkc1xMaXN0SGVhbHRoUmVjb3JkQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/HealthsRecords/UpdateHealthRecordComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xIZWFsdGhzUmVjb3Jkc1xVcGRhdGVIZWFsdGhSZWNvcmRDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Locations/CreateLocationComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMb2NhdGlvbnNcQ3JlYXRlTG9jYXRpb25Db21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Locations/ListLocationComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMb2NhdGlvbnNcTGlzdExvY2F0aW9uQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Locations/UpdateLocationComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMb2NhdGlvbnNcVXBkYXRlTG9jYXRpb25Db21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/About.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBYm91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Animals/CreateAnimalPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBbmltYWxzXENyZWF0ZUFuaW1hbFBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Animals/ListAnimalPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBbmltYWxzXExpc3RBbmltYWxQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Animals/UpdateAnimalPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBbmltYWxzXFVwZGF0ZUFuaW1hbFBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Buyers/CreateBuyerPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdXllcnNcQ3JlYXRlQnV5ZXJQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Buyers/ListBuyerPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdXllcnNcTGlzdEJ1eWVyUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Buyers/UpdateBuyerPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdXllcnNcVXBkYXRlQnV5ZXJQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Error.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/FeedingDetails/CreateFeedingDetailPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGZWVkaW5nRGV0YWlsc1xDcmVhdGVGZWVkaW5nRGV0YWlsUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/FeedingDetails/ListFeedingDetailsPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGZWVkaW5nRGV0YWlsc1xMaXN0RmVlZGluZ0RldGFpbHNQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/FeedingDetails/UpdateFeedingDetailsPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGZWVkaW5nRGV0YWlsc1xVcGRhdGVGZWVkaW5nRGV0YWlsc1BhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/FeedingSchedule/CreateFeedingSchedulePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGZWVkaW5nU2NoZWR1bGVcQ3JlYXRlRmVlZGluZ1NjaGVkdWxlUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/FeedingSchedule/ListFeedingSchedulePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGZWVkaW5nU2NoZWR1bGVcTGlzdEZlZWRpbmdTY2hlZHVsZVBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/FeedingSchedule/UpdateFeedingSchedulePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGZWVkaW5nU2NoZWR1bGVcVXBkYXRlRmVlZGluZ1NjaGVkdWxlUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/HealthsRecords/CreateHealthRecordPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIZWFsdGhzUmVjb3Jkc1xDcmVhdGVIZWFsdGhSZWNvcmRQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/HealthsRecords/ListHealthRecordPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIZWFsdGhzUmVjb3Jkc1xMaXN0SGVhbHRoUmVjb3JkUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/HealthsRecords/UpdateHealthRecordPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIZWFsdGhzUmVjb3Jkc1xVcGRhdGVIZWFsdGhSZWNvcmRQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Locations/CreateLocationPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2NhdGlvbnNcQ3JlYXRlTG9jYXRpb25QYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Locations/ListLocationPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2NhdGlvbnNcTGlzdExvY2F0aW9uUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Locations/UpdateLocationPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2NhdGlvbnNcVXBkYXRlTG9jYXRpb25QYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Races/CreateRacePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSYWNlc1xDcmVhdGVSYWNlUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Races/ListRacePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSYWNlc1xMaXN0UmFjZVBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Races/UpdateRacePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSYWNlc1xVcGRhdGVSYWNlUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Reproductions/CreateReproductionPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZXByb2R1Y3Rpb25zXENyZWF0ZVJlcHJvZHVjdGlvblBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Reproductions/ListReproductionPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZXByb2R1Y3Rpb25zXExpc3RSZXByb2R1Y3Rpb25QYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Reproductions/UpdateReproductionPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZXByb2R1Y3Rpb25zXFVwZGF0ZVJlcHJvZHVjdGlvblBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Sales/CreateSalesPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTYWxlc1xDcmVhdGVTYWxlc1BhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Sales/ListSalePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTYWxlc1xMaXN0U2FsZVBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Sales/UpdateSalePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTYWxlc1xVcGRhdGVTYWxlUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Veterinarians/CreateVeterinariansPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xWZXRlcmluYXJpYW5zXENyZWF0ZVZldGVyaW5hcmlhbnNQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Veterinarians/ListVeterinariansPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xWZXRlcmluYXJpYW5zXExpc3RWZXRlcmluYXJpYW5zUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Veterinarians/UpdateVeterinariansPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xWZXRlcmluYXJpYW5zXFVwZGF0ZVZldGVyaW5hcmlhbnNQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Pages/Weather.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Races/CreateRaceComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYWNlc1xDcmVhdGVSYWNlQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Races/ListRaceComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYWNlc1xMaXN0UmFjZUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Races/UpdateRacesComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYWNlc1xVcGRhdGVSYWNlc0NvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Reproductions/CreateReproductionComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSZXByb2R1Y3Rpb25zXENyZWF0ZVJlcHJvZHVjdGlvbkNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Reproductions/ListReproductionComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSZXByb2R1Y3Rpb25zXExpc3RSZXByb2R1Y3Rpb25Db21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Reproductions/UpdateReproductionComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSZXByb2R1Y3Rpb25zXFVwZGF0ZVJlcHJvZHVjdGlvbkNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Sales/CreateSalesComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTYWxlc1xDcmVhdGVTYWxlc0NvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Sales/ListSaleComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTYWxlc1xMaXN0U2FsZUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Sales/UpdateSaleComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTYWxlc1xVcGRhdGVTYWxlQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Veterinarians/CreateVeterinariansComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xWZXRlcmluYXJpYW5zXENyZWF0ZVZldGVyaW5hcmlhbnNDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Veterinarians/ListVeterinariansComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xWZXRlcmluYXJpYW5zXExpc3RWZXRlcmluYXJpYW5zQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Veterinarians/UpdateVeterinariansComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xWZXRlcmluYXJpYW5zXFVwZGF0ZVZldGVyaW5hcmlhbnNDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-bsmg6rx2n5
+
+[C:/Users/Andres/Music/gestion-ganadera-app/RanchMasterWebApp/Presentation/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-xg50uw8dwo
