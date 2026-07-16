@@ -31,8 +31,10 @@ public class RanchMasterContext : IdentityDbContext<ApplicationUser>
     {
         if (!optionsBuilder.IsConfigured)
         {
+            var connStr = Environment.GetEnvironmentVariable("MYSQL_CONNECTION_STRING")
+                ?? "server=localhost;user=root;password=1234567890;port=3306;database=RanchMasterDB;";
             optionsBuilder.UseMySql(
-                "server=localhost;user=root;password=1234567890;port=3306;database=RanchMasterDB;",
+                connStr,
                 new MySqlServerVersion(new Version(8, 0, 34))
             );
         }
