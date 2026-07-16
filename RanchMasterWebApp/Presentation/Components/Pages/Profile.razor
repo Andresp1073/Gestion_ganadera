@@ -1,0 +1,256 @@
+@page "/profile"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Model.Identity
+@using System.Text.RegularExpressions
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavManager
+
+<PageTitle>Mi Perfil - Ranch Master</PageTitle>
+
+<div class="container py-4 animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="d-flex align-items-center mb-4">
+                <div class="avatar-circle-lg me-3">@initials</div>
+                <div>
+                    <h2 class="mb-1" style="font-family: var(--rm-font-heading);">Mi Perfil</h2>
+                    <p class="text-muted mb-0">Administra tu información personal y contraseña</p>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    @if (successMessage != null)
+                    {
+                        <div class="alert alert-success py-2 small">@successMessage</div>
+                    }
+                    @if (validationErrors.ContainsKey("general"))
+                    {
+                        <div class="alert alert-danger py-2 small">@validationErrors["general"]</div>
+                    }
+
+                    <h5 class="fw-bold mb-3" style="font-family: var(--rm-font-heading);">Información personal</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input @bind="firstName" class="form-control" placeholder="Tu nombre" />
+                        @if (validationErrors.ContainsKey("firstName"))
+                        {
+                            <div class="text-danger small mt-1">@validationErrors["firstName"]</div>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Apellido</label>
+                        <input @bind="lastName" class="form-control" placeholder="Tu apellido" />
+                        @if (validationErrors.ContainsKey("lastName"))
+                        {
+                            <div class="text-danger small mt-1">@validationErrors["lastName"]</div>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Correo electrónico</label>
+                        <input @bind="email" class="form-control" type="email" placeholder="correo@ejemplo.com" />
+                        @if (validationErrors.ContainsKey("email"))
+                        {
+                            <div class="text-danger small mt-1">@validationErrors["email"]</div>
+                        }
+                    </div>
+
+                    <hr class="my-4" />
+                    <h5 class="fw-bold mb-3" style="font-family: var(--rm-font-heading);">Cambiar contraseña</h5>
+                    <p class="text-muted small mb-3">Deja estos campos en blanco si no deseas cambiar tu contraseña.</p>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña actual</label>
+                        <input @bind="currentPassword" class="form-control" type="password" placeholder="Ingresa tu contraseña actual" />
+                        @if (validationErrors.ContainsKey("currentPassword"))
+                        {
+                            <div class="text-danger small mt-1">@validationErrors["currentPassword"]</div>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nueva contraseña</label>
+                        <input @bind="newPassword" class="form-control" type="password" placeholder="Mínimo 8 caracteres" />
+                        @if (validationErrors.ContainsKey("newPassword"))
+                        {
+                            <div class="text-danger small mt-1">@validationErrors["newPassword"]</div>
+                        }
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Confirmar nueva contraseña</label>
+                        <input @bind="confirmPassword" class="form-control" type="password" placeholder="Repite la nueva contraseña" />
+                        @if (validationErrors.ContainsKey("confirmPassword"))
+                        {
+                            <div class="text-danger small mt-1">@validationErrors["confirmPassword"]</div>
+                        }
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success btn-lg" @onclick="SaveProfile" disabled="@isSaving">
+                            @(isSaving ? "Guardando..." : "Guardar cambios")
+                        </button>
+                        <a href="/" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-circle-lg {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: #15803d;
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .card {
+        border-radius: 0.75rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #374151;
+    }
+</style>
+
+@code {
+    private string initials = "";
+    private ApplicationUser? currentUser;
+    private string firstName = "";
+    private string lastName = "";
+    private string email = "";
+    private string currentPassword = "";
+    private string newPassword = "";
+    private string confirmPassword = "";
+    private Dictionary<string, string> validationErrors = new();
+    private string? successMessage;
+    private bool isSaving = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity?.IsAuthenticated != true)
+        {
+            NavManager.NavigateTo("/Identity/Account/Login");
+            return;
+        }
+
+        var userId = UserManager.GetUserId(authState.User);
+        if (userId == null) return;
+
+        currentUser = await UserManager.FindByIdAsync(userId);
+        if (currentUser == null) return;
+
+        firstName = currentUser.FirstName ?? "";
+        lastName = currentUser.LastName ?? "";
+        email = currentUser.Email ?? "";
+        initials = GetInitials(currentUser);
+    }
+
+    private static string GetInitials(ApplicationUser user)
+    {
+        var first = user.FirstName?.Trim();
+        var last = user.LastName?.Trim();
+        if (!string.IsNullOrEmpty(first) && !string.IsNullOrEmpty(last))
+            return $"{first[0]}{last[0]}".ToUpperInvariant();
+        if (!string.IsNullOrEmpty(first))
+            return first.Length >= 2 ? first[..2].ToUpperInvariant() : first[0].ToString().ToUpperInvariant();
+        var email = user.Email?.Trim();
+        if (!string.IsNullOrEmpty(email))
+            return email.Length >= 2 ? email[..2].ToUpperInvariant() : email[0].ToString().ToUpperInvariant();
+        return "?";
+    }
+
+    private bool ValidateForm()
+    {
+        validationErrors.Clear();
+        successMessage = null;
+
+        if (string.IsNullOrWhiteSpace(firstName))
+            validationErrors["firstName"] = "El nombre es requerido.";
+        if (string.IsNullOrWhiteSpace(lastName))
+            validationErrors["lastName"] = "El apellido es requerido.";
+        if (string.IsNullOrWhiteSpace(email))
+            validationErrors["email"] = "El correo electrónico es requerido.";
+        else if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            validationErrors["email"] = "Formato de correo electrónico inválido.";
+
+        var changingPassword = !string.IsNullOrEmpty(newPassword)
+            || !string.IsNullOrEmpty(confirmPassword)
+            || !string.IsNullOrEmpty(currentPassword);
+
+        if (changingPassword)
+        {
+            if (string.IsNullOrEmpty(currentPassword))
+                validationErrors["currentPassword"] = "Ingresa tu contraseña actual.";
+            if (string.IsNullOrEmpty(newPassword))
+                validationErrors["newPassword"] = "Ingresa la nueva contraseña.";
+            else if (newPassword.Length < 8)
+                validationErrors["newPassword"] = "Mínimo 8 caracteres.";
+            if (newPassword != confirmPassword)
+                validationErrors["confirmPassword"] = "Las contraseñas no coinciden.";
+        }
+
+        return validationErrors.Count == 0;
+    }
+
+    private async Task SaveProfile()
+    {
+        if (isSaving) return;
+        if (!ValidateForm() || currentUser == null) return;
+
+        isSaving = true;
+        try
+        {
+            currentUser.FirstName = firstName.Trim();
+            currentUser.LastName = lastName.Trim();
+            currentUser.Email = email.Trim();
+            currentUser.UserName = email.Trim();
+
+            var updateResult = await UserManager.UpdateAsync(currentUser);
+            if (!updateResult.Succeeded)
+            {
+                validationErrors["general"] = string.Join(" ",
+                    updateResult.Errors.Select(e => e.Description));
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(newPassword))
+            {
+                var pwResult = await UserManager.ChangePasswordAsync(
+                    currentUser, currentPassword, newPassword);
+                if (!pwResult.Succeeded)
+                {
+                    validationErrors["general"] = string.Join(" ",
+                        pwResult.Errors.Select(e => e.Description));
+                    return;
+                }
+                currentPassword = "";
+                newPassword = "";
+                confirmPassword = "";
+            }
+
+            initials = GetInitials(currentUser);
+            successMessage = "Perfil actualizado correctamente.";
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+}

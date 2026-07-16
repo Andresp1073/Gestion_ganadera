@@ -7,82 +7,48 @@ namespace Data;
 
 public class RanchMasterContext : IdentityDbContext<ApplicationUser>
 {
+    public RanchMasterContext()
+    {
+    }
+
     public RanchMasterContext(DbContextOptions<RanchMasterContext> options)
         : base(options)
     {
     }
 
-    public DbSet<AnimalsEntity> Animals { get; set; }
-    public DbSet<BuyersEntity> Buyers { get; set; }
-    public DbSet<FeedingDetailsEntity> FeedingDetails { get; set; }
-    public DbSet<FeedingSchedulesEntity> FeedingSchedules { get; set; }
-    public DbSet<HealthsRecordsEntity> HealthsRecords { get; set; }
-    public DbSet<LocationsEntity> Locations { get; set; }
-    public DbSet<RacesEntity> Races { get; set; }
-    public DbSet<ReproductionsEntity> Reproductions { get; set; }
-    public DbSet<SalesEntity> Sales { get; set; }
-    public DbSet<VeterinariansEntity> Veterinarians { get; set; }
+    public DbSet<AnimalsEntity> Animals { get; set; } = null!;
+    public DbSet<BuyersEntity> Buyers { get; set; } = null!;
+    public DbSet<FeedingDetailsEntity> FeedingDetails { get; set; } = null!;
+    public DbSet<FeedingSchedulesEntity> FeedingSchedules { get; set; } = null!;
+    public DbSet<HealthsRecordsEntity> HealthsRecords { get; set; } = null!;
+    public DbSet<LocationsEntity> Locations { get; set; } = null!;
+    public DbSet<RacesEntity> Races { get; set; } = null!;
+    public DbSet<ReproductionsEntity> Reproductions { get; set; } = null!;
+    public DbSet<SalesEntity> Sales { get; set; } = null!;
+    public DbSet<VeterinariansEntity> Veterinarians { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseMySql(
-                connectionString: "server=localhost; user=root; password=123456789; port=3306; database=RanchMasterDB;",
+                "server=localhost;user=root;password=1234567890;port=3306;database=RanchMasterDB;",
                 new MySqlServerVersion(new Version(8, 0, 34))
             );
         }
-        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<RacesEntity>().HasData(
-            new RacesEntity { IdRace = 1, Name = "Cebu", Description = "Pequeña" }
+            new RacesEntity
+            {
+                IdRace = 1,
+                Name = "Cebu",
+                Description = "Pequeña"
+            }
         );
     }
 }
-
-namespace Data;
-
-public class RanchMasterContext : DbContext
-{
-    public DbSet<AnimalsEntity> Animals { get; set; }
-    public DbSet<BuyersEntity> Buyers { get; set; }
-    public DbSet<FeedingDetailsEntity> FeedingDetails { get; set; }
-    public DbSet<FeedingSchedulesEntity> FeedingSchedules { get; set; }
-    public DbSet<HealthsRecordsEntity> HealthsRecords { get; set; }
-    public DbSet<LocationsEntity> Locations { get; set; }
-    public DbSet<RacesEntity> Races { get; set; }
-    public DbSet<ReproductionsEntity> Reproductions { get; set; }
-    public DbSet<SalesEntity> Sales { get; set; }
-    public DbSet<VeterinariansEntity> Veterinarians { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseMySql(
-            connectionString: "server=localhost; user=root; password=123456789; port=3306; database=RanchMasterDB;",
-            new MySqlServerVersion(new Version(8, 0, 34))
-        );
-        
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<RacesEntity>().HasData(
-            new RacesEntity { IdRace  = 1, Name = "Cebu", Description = "Pequeña" }
-        );
-
-    }
-}    
-
-
-    
-
-
-    
-        
-        
-    
